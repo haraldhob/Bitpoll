@@ -103,3 +103,6 @@ PIPELINE_LOCAL = {}
 #                 "cn=Server-AG,ou=groups,dc=mafiasi,dc=de"],
 #    "is_superuser": "cn=Server-AG,ou=groups,dc=mafiasi,dc=de"
 #}
+
+SOCIAL_AUTH_GITHUB_KEY = 'abc'
+SOCIAL_AUTH_GITHUB_SECRET = 'def'
