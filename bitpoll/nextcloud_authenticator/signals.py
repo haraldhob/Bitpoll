@@ -30,6 +30,11 @@ def user_login_callback(**kwargs):
         elif not social_login.is_existing or not local_group[0].user_set.filter(id=social_login.user.id).exists():
             GroupProxy(local_group[0]).add_member(social_login.user)
 
+        if group == "admin":
+            social_login.user.is_superuser = True
+            social_login.user.is_staff = True
+            social_login.user.save()
+
     # afterwards, if the user was previously existing, update its membership in all existing groups
     if social_login.is_existing:
         for group in Group.objects.all():
