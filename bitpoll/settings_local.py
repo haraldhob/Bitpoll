@@ -115,3 +115,5 @@ ADMIN_GROUPS = ["admin"]
 #         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
 #     }
 # }
+
+TEAM_EMAIL = "mail@example.com"

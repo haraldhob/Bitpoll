@@ -87,7 +87,7 @@ def handler500(request):
 
     return render(request, '500.html', status=500, context={
         'use_sentry': use_sentry,
-        'sentry_dsn': sentry_dsn,
+        'sentry_public_dsn': sentry_dsn,
         'event_id': event_id,
     })
 

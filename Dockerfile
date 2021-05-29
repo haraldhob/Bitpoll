@@ -2,7 +2,7 @@
 FROM python:3.8
 
 # first, only copy all production requirements
-COPY ./requirements.txt /app/requirements.txt
+COPY ./requirements-production.txt /app/requirements.txt
 WORKDIR /app
 
 # install all requirements
