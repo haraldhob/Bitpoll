@@ -105,3 +105,13 @@ ALLOWED_HOSTS = [
     "localhost",
     "<bitpoll_base_url>",
 ]
+
+ADMIN_GROUPS = ["admin"]
+
+# TODO: configure database
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+#     }
+# }

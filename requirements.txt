@@ -89,5 +89,7 @@ sqlparse==0.4.1
     # via django
 urllib3==1.26.3
     # via requests
+uwsgi==2.0.19.1
+    # via -r requirements.in
 vobject==0.9.6.1
     # via caldav

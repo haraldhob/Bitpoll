@@ -3,6 +3,7 @@ from allauth.account.signals import user_signed_up
 
 from django.contrib.auth.models import Group
 from django.dispatch import receiver
+from django.conf import settings
 
 from bitpoll.groups.models import create_usergroup, GroupProxy
 
@@ -30,7 +31,7 @@ def user_login_callback(**kwargs):
         elif not social_login.is_existing or not local_group[0].user_set.filter(id=social_login.user.id).exists():
             GroupProxy(local_group[0]).add_member(social_login.user)
 
-        if group == "admin":
+        if group in settings.ADMIN_GROUPS:
             social_login.user.is_superuser = True
             social_login.user.is_staff = True
             social_login.user.save()

@@ -29,6 +29,8 @@ The following settings have to be adjusted to the intended production setting (b
 * BASE_URL: Bitpoll app base url
 * HOME_URL: Nextcloud instance base url
 * ALLOWED_HOSTS: Bitpoll app base url / host
+* DATABASES: the database backend configuration (https://docs.djangoproject.com/en/2.2/ref/databases/)
+* ADMIN_GROUPS: list of nextcloud group names which will be imported as website admins (be careful!)
 
 Initialise Database:
 
@@ -58,7 +60,7 @@ Install Python Dependencies
 pip install -r requirements.txt
 ```
 
-For Production systems it is nessesarry to run
+For Production systems it is necessary to run
 
 ```bash
 ./manage.py compilemessages
@@ -70,6 +72,12 @@ And of course migrate the database for every production deploy
 ```bash
 ./manage.py migrate
 ```
+
+Define a nextcloud group which only contains admins which should also have administrative access to the BitPoll instance:
+
+Edit the `ADMIN_GROUPS` in the `settings_local.py` file. As soon as a user logs in using the nextcloud oauth, his/her
+groups are compared to the groups in this list. If any of them matches, the user is granted administrative rights.
+
 
 # Apache Webserver Setup
 
@@ -84,9 +92,8 @@ pip install mod_wsgi
 Then, add the following line to your apache2 webserver config file (not the virtual host file):
 
 ```apache2
-LoadModule wsgi_module <path-of-python>/dist-packages/mod_wsgi/server/mod_wsgi-<...>.so
-WSGIPythonHome <path-to-virtual-environment-folder>
-WSGIPythonPath <path-to-bitpoll-django-app>
+LoadModule proxy_module modules/mod_proxy.so
+LoadModule proxy_uwsgi_module modules/mod_proxy_uwsgi.so
 ```
 
 To successfully serve the bitpoll application, we still need to correctly route the static files and give apache access 
@@ -94,20 +101,25 @@ to the wsgi.py entrypoint file. This code snipped has to be added to the **Virtu
 serving the bitpoll application.
 
 ```apache2
-Alias /static <repository_root_path>/_static
+<VirtualHost *:80>
+    ServerName localhost
 
-<Directory <repository_root_path>/_static>
-    Require all granted
-</Directory>
+    Alias /static /app/_static
+    ProxyPass /static !
+    ProxyPass / uwsgi://bitpoll:8000/
 
-WSGIScriptAlias / <repository_root_path>/bitpoll/wsgi.py
-
-<Directory <repository_root_path>/bitpoll>
-    <Files wsgi.py>
+    <Directory /app/_static>
         Require all granted
-    </Files>
-</Directory>
+    </Directory>
+</VirtualHost>
 ```
+
+# Nextcloud OAuth setup
+
+For enabling the nextcloud OAuth login, first navigate to `Settings/Administration/Security` on your Nextcloud instance.
+On the bottom of the site should be a section called "OAuth 2.0 clients" (tested with version 21.0.2).
+
+Enter a custom name and `https://<bitpoll_domain>/accounts/nextcloud_auth/login/callback/` as the redirection URI.
 
 # Management of Dependencies
 
