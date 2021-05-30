@@ -2,8 +2,8 @@
 
 Bitpoll is a software to conduct polls about Dates, Times or general Questions.
 
-
-This is a new version of the Dudel from opatut (<https://github.com/opatut/dudel>) used on <mafiasi.de>, rewritten using the Django framework as a backend.
+This is a new version of the Dudel from opatut (<https://github.com/opatut/dudel>) used on <mafiasi.de>, rewritten using
+the Django framework as a backend.
 
 # Install
 
@@ -73,11 +73,32 @@ And of course migrate the database for every production deploy
 ./manage.py migrate
 ```
 
-Define a nextcloud group which only contains admins which should also have administrative access to the BitPoll instance:
+Define a nextcloud group which only contains admins which should also have administrative access to the BitPoll
+instance:
 
 Edit the `ADMIN_GROUPS` in the `settings_local.py` file. As soon as a user logs in using the nextcloud oauth, his/her
 groups are compared to the groups in this list. If any of them matches, the user is granted administrative rights.
 
+# nginx Webserver Setup
+
+Add the following code snippet to your virtual host configuration:
+
+```
+server {
+    listen 80;
+    server_name bitpoll.<your-domain>.de;
+    access_log /var/log/bitpoll/access_log;
+    
+    location / {
+        root /var/www/html;
+        uwsgi_pass bitpoll:8000;
+        include uwsgi_params;
+    }
+    
+    location /static {
+        alias /app/_static;
+    }
+```
 
 # Apache Webserver Setup
 
@@ -96,7 +117,7 @@ LoadModule proxy_module modules/mod_proxy.so
 LoadModule proxy_uwsgi_module modules/mod_proxy_uwsgi.so
 ```
 
-To successfully serve the bitpoll application, we still need to correctly route the static files and give apache access 
+To successfully serve the bitpoll application, we still need to correctly route the static files and give apache access
 to the wsgi.py entrypoint file. This code snipped has to be added to the **VirtualHost**-file which will be used for
 serving the bitpoll application.
 
@@ -123,8 +144,8 @@ Enter a custom name and `https://<bitpoll_domain>/accounts/nextcloud_auth/login/
 
 # Management of Dependencies
 
-We use pip-tools to manage the dependencies.
-After modification or the requirements*.in files or for updates of packages run
+We use pip-tools to manage the dependencies. After modification or the requirements*.in files or for updates of packages
+run
 
 ```bash
 pip-compile --upgrade --output-file requirements.txt requirements.in
