@@ -7,7 +7,7 @@ SECRET_KEY = '12345678'
 FIELD_ENCRYPTION_KEY = "this+is+an+example+key+please+generate+one+="
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 PIPELINE_LOCAL = {}
 
