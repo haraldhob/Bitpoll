@@ -79,6 +79,9 @@ msgstr "Registrieren"
 msgid "Login"
 msgstr "Login"
 
+msgid "Local Login"
+msgstr "Lokaler Login"
+
 #: bitpoll/base/templates/base.html:64
 msgid "Groups"
 msgstr "Gruppen"
