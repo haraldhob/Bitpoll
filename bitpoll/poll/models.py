@@ -374,7 +374,7 @@ class PollWatch(models.Model):
         try:
             send_mail(_("New votes for {}".format(self.poll.title)), email_content, None,
                       [self.user.email])
-        except SMTPRecipientsRefused:
+        except (SMTPRecipientsRefused, OSError):
             translation.activate(old_lang)
             messages.error(
                 request, _("The mail server had an error sending the notification to {}".format(

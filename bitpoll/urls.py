@@ -29,7 +29,10 @@ urlpatterns = [
     url(r'^invitations/', include('bitpoll.invitations.urls')),
     url(r'^$', lambda req: redirect('index'), name='home'),
     url(r'^login/$', auth_views.LoginView.as_view(), name='login', ),
-    url(r'^social-auth/', include('social_django.urls', namespace="social")),
+
+    # urls for nextcloud oauth login interaction
+    url(r'^accounts/', include('allauth.urls')),
+
     url(r'^logout/$', auth_views.LogoutView.as_view(next_page='index'), name='logout'),
     url(r'^markdown/', include('django_markdown.urls')),
     url(r'^registration/', include('bitpoll.registration.urls')),
@@ -84,7 +87,7 @@ def handler500(request):
 
     return render(request, '500.html', status=500, context={
         'use_sentry': use_sentry,
-        'sentry_dsn': sentry_dsn,
+        'sentry_public_dsn': sentry_dsn,
         'event_id': event_id,
     })
 

@@ -1,0 +1,19 @@
+version: '3'
+
+services:
+  bitpoll:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    container_name: bitpoll
+    ports:
+      - "8000:8000"
+    environment:
+      - VIRTUAL_HOST=bitpoll.<your-domain>.de
+
+  apache:
+    build:
+      context: .
+      dockerfile: ./docker_testing/apache/Dockerfile
+    ports:
+      - "8080:80"

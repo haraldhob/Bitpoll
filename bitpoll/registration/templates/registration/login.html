@@ -2,6 +2,7 @@
 {% load i18n %}
 {% load widget_tweaks %}
 {% load settings_value %}
+{% load socialaccount %}
 {% block title %}{% trans "Login" %}{% endblock %}
 
 {% value_from_settings REGISTER_ENABLED as register %}
@@ -22,6 +23,11 @@
                         <p>{% trans 'Please login to see this page.' %}</p>
                     {% endif %}
                 {% endif %}
+                <form action="{% provider_login_url 'nextcloud_auth' process='login'%}">
+                    <p>Nextcloud Login:</p>
+                    <input class="primary action" type="submit" value="Login (Nextcloud Auth)" />
+                </form>
+                <br>
                 <form method="post" action="{% url 'login' %}">
                     {% csrf_token %}
                     {% if form.non_field_errors %}
@@ -54,11 +60,6 @@
                         <button type="submit" class="primary action">{% trans "Login" %}</button>
                     </div>
                 </form>
-                {% if register %}{# TODO: link to central account management? #}
-                    <p><a href="{% url 'password_reset' %}">{% trans "Did you forget your password?" %}</a></p>
-                {% else %}
-                    <p>{% trans 'You can not reset your password here, as the account management is centralized' %}</p>
-                {% endif %}
             </div>
         </div>
     </section>

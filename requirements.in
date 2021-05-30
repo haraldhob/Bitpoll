@@ -10,4 +10,5 @@ django-encrypted-model-fields
 caldav
 icalendar
 django-token-bucket>=0.2.2
-social-auth-app-django
+django-allauth
+uwsgi
