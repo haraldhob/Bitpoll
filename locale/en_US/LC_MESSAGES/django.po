@@ -1479,6 +1479,9 @@ msgstr "show invitations as empty votes"
 msgid "hide participants"
 msgstr ""
 
+msgid "change vote after event"
+msgstr "Allow changes of votes for past events"
+
 #: bitpoll/poll/templates/poll/settings.html:142
 msgid ""
 "\n"

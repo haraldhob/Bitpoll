@@ -71,6 +71,7 @@ class PollSettingsForm(ModelForm):
             'public_listening',
             'vote_all',
             'hide_participants',
+            'change_vote_after_event',
             'use_user_timezone',
             'sorting',
         ]

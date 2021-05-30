@@ -132,6 +132,10 @@
                 <input type="checkbox" id="vote_hide_participants" name="{{ form.hide_participants.name }}" {% if form.hide_participants.value %} checked {% endif %}>
                 <label for="vote_hide_participants">{% trans 'hide participants' %}</label>
             </div>
+            <div class="checkbox">
+                <input type="checkbox" id="change_vote_after_event" name="{{ form.change_vote_after_event.name }}" {% if form.change_vote_after_event.value %} checked {% endif %}>
+                <label for="change_vote_after_event">{% trans 'change vote after event' %}</label>
+            </div>
             <div class="">
                 Sort results by:
             {# TODO: use enum values #}

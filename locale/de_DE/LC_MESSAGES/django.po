@@ -1539,6 +1539,9 @@ msgstr "zeige Einladungen als leere Stimmen an"
 msgid "hide participants"
 msgstr "Teilnehmerliste verbergen"
 
+msgid "change vote after event"
+msgstr "Verhindere Änderungen der Eintragung bei vergangenen Events"
+
 #: bitpoll/poll/templates/poll/settings.html:142
 msgid ""
 "\n"
