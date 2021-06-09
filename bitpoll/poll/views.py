@@ -897,7 +897,20 @@ def vote(request, poll_url, vote_id=None):
                     request, _('You need to either provide a name or post an anonymous vote.'))
 
     # no/invalid POST: show the dialog
-    matrix = current_poll.get_choice_group_matrix(get_current_timezone())
+    ALLOW_EDIT_HOURS = 24 # TODO extract to somewhere better suited
+    only_choices_after = None
+    if (current_poll.type == 'datetime' or current_poll.type == 'date') and not current_poll.change_vote_after_event:
+        only_choices_after = now() + timedelta(hours=ALLOW_EDIT_HOURS)
+    matrix = current_poll.get_choice_group_matrix(get_current_timezone(), choices_after=only_choices_after)
+    if len(matrix) == 0 or matrix == [[]]:
+        messages.error(
+            request, _("Voting time for all options has expired, voting is no longer possible")  # TODO add translations
+        )
+        return redirect('poll', poll_url)
+    if len(matrix) < len(current_poll.ordered_choices):
+        messages.info(
+            request, _('Some poll options have already passed. You will not be able to change your vote for these options.') # TODO translation
+        )
     choices = []
     comments = []
     choice_votes = []

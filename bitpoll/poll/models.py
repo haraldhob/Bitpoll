@@ -144,10 +144,19 @@ class Poll(models.Model):
     def ordered_choices(self):
         return self.choice_set.filter(deleted=False).order_by('sort_key')
 
-    def get_choice_group_matrix(self, tz):
+    def get_choice_group_matrix(self, tz, choices_after=None):
         matrix = [
             choice.get_hierarchy(tz) for choice in self.ordered_choices]
+
+        if choices_after and (self.type == 'date' or self.type == 'datetime') and not self.change_vote_after_event:
+            filtered_matrix = []
+            for row in matrix:
+                if row[0].datetime > choices_after:
+                    filtered_matrix.append(row)
+            matrix = filtered_matrix
+
         matrix = [[[item, 1, 1] for item in row] for row in matrix]
+
         if not matrix:
             return [[]]
         width = max(len(row) for row in matrix)
