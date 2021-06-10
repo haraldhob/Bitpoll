@@ -918,7 +918,10 @@ def vote(request, poll_url, vote_id=None):
         current_vote = get_object_or_404(Vote, pk=vote_id)
     else:
         current_vote = Vote()
-    choices_orig = current_poll.choice_set.filter(deleted=False).order_by('sort_key')
+    if only_choices_after:
+        choices_orig = current_poll.choice_set.filter(deleted=False, date__date__gt=only_choices_after).order_by('sort_key')
+    else:
+        choices_orig = current_poll.choice_set.filter(deleted=False).order_by('sort_key')
     for choice in choices_orig:
         cur_comment = ""
         value = None
@@ -937,7 +940,7 @@ def vote(request, poll_url, vote_id=None):
         comments.append(cur_comment)
         choice_votes.append(value)
 
-    events = get_caldav(choices, current_poll, request.user, request)
+    events = get_caldav(choices, current_poll, request.user, request) # TODO check if we broke anything in CalDAV handling
 
     return TemplateResponse(request, 'poll/vote_creation.html', {
         'poll': current_poll,
