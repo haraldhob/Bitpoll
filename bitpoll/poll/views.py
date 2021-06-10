@@ -778,6 +778,7 @@ def vote(request, poll_url, vote_id=None):
     current_poll = get_object_or_404(Poll, url=poll_url)
     error_msg = False
     deleted_choicevals = False
+    expired_choices = False
 
     if current_poll.due_date and current_poll.due_date < now():
         messages.error(
@@ -792,6 +793,11 @@ def vote(request, poll_url, vote_id=None):
             return redirect('poll', poll_url)
 
     tz_activate(current_poll.get_tz_name(request.user))
+
+    ALLOW_EDIT_HOURS = 24  # TODO extract to somewhere better suited
+    only_choices_after = None
+    if (current_poll.type == 'datetime' or current_poll.type == 'date') and not current_poll.change_vote_after_event:
+        only_choices_after = now() + timedelta(hours=ALLOW_EDIT_HOURS)
 
     if request.method == 'POST':
         vote_id = request.POST.get('vote_id', None)
@@ -853,11 +859,14 @@ def vote(request, poll_url, vote_id=None):
                             if str(choice.id) in request.POST and request.POST[str(choice.id)].isdecimal():
                                 choice_value = get_object_or_404(ChoiceValue, id=request.POST[str(choice.id)])
                                 if not choice_value.deleted:
-                                    new_choices.append(VoteChoice(value=choice_value,
-                                                                  vote=current_vote,
-                                                                  choice=choice,
-                                                                  comment=request.POST.get(
-                                                                        'comment_{}'.format(choice.id)) or ''))
+                                    if current_poll.change_vote_after_event or choice.date > only_choices_after:
+                                        new_choices.append(VoteChoice(value=choice_value,
+                                                                      vote=current_vote,
+                                                                      choice=choice,
+                                                                      comment=request.POST.get(
+                                                                            'comment_{}'.format(choice.id)) or ''))
+                                    else:
+                                        expired_choices = True
                                 else:
                                     deleted_choicevals = True
                             else:
@@ -874,6 +883,11 @@ def vote(request, poll_url, vote_id=None):
                             error_msg = True
                             messages.error(request, _('Value for choice does not exist. This is probably due to '
                                                       'changes in the poll. Please correct your vote.'))
+                        if expired_choices:
+                            error_msg = True
+                            messages.error(request, _('Tried to vote for a choice that has expired. '
+                                                      'This is probably because the poll\'s settings were changed'
+                                                      'since you started voting. Please reload the page.')) # TODO translate
 
                         if not error_msg:
                             if vote_id:
@@ -897,10 +911,6 @@ def vote(request, poll_url, vote_id=None):
                     request, _('You need to either provide a name or post an anonymous vote.'))
 
     # no/invalid POST: show the dialog
-    ALLOW_EDIT_HOURS = 24 # TODO extract to somewhere better suited
-    only_choices_after = None
-    if (current_poll.type == 'datetime' or current_poll.type == 'date') and not current_poll.change_vote_after_event:
-        only_choices_after = now() + timedelta(hours=ALLOW_EDIT_HOURS)
     matrix = current_poll.get_choice_group_matrix(get_current_timezone(), choices_after=only_choices_after)
     if len(matrix) == 0 or matrix == [[]]:
         messages.error(
