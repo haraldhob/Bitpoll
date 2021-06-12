@@ -185,7 +185,7 @@ class Poll(models.Model):
 
         # cut off time column in day mode, only use date field
         if self.type == 'date':
-            matrix = [[row[0]] for row in matrix]
+            matrix = [[row[0], row[1]] for row in matrix]
 
         return matrix
 
@@ -247,8 +247,13 @@ class Choice(models.Model):
 
     def get_hierarchy(self, tz):
         if self.date:
-            return [PartialDateTime(self.date, DateTimePart.date, tz),
-                    PartialDateTime(self.date, DateTimePart.time, tz)]
+            return_list = [
+                PartialDateTime(self.date, DateTimePart.date, tz),
+                PartialDateTime(self.date, DateTimePart.time, tz),
+            ]
+            if self.text:
+                return_list = [return_list[0], self.text, return_list[1]]
+            return return_list
         return [part.strip() for part in self.text.split("/") if part]
 
     def votechoice_count(self):
@@ -329,7 +334,7 @@ class Vote(models.Model):
         if user.is_anonymous:
             return False
         return self.can_edit(user)
-    
+
     @property
     def display_name(self) -> str:
         """Name of user if assigned, name field or anonymous else."""
