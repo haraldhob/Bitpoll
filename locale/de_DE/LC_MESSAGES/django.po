@@ -1724,6 +1724,10 @@ msgstr ""
 msgid "Add a comment"
 msgstr "Füge einen Kommentar hinzu"
 
+#: bitpoll/poll/templates/poll/dt_choice_creation_combinations.html:59
+msgid "Set a custom name"
+msgstr "Namen setzen"
+
 #: bitpoll/poll/templates/poll/vote_creation.html:82
 msgid "Your name:"
 msgstr "Dein Name:"

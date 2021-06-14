@@ -30,19 +30,19 @@
                         <th class="choice-text">{{ time }}</th>
                     {% endfor %}
                 </tr>
-                    {% for day in dates %}
+                    {% for date, text in dates.items %}
                         <tr>
-                        <th class="author">{{ day }}</th>
+                        <th class="author">{{ date }}</th>
                         {% for time in times %}
-                            {% is_initial_choice initial=initial_choices date=day time=time as is_initial %}
+                            {% is_initial_choice initial=initial_choices date=date time=time as is_initial %}
 
                             {% if not initial_choices or is_initial %}
                                 <td class="checkbox-cell on">
-                                    <input type="checkbox" checked="[]" value="{{ day }} {{ time }}" name="datetimes[]">
+                                    <input type="checkbox" checked="[]" value="{{ date }} {{ time }}" name="datetimes[]">
                                 </td>
                             {% else %}
                                 <td class="checkbox-cell off">
-                                    <input type="checkbox" value="{{ day }} {{ time }}" name="datetimes[]">
+                                    <input type="checkbox" value="{{ date }} {{ time }}" name="datetimes[]">
                                 </td>
                             {% endif %}
 
@@ -52,6 +52,10 @@
                             </button>
                             <button class="action icon toggle toggle-deselect toggle-row"><i class="fa fa-square-o"></i>
                             </button>
+                        </td>
+                        <td class="choice-text">
+                            <input type="text" class="vote-choice-comment form-control" name="label_{{ date }}"
+                                   placeholder="{{ _('Set a custom name') }}" value="{{ text }}" />
                         </td>
                         </tr>
                     {% endfor %}

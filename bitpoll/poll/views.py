@@ -32,7 +32,7 @@ from bitpoll.invitations.models import Invitation
 from datetime import timedelta
 from decimal import Decimal
 from pytz import all_timezones, timezone
-from django.utils.dateparse import parse_datetime
+from django.utils.dateparse import parse_datetime, parse_date
 
 
 def poll(request, poll_url: str, export: bool=False):
@@ -501,6 +501,14 @@ def edit_dt_choice_time(request, poll_url):
             times = form.cleaned_data['times'].split(',')
             dates = form.cleaned_data['dates'].split(',')
 
+            date_choices = {
+                date_choice.date.date().isoformat(): date_choice.text
+                for date_choice in current_poll.choice_set.filter(deleted=False)
+                if date_choice.date.date().isoformat() in dates
+            }
+            for date in dates:
+                date_choices.setdefault(date, "")
+
             initial_choices = current_poll.choice_set.filter(deleted=False).values_list('date')
             initial_choices = list(initial_choices)
             initial_choices = [(date_format(localtime(elem[0]), format='Y-m-d'),
@@ -508,7 +516,7 @@ def edit_dt_choice_time(request, poll_url):
 
             return TemplateResponse(request, "poll/dt_choice_creation_combinations.html", {
                 'times': times,
-                'dates': dates,
+                'dates': date_choices,
                 'initial_choices': initial_choices,
                 'poll': current_poll,
                 'page': 'Choices',
@@ -570,6 +578,14 @@ def edit_dt_choice_combinations(request, poll_url):
             else:
                 new_choices.append(Choice(
                     date=date_time, poll=current_poll, sort_key=i))
+
+        for key in request.POST.keys():
+            if key.startswith("label_"):
+                if date := parse_date(key.replace("label_", "")):
+                    for choice in new_choices + old_choices:
+                        if choice.date.date() == date:
+                            choice.text = request.POST.get(key)
+
         # Save new choices to database, Update/Delete old ones
         with transaction.atomic():
             # Save the new Choices
