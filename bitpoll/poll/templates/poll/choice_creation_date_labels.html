@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load pipeline %}
+{% load poll_filter %}
+
+{% block title %}Create choice{% endblock %}
+
+{% block css %}
+    {% stylesheet 'poll_edit' %}
+{% endblock %}
+
+{% block content %}
+    {% include "poll/poll_header.html" %}
+    <div class="container">
+    {% include "poll/date_choice_header.html" %}
+    <div class="alert alert-info">
+        <i class="fa fa-exclamation-circle"></i>{% blocktrans %}Here you can set custom labels for each date choice.{% endblocktrans %}
+
+    </div>
+    <form class="form" action="{% url 'poll_editDateChoice_labels' poll.url %}" method="POST">
+        {% csrf_token %}
+        <div class="table-responsive choice-combinations-table">
+            <table class="table auto-width poll">
+                <tbody>
+                <tr>
+                    <th></th>
+                    {% for time in times %}
+                        <th class="choice-text">{{ time }}</th>
+                    {% endfor %}
+                </tr>
+                    {% for date, text in dates.items %}
+                        <tr>
+                        <th class="author">{{ date }}</th>
+                        <td class="choice-text">
+                            <input type="text" class="vote-choice-comment form-control" name="label_{{ date }}"
+                                   placeholder="{{ _('Set a custom name') }}" value="{{ text }}" />
+                        </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="form-actions"><a class="action btn-js-back script-only" href="">{% trans 'Back' %}</a>
+          <input type="submit" class="action primary" value="{% trans 'Next' %}">
+        </div>
+    </form>
+    </div>
+{% endblock %}

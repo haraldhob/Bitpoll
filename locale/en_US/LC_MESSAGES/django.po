@@ -1210,6 +1210,10 @@ msgstr "Select time slots"
 msgid "Choose combinations"
 msgstr "Choose combinations"
 
+#: bitpoll/poll/templates/poll/date_choice_header.html:14
+msgid "Assign labels"
+msgstr "Assign labels"
+
 #: bitpoll/poll/templates/poll/mail_watch.txt:1
 #, python-format
 msgid ""

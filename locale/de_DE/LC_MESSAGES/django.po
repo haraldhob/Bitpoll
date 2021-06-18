@@ -1269,6 +1269,10 @@ msgstr "Wähle die Zeiten"
 msgid "Choose combinations"
 msgstr "Wähle die Kombinationen"
 
+#: bitpoll/poll/templates/poll/date_choice_header.html:14
+msgid "Assign labels"
+msgstr "Vergebe Namen"
+
 #: bitpoll/poll/templates/poll/mail_watch.txt:1
 #, python-format
 msgid ""

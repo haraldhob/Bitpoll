@@ -15,6 +15,7 @@
         {% if is_dt_choice %}
             {% include  "poll/dt_choice_header.html" %}
         {% else %}
+            {% include "poll/date_choice_header.html" %}
             {% include "poll/noscript_date_time.html" %}
         {% endif %}
         <form action="{{ request.url }}" method="POST" id="date-time-form">

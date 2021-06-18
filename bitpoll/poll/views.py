@@ -415,15 +415,50 @@ def edit_date_choice(request, poll_url):
                     for choice in old_choices:
                         choice.save()
                     Choice.objects.filter(pk__in=old_choices_ids).update(deleted=True)
-                return redirect('poll', poll_url)
+                date_choices = {
+                    date_choice.date.date().isoformat(): date_choice.text
+                    for date_choice in (new_choices + old_choices)
+                }
+                return TemplateResponse(request, "poll/choice_creation_date_labels.html", {
+                    'dates': date_choices,
+                    'poll': current_poll,
+                    'page': 'Choices',
+                    'step': 2,
+                })
     else:
         form = DateChoiceCreationForm(initial=initial)
     return TemplateResponse(request, "poll/choice_creation_date.html", {
         'poll': current_poll,
         'new_choice': form,
         'page': 'Choices',
+        'step': 1,
         'is_dt_choice': False,
     })
+
+
+def edit_choice_date_labels(request, poll_url):
+    current_poll = get_object_or_404(Poll, url=poll_url)
+    if not current_poll.can_edit(request.user, request):
+        return redirect('poll', poll_url)
+
+    if request.method == 'POST':
+        print(request.POST)
+        changed_choices = []
+        for key in request.POST.keys():
+            if key.startswith("label_"):
+                if date := parse_date(key.replace("label_", "")):
+                    choice_filter = current_poll.choice_set.filter(date__date=date)
+                    if choice_filter.exists():
+                        choice = choice_filter.first()
+                        choice.text = request.POST.get(key)
+                        changed_choices.append(choice)
+
+        # Save new choices to database, Update/Delete old ones
+        with transaction.atomic():
+            for choice in changed_choices:
+                choice.save()
+        return redirect('poll', current_poll.url)
+    return redirect('poll_editDateChoice', current_poll.url)
 
 
 def edit_dt_choice_date(request, poll_url):
