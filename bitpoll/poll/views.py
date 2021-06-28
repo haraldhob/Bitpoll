@@ -848,7 +848,7 @@ def vote(request, poll_url, vote_id=None):
     ALLOW_EDIT_HOURS = 24  # TODO extract to somewhere better suited
     only_choices_after = None
     if (current_poll.type == 'datetime' or current_poll.type == 'date') and not current_poll.change_vote_after_event:
-        only_choices_after = now() + timedelta(hours=ALLOW_EDIT_HOURS)
+        only_choices_after = now() - timedelta(hours=ALLOW_EDIT_HOURS)
 
     if request.method == 'POST':
         vote_id = request.POST.get('vote_id', None)
