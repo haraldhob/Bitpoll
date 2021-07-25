@@ -157,12 +157,13 @@ def poll(request, poll_url: str, export: bool=False):
         response['Content-Disposition'] = 'attachment; filename="poll.csv"'
         writer = csv.writer(response)
         a = [choice.get_title for choice in current_poll.ordered_choices]
-        row = ['Name', 'Datetime']
+        row = ['Name', 'Datetime', 'Comment']
         row.extend(a)
         writer.writerow(row)
         for vote, votechoices in zip(poll_votes, vote_choice_matrix):
             row = [vote.display_name if not current_poll.hide_participants else _('Hidden')]
             row.append(vote.date_created.isoformat(timespec='seconds'))
+            row.append(vote.comment if vote.comment else '')
             row.extend([(choice['value'].title + (" ({})".format(choice['comment']) if choice and choice['comment'] and len(choice['comment']) > 0 else '')) if choice and choice['value'] else '' for choice in votechoices])
             writer.writerow(row)
         return response

@@ -235,6 +235,8 @@ class Choice(models.Model):
     def __str__(self):
         if self.poll.type == 'universal':
             return self.text
+        elif self.text:
+            return "{} ({})".format(self.text, self.date)
         else:
             return str(self.date)
 
