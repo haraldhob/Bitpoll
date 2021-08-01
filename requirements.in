@@ -12,3 +12,4 @@ icalendar
 django-token-bucket>=0.2.2
 django-allauth
 uwsgi
+mysqlclient
