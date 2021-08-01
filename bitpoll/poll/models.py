@@ -67,6 +67,7 @@ class Poll(models.Model):
     class ResultSorting(enum.IntEnum):
         DATE = 0
         NAME = 1
+        GROUP = 2
 
     def __str__(self):
         return u'Poll {}'.format(self.title)
@@ -221,7 +222,8 @@ class Poll(models.Model):
 
 POLL_RESULT_SORTING = (
     (Poll.ResultSorting.DATE, 'Date'),
-    (Poll.ResultSorting.NAME, 'Name')
+    (Poll.ResultSorting.NAME, 'Name'),
+    (Poll.ResultSorting.GROUP, 'Group')
 )
 
 

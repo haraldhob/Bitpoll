@@ -141,6 +141,8 @@
             {# TODO: use enum values #}
                 <input type="radio" name="{{ form.sorting.name }}" value="0" id="sorting_date" {% if form.sorting.value == 0 %} checked {% endif %}><label for="sorting_date">Date</label>
                 <input type="radio" name="{{ form.sorting.name }}" value="1" id="sorting_name" {% if form.sorting.value == 1 %} checked {% endif %}><label for="sorting_name">Name</label>
+                <input type="radio" name="{{ form.sorting.name }}" value="2" id="sorting_name" {% if form.sorting.value == 2 %} checked {% endif %}><label for="sorting_name">Group</label>
+
             </div>
             <div class="help-block">
                 {% blocktrans %}

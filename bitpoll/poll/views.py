@@ -11,7 +11,7 @@ from django.db import transaction, IntegrityError
 
 from django.http import HttpResponseForbidden, HttpResponse
 from django.shortcuts import redirect, get_object_or_404
-from django.db.models import Sum, Count, Q
+from django.db.models import Sum, Count, Q, When, Case, F
 from django.template.response import TemplateResponse
 from django.urls import reverse
 from django.utils.formats import date_format
@@ -52,6 +52,22 @@ def poll(request, poll_url: str, export: bool=False):
         poll_votes = poll_votes.order_by('name')
     elif current_poll.sorting == Poll.ResultSorting.DATE:
         poll_votes = poll_votes.order_by('date_created')
+    elif current_poll.sorting == Poll.ResultSorting.GROUP:
+        # the desired behavior in this case is:
+        # - stipendiaten appear first, ordered by name
+        # - vertrauenspersonen appear second, also ordered by name
+
+        # this is kind of a hack to achieve the desired behavior:
+        # I'm introducing an aggregated attribute called is_vertrauensperson by counting the number of groups assocaited
+        # with a user that are named 'vertrauenspersonen'. Thus this attribute is 0 if the person who gave a vote is a
+        # stip and 1 if they are a vertrauensperson
+        poll_votes = poll_votes.annotate(
+            is_vertrauensperson=Count(
+                'user__groups',
+                filter=Q(user__groups__name__iexact='vertrauenspersonen') # TODO extract the magic name into the config?
+            )
+        ).order_by('is_vertrauensperson', 'name')
+
     # prefetch_related('votechoice_set').select_releated() #TODO (Prefetch objekt nötig, wie ist der reverse join name wirklich?
 
     matrix = transpose(current_poll.get_choice_group_matrix(get_current_timezone()))
