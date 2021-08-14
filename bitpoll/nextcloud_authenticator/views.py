@@ -30,18 +30,27 @@ class CustomNextCloudAdapter(NextCloudAdapter):
             print("Error in user metadata request: " + str(resp.status_code) + " " + resp.content.decode())
         resp.raise_for_status()
         data = ET.fromstring(resp.content.decode())[1]
-
+        
         result_dict = {}
         for d in data:
             if d.text:
-                result_dict[d.tag] = d.text.strip()
+                value = d.text.strip()
+                if d.tag == "displayname":
+                    result_dict["name"] = value
+                    if len(name_parts := d.text.strip().split(" ")) == 2:
+                        result_dict["first_name"] = name_parts[0]
+                        result_dict["second_name"] = name_parts[1]
+                elif d.tag == "id":
+                    result_dict["username"] = value
+                result_dict[d.tag] = value
+
             # The 'groups' tag doesn't contain plain text, but a list of group strings
             if d.tag == 'groups':
                 result_dict[d.tag] = ", ".join([e.text for e in d])
 
         # Our login fails if the nextcloud user doesn't have a valid email. This shouldn't be the case.
-        if "email" not in result_dict.keys():
-            raise ValueError(f"Missing user email in nextcloud account for user {user_id}.")
+        if {"email", "username", "name"} - result_dict.keys():
+            raise ValueError(f"Missing user details (email, username or name) in nextcloud account for user {user_id}.")
         return result_dict
 
 
