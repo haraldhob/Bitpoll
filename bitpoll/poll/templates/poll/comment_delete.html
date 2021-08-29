@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends basetemplate_name %}
 
 {% load widget_tweaks %}
 {% load settings_value %}
@@ -29,7 +29,7 @@
     </div>
     </div>
         <br /><br />
-    <form action="{% url 'poll_deleteComment' poll.url comment.id %}" method="POST">{% csrf_token %}
+    <form action="{% url 'poll_deleteComment' poll.url comment.id %}{{ url_append }}" method="POST">{% csrf_token %}
         <input class="action" type="submit" name="Cancel" value="{% trans 'Cancel' %}" />
         <input class="action danger" type="submit" name="Delete" value="{% trans 'Delete' %}" />
     </form>

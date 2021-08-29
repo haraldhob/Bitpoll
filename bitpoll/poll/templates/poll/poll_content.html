@@ -80,17 +80,17 @@
                     {% endfor %}
                     <td class="noprint vote-actions">
                         {% if vote|vote_can_edit:request.user %}
-                            <a href="{% url 'poll_voteEdit' poll.url vote.id %}"
+                            <a href="{% url 'poll_voteEdit' poll.url vote.id %}{{ url_append }}"
                                class="btn btn-xs btn-default" title="{{ _('Edit vote') }}"><i
                                     class="fa fa-pencil"></i></a>
                         {% endif %}
                         {% if vote|vote_can_delete:request.user %}
-                            <a href="{% url 'poll_voteDelete' poll.url vote.id %}"
+                            <a href="{% url 'poll_voteDelete' poll.url vote.id %}{{ url_append }}"
                                class="btn btn-xs btn-default" title="{{ _('Delete vote') }}"><i
                                     class="fa fa-trash-o"></i></a>
                         {% endif %}
                         {% if vote.user == None and vote|vote_can_edit:request.user %}
-                            <a href="{% url 'poll_voteAssign' poll.url vote.id %}"
+                            <a href="{% url 'poll_voteAssign' poll.url vote.id %}{{ url_append }}"
                                class="btn btn-xs btn-default" title="{{ _('Assign user') }}">
                                 <i class="fa fa-user"></i></a>
                         {% endif %}
@@ -127,7 +127,7 @@
                     {% endfor %}
                     <td class="noprint vote-actions">
                         {% if invited.user == request.user %}
-                            <a href="{% url 'poll_vote' poll.url %}"
+                            <a href="{% url 'poll_vote' poll.url %}{{ url_append }}"
                                class="btn btn-xs btn-default" title="{{ _('Vote') }}"><i
                                     class="fa fa-pencil"></i></a>
                         {% endif %}
@@ -214,7 +214,7 @@
                 </a>
                 {% endif %}
                 {% if comment|comment_can_edit:request.user %}
-                    <a href="{% url 'poll_comment_edit' poll.url comment.id %}" title="{% trans 'Edit comment' %}" class="btn btn-default btn-xs">
+                    <a href="{% url 'poll_comment_edit' poll.url comment.id %}{{ url_append }}" title="{% trans 'Edit comment' %}" class="btn btn-default btn-xs">
                         <i class="fa fa-pencil"></i>
                 </a>
                 {% endif %}

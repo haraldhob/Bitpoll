@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends basetemplate_name %}
 {% load i18n %}
 
 {% block title %}{% trans 'Delete vote' %}{% endblock %}
@@ -15,7 +15,7 @@
     <label>{% trans 'Comment:' %}</label> {{ vote.comment }}
 
     <br /><br />
-    <form action="{% url 'poll_voteDelete' poll.url vote.id %}" method="POST">{% csrf_token %}
+    <form action="{% url 'poll_voteDelete' poll.url vote.id %}{{ url_append }}" method="POST">{% csrf_token %}
         <input type="submit" class="action" name="Cancel" value="{% trans 'Cancel' %}" />
         <input type="submit" class="action primary" name="Delete" value="{% trans 'Delete' %}" />
     </form>

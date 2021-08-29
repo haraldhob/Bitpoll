@@ -184,11 +184,10 @@ def poll(request, poll_url: str, export: bool=False):
             writer.writerow(row)
         return response
 
-    template = 'poll/poll.html'
-    if 'reduced' in request.GET:
-        template = 'poll/poll_reduced.html'
+    reduced_template = True if 'reduced' in request.GET else False
 
-    return TemplateResponse(request, template, {
+    return TemplateResponse(request, 'poll/poll.html', {
+        'basetemplate_name': 'base.html' if not reduced_template else 'base_reduced.html',
         'poll': current_poll,
         'matrix': matrix,
         'choices_matrix': zip(matrix, current_poll.choice_set.all()),
@@ -202,6 +201,7 @@ def poll(request, poll_url: str, export: bool=False):
         'comments': current_poll.comment_set.order_by('date_created'),
         'choice_values': ChoiceValue.objects.filter(poll=current_poll),
         'spam_challenge': create_anti_spam_challenge(current_poll.id),
+        'url_append': '' if not reduced_template else '?reduced'
     })
 
 
@@ -213,10 +213,15 @@ def comment(request, poll_url, comment_id=None):
     :param comment_id:
     :return:
     """
+
+    reduced_template = True if 'reduced' in request.GET else False
     current_poll = get_object_or_404(Poll, url=poll_url)
     if not current_poll.allow_comments:
         messages.error(request, _("Comments are disabled for this Poll"))
-        return redirect('poll', poll_url)
+        response = redirect('poll', poll_url)
+        if reduced_template:
+            response['Location'] += '?reduced'
+        return response
     user = None
     if not request.user.is_anonymous:
         user = request.user
@@ -260,7 +265,10 @@ def comment(request, poll_url, comment_id=None):
                                                   poll=current_poll,
                                                   user=user)
                             new_comment.save()
-                        return redirect('poll', poll_url)
+                        response = redirect('poll', poll_url)
+                        if reduced_template:
+                            response['Location'] += '?reduced'
+                        return response
                     else:
                         form.add_error('name', _("Provide a name"))
                 else:
@@ -284,11 +292,17 @@ def comment(request, poll_url, comment_id=None):
                 form = CommentForm(instance=comment_obj)
             else:
                 messages.error(request, _("You can't edit this Comment"))
-                return redirect('poll', poll_url)
+                response = redirect('poll', poll_url)
+                if reduced_template:
+                    response['Location'] += '?reduced'
+                return response
         else:
             form = CommentForm()
         spam_challenge = create_anti_spam_challenge(current_poll.id)
+
     return TemplateResponse(request, 'poll/comment_edit.html', {
+        'basetemplate_name': 'base.html' if not reduced_template else 'base_reduced.html',
+        'url_append': '' if not reduced_template else '?reduced',
         'comment_form': form,
         'comment_edit_id': comment_id,
         'poll': current_poll,
@@ -319,6 +333,7 @@ def delete_comment(request, poll_url, comment_id):
     current_poll = get_object_or_404(Poll, url=poll_url)
     current_comment = get_object_or_404(Comment, id=comment_id)
     error_msg = ""
+    reduced_template = True if 'reduced' in request.GET else False
 
     if request.method == 'POST':
         if 'Delete' in request.POST:
@@ -326,15 +341,25 @@ def delete_comment(request, poll_url, comment_id):
                 # TODO additional possibilities of deleting
                 if current_comment.can_delete(request.user):
                     current_comment.delete()
-                    return redirect('poll', poll_url)
+                    response = redirect('poll', poll_url)
+                    if reduced_template:
+                        response['Location'] += '?reduced'
+                    return response
                 else:
                     error_msg = _("Deletion not allowed. You are not {}.".format(str(current_comment.name)))
             else:
                 error_msg = _("Deletion not allowed. You are not authenticated.")
         else:
-            return redirect('poll', poll_url)
+            response = redirect('poll', poll_url)
+            if reduced_template:
+                response['Location'] += '?reduced'
+            return response
+
+    reduced_template = True if 'reduced' in request.GET else False
 
     return TemplateResponse(request, 'poll/comment_delete.html', {
+        'basetemplate_name': 'base.html' if not reduced_template else 'base_reduced.html',
+        'url_append': '' if not reduced_template else '?reduced',
         'poll': current_poll,
         'comment': current_comment,
         'error': error_msg,
@@ -345,12 +370,16 @@ def delete_comment(request, poll_url, comment_id):
 @login_required
 def watch(request, poll_url):
     current_poll = get_object_or_404(Poll, url=poll_url)
+    reduced_template = True if 'reduced' in request.GET else False
 
     if not current_poll.can_watch(request.user):
         messages.error(
             request, _("You are not allowed to watch this poll.")
         )
-        return redirect('poll', poll_url)
+        response = redirect('poll', poll_url)
+        if reduced_template:
+            response['Location'] += '?reduced'
+        return response
 
     if current_poll.user_watches(request.user):
         poll_watch = PollWatch.objects.get(poll=current_poll, user=request.user)
@@ -358,7 +387,11 @@ def watch(request, poll_url):
     else:
         poll_watch = PollWatch(poll=current_poll, user=request.user)
         poll_watch.save()
-    return redirect('poll', poll_url)
+    response = redirect('poll', poll_url)
+    if reduced_template:
+        response['Location'] += '?reduced'
+    return response
+
 
 
 def edit_choice(request, poll_url):
@@ -864,6 +897,8 @@ def vote(request, poll_url, vote_id=None):
         else:
             return redirect('poll', poll_url)
 
+    reduced_template = True if 'reduced' in request.GET else False
+
     tz_activate(current_poll.get_tz_name(request.user))
 
     ALLOW_EDIT_HOURS = 24  # TODO extract to somewhere better suited
@@ -975,7 +1010,10 @@ def vote(request, poll_url, vote_id=None):
 
                             VoteChoice.objects.bulk_create(new_choices)
                             messages.success(request, _('Vote has been recorded'))
-                            return redirect('poll', poll_url)
+                            response = redirect('poll', poll_url)
+                            if reduced_template:
+                                response['Location'] += '?reduced'
+                            return response
                         else:
                             raise IntegrityError("An Error while saving the Vote occurred, see message")
                 except IntegrityError as e:
@@ -1027,7 +1065,10 @@ def vote(request, poll_url, vote_id=None):
 
     events = get_caldav(choices, current_poll, request.user, request) # TODO check if we broke anything in CalDAV handling
 
+    reduced_template = True if 'reduced' in request.GET else False
+
     return TemplateResponse(request, 'poll/vote_creation.html', {
+        'basetemplate_name': 'base.html' if not reduced_template else 'base_reduced.html',
         'poll': current_poll,
         'matrix': matrix,
         'matrix_len': len(matrix[0]),
@@ -1040,6 +1081,7 @@ def vote(request, poll_url, vote_id=None):
         'timezone_warning': (request.user.is_authenticated and
                              current_poll.get_tz_name(request.user) != request.user.timezone),
         'choice_values': ChoiceValue.objects.filter(poll=current_poll),
+        'url_append': '' if not reduced_template else '?reduced',
     })
 
 
@@ -1109,7 +1151,11 @@ def vote_delete(request, poll_url, vote_id):
         else:
             return redirect('poll', poll_url)
 
+    reduced_template = True if 'reduced' in request.GET else False
+
     return TemplateResponse(request, 'poll/vote_delete.html', {
+        'basetemplate_name': 'base.html' if not reduced_template else 'base_reduced.html',
+        'url_append': '?reduced' if reduced_template else '',
         'poll': current_poll,
         'vote': current_vote,
         'error': error_msg,

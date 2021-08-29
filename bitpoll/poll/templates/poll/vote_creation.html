@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends basetemplate_name %}
 {% load i18n %}
 {% load poll_filter %}
 {% load widget_tweaks %}
@@ -22,9 +22,9 @@
           <li>{% trans 'Hold left mouse button and drag mouse to select multiple vote choices.' %}</li>
         </ul>
         {% if current_vote.pk %}
-            <form action="{% url 'poll_voteEdit' poll.url current_vote.pk %}" method="POST" class="form-inline">
+            <form action="{% url 'poll_voteEdit' poll.url current_vote.pk %}{{ url_append }}" method="POST" class="form-inline">
         {% else %}
-        <form action="{% url 'poll_vote' poll.url %}" method="POST" class="form-inline">
+        <form action="{% url 'poll_vote' poll.url %}{{ url_append }}" method="POST" class="form-inline">
         {% endif %}
             {% csrf_token %}
             <table class="table poll vote auto-width">

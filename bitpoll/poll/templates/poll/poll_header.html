@@ -8,7 +8,7 @@
         <div class="poll-actions">
         </div>
         <h1>{{ poll.title }}{% if request.user.is_authenticated %}
-            <form class="form form-inline pull-right" action="{% url 'poll_watch' poll.url %}" method="post">
+            <form class="form form-inline pull-right" action="{% url 'poll_watch' poll.url %}{{ url_append }}" method="post">
                 {% csrf_token %}
                 {% if request.user|is_watching:poll %}
                     <button class="action noprint" type="submit"><i class="fa fa-eye-slash"></i> {% trans 'Unwatch Poll' %}</button>
@@ -74,7 +74,7 @@
         <nav>
             <ul class="poll-tabs noprint">
                 <li class="{% if page == "" %}active{% endif %}"><a data-shortcut="g o"
-                                                                    href="{% url 'poll' poll.url %}"><i
+                                                                    href="{% url 'poll' poll.url %}{{ url_append }}"><i
                         class="fa fa-table"></i>
                     <span>{% trans 'Overview' %}</span></a>
                 </li>
@@ -85,22 +85,22 @@
             {%  endcomment %}
                 {% if poll|poll_can_edit:request.user %}
                      <li class="{% if page == "Settings" %}active{% endif %}"><a data-shortcut="g s"
-                                                                                href="{% url 'poll_settings' poll.url %}">
+                                                                                href="{% url 'poll_settings' poll.url %}{{ url_append }}">
                         <i class="fa fa-wrench"></i><span>{% trans 'Settings' %}</span></a>
                     </li>
                     <li class="{% if page == "Choices" %}active{% endif %}">
-                        <a data-shortcut="g c" href="{% url 'poll_editChoice' poll.url %}"><i
+                        <a data-shortcut="g c" href="{% url 'poll_editChoice' poll.url %}{{ url_append }}"><i
                                 class="fa fa-list"></i><span>{% trans 'Choices' %}</span></a>
                     </li>
                 {% endif %}
                 {% if poll.one_vote_per_user and poll|has_voted:request.user %}
                     <li class="vote {% if page == "Vote" %}active{% endif %}"><a data-shortcut="g v"
-                                                                                 href="{% url 'poll_voteEdit' poll.url poll|get_own_vote_pk:request.user %}"><i
+                                                                                 href="{% url 'poll_voteEdit' poll.url poll|get_own_vote_pk:request.user %}{{ url_append }}"><i
                         class="fa fa-check"></i><span>{% trans 'Edit Vote' %}</span></a>
                     </li>
                 {% else %}
                     <li class="vote {% if page == "Vote" %}active{% endif %}"><a data-shortcut="g v"
-                                                                                 href="{% url 'poll_vote' poll.url %}"><i
+                                                                                 href="{% url 'poll_vote' poll.url %}{{ url_append }}"><i
                         class="fa fa-check"></i><span>{% trans 'Vote' %}</span></a>
                     </li>
                 {% endif %}

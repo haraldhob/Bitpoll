@@ -1,8 +1,8 @@
 {% load i18n %}
 {% if comment_edit_id %}
-    <form action="{% url 'poll_comment_edit' poll.url comment_edit_id %}" method="POST" class="form">
+    <form action="{% url 'poll_comment_edit' poll.url comment_edit_id %}{{ url_append }}" method="POST" class="form">
 {% else %}
-    <form action="{% url 'poll_comment' poll.url %}" method="POST" class="form">
+    <form action="{% url 'poll_comment' poll.url %}{{ url_append }}" method="POST" class="form">
 {%  endif %}
     {% csrf_token %}
     <div class="form-group">
