@@ -184,7 +184,11 @@ def poll(request, poll_url: str, export: bool=False):
             writer.writerow(row)
         return response
 
-    return TemplateResponse(request, "poll/poll.html", {
+    template = 'poll/poll.html'
+    if 'reduced' in request.GET:
+        template = 'poll/poll_reduced.html'
+
+    return TemplateResponse(request, template, {
         'poll': current_poll,
         'matrix': matrix,
         'choices_matrix': zip(matrix, current_poll.choice_set.all()),
