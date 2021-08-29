@@ -44,6 +44,7 @@ def poll(request, poll_url: str, export: bool=False):
     Displays for a given poll its fields along with all possible choices, all votes and all its comments.
     """
     current_poll = get_object_or_404(Poll, url=poll_url)
+    reduced_template = True if 'reduced' in request.GET else False
 
     tz_activate(current_poll.get_tz_name(request.user))
 
@@ -81,7 +82,7 @@ def poll(request, poll_url: str, export: bool=False):
     # The next block is limiting the visibility of the results
     summary = True
     if current_poll.require_login_view and not request.user.is_authenticated:
-        return redirect_to_login(reverse('poll', args=[poll_url]))
+        return redirect_to_login(reverse('poll', args=[poll_url]) + '?reduced' if reduced_template else '')
 
     elif current_poll.current_user_is_owner(request) and current_poll.show_results != "complete":
         messages.info(request, _("You can see the results because you are the owner of the Poll"))
@@ -186,8 +187,6 @@ def poll(request, poll_url: str, export: bool=False):
             row.extend([(choice['value'].title + (" ({})".format(choice['comment']) if choice and choice['comment'] and len(choice['comment']) > 0 else '')) if choice and choice['value'] else '' for choice in votechoices])
             writer.writerow(row)
         return response
-
-    reduced_template = True if 'reduced' in request.GET else False
 
     return TemplateResponse(request, 'poll/poll.html', {
         'basetemplate_name': 'base.html' if not reduced_template else 'base_reduced.html',
