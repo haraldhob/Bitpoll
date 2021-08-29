@@ -910,7 +910,10 @@ def vote(request, poll_url, vote_id=None):
         if current_poll.require_login and not request.user.is_authenticated:
             return redirect_to_login(reverse('poll_vote', args=[poll_url]))
         else:
-            reduced_template = True if 'reduced' in request.GET else False
+            response = redirect('poll', poll_url)
+            if reduced_template:
+                response['Location'] += '?reduced'
+            return response
 
     tz_activate(current_poll.get_tz_name(request.user))
 
