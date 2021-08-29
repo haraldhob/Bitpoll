@@ -7,4 +7,7 @@ db.sqlite3
 **.sass-cache
 **.swp
 .pyenv
+.pyenv2
+.venv
 *.mo
+bitpoll/settings_local2.py
