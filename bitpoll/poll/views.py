@@ -396,15 +396,29 @@ def watch(request, poll_url):
 
 def edit_choice(request, poll_url):
     current_poll = get_object_or_404(Poll, url=poll_url)
+    reduced_template = True if 'reduced' in request.GET else False
+
     if not current_poll.can_edit(request.user, request):
-        return redirect('poll', poll_url)
+        response = redirect('poll', poll_url)
+        if reduced_template:
+            response['Location'] += '?reduced'
+        return response
 
     if current_poll.type == 'universal':
-        return redirect('poll_editUniversalChoice', current_poll.url)
+        response = redirect('poll_editUniversalChoice', current_poll.url)
+        if reduced_template:
+            response['Location'] += '?reduced'
+        return response
     elif current_poll.type == 'date':
-        return redirect('poll_editDateChoice', current_poll.url)
+        response = redirect('poll_editDateChoice', current_poll.url)
+        if reduced_template:
+            response['Location'] += '?reduced'
+        return response
     else:
-        return redirect('poll_editDTChoiceDate', current_poll.url)
+        response = redirect('poll_editDTChoiceDate', current_poll.url)
+        if reduced_template:
+            response['Location'] += '?reduced'
+        return response
     pass
 
 
@@ -881,6 +895,7 @@ def vote(request, poll_url, vote_id=None):
     Takes vote with comments as input and saves the vote along with all comments.
     """
     current_poll = get_object_or_404(Poll, url=poll_url)
+    reduced_template = True if 'reduced' in request.GET else False
     error_msg = False
     deleted_choicevals = False
     expired_choices = False
@@ -889,15 +904,13 @@ def vote(request, poll_url, vote_id=None):
         messages.error(
             request, _("This Poll is past the due date, voting is no longer possible")
         )
-        return redirect('poll', poll_url)
+        reduced_template = True if 'reduced' in request.GET else False
 
     if not current_poll.can_vote(request.user, request, vote_id is not None):
         if current_poll.require_login and not request.user.is_authenticated:
             return redirect_to_login(reverse('poll_vote', args=[poll_url]))
         else:
-            return redirect('poll', poll_url)
-
-    reduced_template = True if 'reduced' in request.GET else False
+            reduced_template = True if 'reduced' in request.GET else False
 
     tz_activate(current_poll.get_tz_name(request.user))
 
@@ -939,7 +952,10 @@ def vote(request, poll_url, vote_id=None):
             messages.error(
                 request, _("The Name is longer than the allowed name length of 80 characters")
             )
-            return redirect('poll', poll_url) #todo: das macht keinen sinn, warum nicht verbessern?
+            response = redirect('poll', poll_url)
+            if reduced_template:
+                response['Location'] += '?reduced'
+            return response #todo: das macht keinen sinn, warum nicht verbessern?
 
         current_vote.anonymous = 'anonymous' in request.POST
 
@@ -1029,7 +1045,10 @@ def vote(request, poll_url, vote_id=None):
         messages.error(
             request, _("Voting time for all options has expired, voting is no longer possible")  # TODO add translations
         )
-        return redirect('poll', poll_url)
+        response = redirect('poll', poll_url)
+        if reduced_template:
+            response['Location'] += '?reduced'
+        return response
     if len(matrix) < len(current_poll.ordered_choices):
         messages.info(
             request, _('Some poll options have already passed. You will not be able to change your vote for these options.') # TODO translation
@@ -1143,13 +1162,19 @@ def vote_delete(request, poll_url, vote_id):
                 # TODO additional possibilities of deleting
                 if current_vote.can_delete(request.user):
                     current_vote.delete()
-                    return redirect('poll', poll_url)
+                    response = redirect('poll', poll_url)
+                    if reduced_template:
+                        response['Location'] += '?reduced'
+                    return response
                 else:
                     error_msg = _("Deletion not allowed. You are not {}.".format(str(current_vote.name)))
             else:
                 error_msg = _("Deletion not allowed. You are not authenticated.")
         else:
-            return redirect('poll', poll_url)
+            response = redirect('poll', poll_url)
+            if reduced_template:
+                response['Location'] += '?reduced'
+            return response
 
     reduced_template = True if 'reduced' in request.GET else False
 
