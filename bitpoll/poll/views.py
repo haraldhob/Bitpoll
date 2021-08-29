@@ -1163,6 +1163,7 @@ def vote_delete(request, poll_url, vote_id):
     """
     current_poll = get_object_or_404(Poll, url=poll_url)
     current_vote = get_object_or_404(Vote, id=vote_id)
+    reduced_template = True if 'reduced' in request.GET else False
     error_msg = ""
 
     if request.method == 'POST':
@@ -1184,8 +1185,6 @@ def vote_delete(request, poll_url, vote_id):
             if reduced_template:
                 response['Location'] += '?reduced'
             return response
-
-    reduced_template = True if 'reduced' in request.GET else False
 
     return TemplateResponse(request, 'poll/vote_delete.html', {
         'basetemplate_name': 'base.html' if not reduced_template else 'base_reduced.html',
