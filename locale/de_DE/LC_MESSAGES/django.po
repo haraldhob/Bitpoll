@@ -346,8 +346,11 @@ msgstr "erlaube anonymes Abstimmen"
 #: bitpoll/base/templates/base/index.html:162
 #: bitpoll/poll/templates/poll/poll_header.html:62
 #: bitpoll/poll/templates/poll/settings.html:105
-msgid "login required"
-msgstr "Login erforderlich"
+msgid "login required to vote"
+msgstr "Login zum Abstimmen erforderlich"
+
+msgid "login required to view"
+msgstr "Login zum Betrachten erforderlich"
 
 #: bitpoll/base/templates/base/index.html:166
 #: bitpoll/poll/templates/poll/settings.html:109
@@ -1892,6 +1895,15 @@ msgstr ""
 "Eine der ausgewählten Antwortmöglichkeiten existiert nicht. Dies liegt "
 "wahrscheinlich an Änderungen bei der Umfrage. Bitte korrigiere deine "
 "Stimmabgabe."
+
+msgid ""
+"Tried to vote for a choice that has expired."
+"This is probably because the poll\'s settings were changed"
+"since you started voting. Please reload the page."
+msgstr ""
+"Eine der ausgewählten Antwortmöglichkeiten liegt in der Vergangenheit."
+"Dies liegt wahrscheinlich an Änderungen bei der Umfrage, während Du sie"
+"ausgefüllt hast. Bitte korrigiere deine Stimmabgabe"
 
 #: bitpoll/poll/views.py:877
 msgid "Vote has been recorded"

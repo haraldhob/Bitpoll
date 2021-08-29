@@ -309,8 +309,14 @@ msgstr "allow anonymous votes"
 #: bitpoll/base/templates/base/index.html:162
 #: bitpoll/poll/templates/poll/poll_header.html:62
 #: bitpoll/poll/templates/poll/settings.html:105
-msgid "login required"
-msgstr "login required"
+msgid "login required to vote"
+msgstr "login required to vote"
+
+#: bitpoll/base/templates/base/index.html:162
+#: bitpoll/poll/templates/poll/poll_header.html:62
+#: bitpoll/poll/templates/poll/settings.html:105
+msgid "login required to view"
+msgstr "login required to view"
 
 #: bitpoll/base/templates/base/index.html:166
 #: bitpoll/poll/templates/poll/settings.html:109
@@ -1794,6 +1800,12 @@ msgstr ""
 msgid ""
 "Value for choice does not exist. This is probably due to changes in the "
 "poll. Please correct your vote."
+msgstr ""
+
+msgid ""
+"Tried to vote for a choice that has expired."
+"This is probably because the poll\'s settings were changed"
+"since you started voting. Please reload the page."
 msgstr ""
 
 #: bitpoll/poll/views.py:877
