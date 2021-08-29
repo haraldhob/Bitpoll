@@ -39,7 +39,7 @@
                         data-toggle="popover"
                         data-trigger="hover"
                         data-container="body"
-                        data-title="{{ vote.display_name|force_escape|force_escape }} {% if vote.user %}({{ vote.user.username }}){% endif %}"
+                        data-title="{{ vote.display_name|force_escape|force_escape }} {% if vote.user %}({{ vote.user.username|force_escape|force_escape }}){% endif %}"
                         data-content="
                             {{ vote.date_created }}
                             {% if vote.comment %}
@@ -110,7 +110,7 @@
                         data-toggle="popover"
                         data-trigger="hover"
                         data-container="body"
-                        data-title="{{ invited.user.get_displayname|force_escape|force_escape }}"
+                        data-title="{{ invited.user.get_displayname|force_escape|force_escape }} {% if invited.user %}({{ invited.user.username|force_escape|force_escape }}){% endif %}"
                         data-content="">
                         {{ invited.user.get_displayname }}
                     </td>
