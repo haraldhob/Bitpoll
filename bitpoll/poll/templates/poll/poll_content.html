@@ -39,7 +39,7 @@
                         data-toggle="popover"
                         data-trigger="hover"
                         data-container="body"
-                        data-title="{{ vote.display_name|force_escape|force_escape }}"
+                        data-title="{{ vote.display_name|force_escape|force_escape }} {% if vote.user %}({{ vote.user.username }}){% endif %}"
                         data-content="
                             {{ vote.date_created }}
                             {% if vote.comment %}
