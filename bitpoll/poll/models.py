@@ -50,6 +50,7 @@ class Poll(models.Model):
     anonymous_allowed = models.BooleanField(default=True)
     public_listening = models.BooleanField(default=False)
     require_login = models.BooleanField(default=False)
+    require_login_view = models.BooleanField(default=False)
     require_invitation = models.BooleanField(default=False)
     show_results = models.CharField(max_length=20, choices=POLL_RESULTS, default="complete")
     send_mail = models.BooleanField(default=False)

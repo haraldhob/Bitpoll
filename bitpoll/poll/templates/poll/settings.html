@@ -102,7 +102,11 @@
             </div>
             <div class="checkbox">
                 <input type="checkbox" id="require_login" name="{{ form.require_login.name }}" {% if form.require_login.value %} checked {% endif %}>
-                <label for="require_login">{% trans 'login required' %}</label>
+                <label for="require_login">{% trans 'login required to vote' %}</label>
+            </div>
+            <div class="checkbox">
+                <input type="checkbox" id="require_login" name="{{ form.require_login_view.name }}" {% if form.require_login_view.value %} checked {% endif %}>
+                <label for="require_login_view">{% trans 'login required to view' %}</label>
             </div>
             <div class="checkbox">
                 <input type="checkbox" id="require_invitation" name="{{ form.require_invitation.name }}" {% if form.require_invitation.value %} checked {% endif %}>

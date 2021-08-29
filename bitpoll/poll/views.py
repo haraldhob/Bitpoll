@@ -80,7 +80,10 @@ def poll(request, poll_url: str, export: bool=False):
     invitations = current_poll.invitation_set.filter(vote=None)
     # The next block is limiting the visibility of the results
     summary = True
-    if current_poll.current_user_is_owner(request) and current_poll.show_results != "complete":
+    if current_poll.require_login_view and not request.user.is_authenticated:
+        return redirect_to_login(reverse('poll', args=[poll_url]))
+
+    elif current_poll.current_user_is_owner(request) and current_poll.show_results != "complete":
         messages.info(request, _("You can see the results because you are the owner of the Poll"))
     else:
         if current_poll.show_results in ("summary", "never"):
@@ -904,7 +907,10 @@ def vote(request, poll_url, vote_id=None):
         messages.error(
             request, _("This Poll is past the due date, voting is no longer possible")
         )
-        reduced_template = True if 'reduced' in request.GET else False
+        response = redirect('poll', poll_url)
+        if reduced_template:
+            response['Location'] += '?reduced'
+        return response
 
     if not current_poll.can_vote(request.user, request, vote_id is not None):
         if current_poll.require_login and not request.user.is_authenticated:

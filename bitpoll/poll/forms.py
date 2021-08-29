@@ -63,6 +63,7 @@ class PollSettingsForm(ModelForm):
             'allow_comments',
             'anonymous_allowed',
             'require_login',
+            'require_login_view',
             'require_invitation',
             'allow_unauthenticated_vote_changes',
             'one_vote_per_user',

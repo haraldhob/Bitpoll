@@ -61,10 +61,14 @@
                 <li title="{% trans 'Login required' %}"><i class="fa fa-check"></i>
                     <span class="content">{% trans 'login required' %}</span></li>
             {% endif %}
-                {% if poll.vote_all %}
-                    <li title="{% trans 'Empty choices forbidden' %}"><i class="fa fa-ban"></i>
-                        <span class="content">{% trans 'Empty choices forbidden' %}</span></li>
-                {% endif %}
+            {% if poll.require_login_view %}
+                <li title="{% trans 'Login required to view' %}"><i class="fa fa-check"></i>
+                    <span class="content">{% trans 'login required to view' %}</span></li>
+            {% endif %}
+            {% if poll.vote_all %}
+                <li title="{% trans 'Empty choices forbidden' %}"><i class="fa fa-ban"></i>
+                    <span class="content">{% trans 'Empty choices forbidden' %}</span></li>
+            {% endif %}
         </ul>
         {% if  poll.description %}
             <div class="description">
