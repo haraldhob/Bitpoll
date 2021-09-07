@@ -159,7 +159,7 @@
                         data-placement="top"
                         data-score="{{ choice.score|percentage }}">
                         {# if vote.score != 0 else 1  TODO: das if soll glaube ich ob da übrhaupt was da ist #}
-                        {{ choice.score|percentage }}
+                        {{ choice.score|percentage }}<br/>({{ choice.count }})
                     </th>
                 {% endfor %}
             </tr>
