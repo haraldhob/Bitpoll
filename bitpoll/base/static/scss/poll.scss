@@ -42,6 +42,11 @@ table.poll {
     margin: .7em -3px;
 }
 
+.sticky-firstrow {
+    position: sticky;
+    left: 0;
+}
+
 .poll, .vote {
     font-size: 9pt;
 }
