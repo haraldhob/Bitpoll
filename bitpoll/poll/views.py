@@ -122,7 +122,40 @@ def poll(request, poll_url: str, export: bool=False):
                                         'value': vote_choice.value,
                                         'choice': choice}
 
+    voted_entries = map(lambda x: ('VOTE', x), zip(poll_votes, vote_choice_matrix))
+    invited_entries = map(lambda x: ('INVITE', x), invitations)
+    all_entries = list(voted_entries) + list(invited_entries)
+
+
+    def getkey_vote_and_invitation(item):
+        item = item[1]
+        if isinstance(item, Invitation):
+            if current_poll.sorting == Poll.ResultSorting.NAME:
+                return item.user.username
+            elif current_poll.sorting == Poll.ResultSorting.DATE:
+                return item.date_created
+            elif current_poll.sorting == Poll.ResultSorting.GROUP:
+                if len(item.user.groups.filter(name='vertrauenspersonen').all()) > 0:
+                    return (2, item.user.username)
+                else:
+                    return (1, item.user.username)
+        elif isinstance(item, tuple) and len(item) == 2 and isinstance(item[0], Vote):
+            if current_poll.sorting == Poll.ResultSorting.NAME:
+                return item[0].user.username
+            elif current_poll.sorting == Poll.ResultSorting.DATE:
+                return item[0].date_created
+            elif current_poll.sorting == Poll.ResultSorting.GROUP:
+                if len(item[0].user.groups.filter(name='vertrauenspersonen').all()) > 0:
+                    return (2, item[0].user.username)
+                else:
+                    return (1, item[0].user.username)
+        return (3, '')
+
+    all_entries.sort(key=getkey_vote_and_invitation)
+    # keys = map(getkey_vote_and_invitation, vote_entries)
+
     # aggregate stats for the different Choice_Values per column
+
     stats2 = Choice.objects.filter(poll=current_poll, deleted=False).order_by('sort_key').annotate(
         count=Count('votechoice__value__color')).values('count', 'id', 'votechoice__value__icon',
                                                         'votechoice__value__color', 'votechoice__value__title',
@@ -192,12 +225,12 @@ def poll(request, poll_url: str, export: bool=False):
         'basetemplate_name': 'base.html' if not reduced_template else 'base_reduced.html',
         'poll': current_poll,
         'matrix': matrix,
-        'choices_matrix': zip(matrix, current_poll.choice_set.all()),
+        # 'choices_matrix': zip(matrix, current_poll.choice_set.all()),
         'page': '',
-        'votes': zip(poll_votes, vote_choice_matrix),
+        'vote_entries': all_entries,
         'stats': stats,
         'max_score': max_score,
-        'invitations': invitations if current_poll.show_invitations else [],
+        # 'invitations': invitations if current_poll.show_invitations else [],
         'summary': summary,
         'comment_form': CommentForm(),
         'comments': current_poll.comment_set.order_by('date_created'),
