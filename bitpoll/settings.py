@@ -89,6 +89,7 @@ INSTALLED_APPS = [
     'friendlytagloader',
     'encrypted_model_fields',
     'django_token_bucket',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
@@ -347,6 +348,12 @@ CALENDAR_FILL_RATE = 500
 URL_PREFIX = ''
 
 ANTI_SPAM_CHALLENGE_TTL = 60 * 60 * 24 * 7  # Defaults to 7 days
+
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAdminUser',
+    ]
+}
 
 from .settings_local import *
 

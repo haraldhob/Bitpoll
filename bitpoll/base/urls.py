@@ -1,8 +1,16 @@
 from django.conf.urls import url
+from django.urls import path, include
+
+from rest_framework import routers
 
 from . import views
 
+router = routers.DefaultRouter()
+router.register(r'users', views.UserViewSet)
+router.register(r'groups', views.GroupViewSet)
+
 urlpatterns = [
+    path('api/', include(router.urls)),
     url(r'^settings/$', views.user_settings, name='settings'),
     url(r'^$', views.index, name='index'),
     url(r'^imprint/$', views.imprint, name='imprint'),

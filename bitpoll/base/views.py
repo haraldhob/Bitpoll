@@ -11,6 +11,7 @@ from django.db import IntegrityError
 
 from bitpoll.base.autocomplete import autocomplete_users
 from bitpoll.base.models import BitpollUser
+from django.contrib.auth.models import Group
 from bitpoll.caldav.forms import DavCalendarForm
 from bitpoll.caldav.models import DavCalendar
 
@@ -25,6 +26,9 @@ from bitpoll.registration.forms import RegisterForm
 from bitpoll.settings import IMPRINT_URL
 from django.core import signing
 from django.conf import settings
+
+from rest_framework import viewsets, permissions
+from .serializers import UserSerializer, GroupSerializer
 
 
 def index(request):
@@ -160,3 +164,16 @@ def autocomplete(request):
         } for user in users]
     })
     return HttpResponse(result_json, content_type='application/json')
+
+class UserViewSet(viewsets.ModelViewSet):
+    queryset = BitpollUser.objects.all().order_by('username')
+    serializer_class = UserSerializer
+    permission_classes = [permissions.IsAdminUser]
+
+class GroupViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows groups to be viewed or edited.
+    """
+    queryset = Group.objects.all()
+    serializer_class = GroupSerializer
+    permission_classes = [permissions.IsAdminUser]
