@@ -175,5 +175,6 @@ class GroupViewSet(viewsets.ModelViewSet):
     API endpoint that allows groups to be viewed or edited.
     """
     queryset = Group.objects.all()
+    lookup_field = 'name'
     serializer_class = GroupSerializer
     permission_classes = [permissions.IsAdminUser]
