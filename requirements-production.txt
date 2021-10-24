@@ -100,3 +100,4 @@ uwsgi==2.0.19.1
     # via -r requirements.in
 vobject==0.9.6.1
     # via caldav
+djangorestframework==3.12.4
