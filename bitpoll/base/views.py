@@ -167,6 +167,9 @@ def autocomplete(request):
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = BitpollUser.objects.all().order_by('username')
+    lookup_field = 'username'
+    lookup_value_regex = '[^/]+'    # this needs to be done to allow for "." in usernames. Otherwise django crashes when
+                                    # rendering the list of users... for whatever reason :(
     serializer_class = UserSerializer
     permission_classes = [permissions.IsAdminUser]
 

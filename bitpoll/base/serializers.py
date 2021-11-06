@@ -3,14 +3,23 @@ from rest_framework import serializers
 from .models import BitpollUser
 from django.contrib.auth.models import Group
 
+
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     groups = serializers.SlugRelatedField(many=True, slug_field='name', queryset=Group.objects.all())
+    last_login = serializers.DateTimeField(format="%Y-%m-%dT%H:%M:%S%z")
+    date_joined = serializers.DateTimeField(format="%Y-%m-%dT%H:%M:%S%z")
+
     class Meta:
         model = BitpollUser
-        fields = ['id', 'url', 'username', 'email', 'first_name', 'last_name', 'groups']
+        fields = ['id', 'url', 'username', 'email', 'first_name', 'last_name', 'groups', 'is_active', 'date_joined', 'last_login']
+        lookup_field = 'username'
+        extra_kwargs = {
+            'url': {'lookup_field': 'username'}
+        }
 
 
 class GroupSerializer(serializers.HyperlinkedModelSerializer):
+
     class Meta:
         model = Group
         fields = ['url', 'name']
