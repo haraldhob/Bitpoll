@@ -6,8 +6,8 @@ from django.contrib.auth.models import Group
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     groups = serializers.SlugRelatedField(many=True, slug_field='name', queryset=Group.objects.all())
-    last_login = serializers.DateTimeField(format="%Y-%m-%dT%H:%M:%S%z")
-    date_joined = serializers.DateTimeField(format="%Y-%m-%dT%H:%M:%S%z")
+    last_login = serializers.DateTimeField(format="%Y-%m-%dT%H:%M:%S%z", required=False)
+    date_joined = serializers.DateTimeField(format="%Y-%m-%dT%H:%M:%S%z", required=False)
 
     class Meta:
         model = BitpollUser
