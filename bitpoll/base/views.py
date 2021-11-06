@@ -28,7 +28,9 @@ from django.core import signing
 from django.conf import settings
 
 from rest_framework import viewsets, permissions
-from .serializers import UserSerializer, GroupSerializer
+from .serializers import UserSerializer, GroupSerializer, SocialAccountSerializer
+
+from allauth.socialaccount.models import SocialAccount
 
 
 def index(request):
@@ -180,4 +182,16 @@ class GroupViewSet(viewsets.ModelViewSet):
     queryset = Group.objects.all()
     lookup_field = 'name'
     serializer_class = GroupSerializer
+    permission_classes = [permissions.IsAdminUser]
+
+
+class SocialAccountViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows AllAuth's SocialUsers to be viewed or edited.
+    """
+    queryset = SocialAccount.objects.all()
+    lookup_field = 'user'
+    lookup_value_regex = '[^/]+'    # this needs to be done to allow for "." in usernames. Otherwise django crashes when
+                                    # rendering the list of users... for whatever reason :(
+    serializer_class = SocialAccountSerializer
     permission_classes = [permissions.IsAdminUser]

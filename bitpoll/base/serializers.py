@@ -2,6 +2,7 @@ from rest_framework import serializers
 
 from .models import BitpollUser
 from django.contrib.auth.models import Group
+from allauth.socialaccount.models import SocialAccount
 
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
@@ -26,4 +27,14 @@ class GroupSerializer(serializers.HyperlinkedModelSerializer):
         lookup_field = 'name'
         extra_kwargs = {
             'url': {'lookup_field': 'name'}
+        }
+
+class SocialAccountSerializer(serializers.HyperlinkedModelSerializer):
+    user = serializers.SlugRelatedField(many=False, slug_field='username', queryset=BitpollUser.objects.all())
+    class Meta:
+        model = SocialAccount
+        fields = ['url', 'user', 'provider', 'uid']
+        lookup_field = 'user'
+        extra_kwargs = {
+            'url': {'lookup_field': 'user'}
         }
