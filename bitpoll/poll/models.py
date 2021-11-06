@@ -47,10 +47,10 @@ class Poll(models.Model):
 
     # === Extra settings ==
     due_date = models.DateTimeField(null=True, blank=True)
-    anonymous_allowed = models.BooleanField(default=True)
+    anonymous_allowed = models.BooleanField(default=False)
     public_listening = models.BooleanField(default=False)
-    require_login = models.BooleanField(default=False)
-    require_login_view = models.BooleanField(default=False)
+    require_login = models.BooleanField(default=True)
+    require_login_view = models.BooleanField(default=True)
     require_invitation = models.BooleanField(default=False)
     show_results = models.CharField(max_length=20, choices=POLL_RESULTS, default="complete")
     send_mail = models.BooleanField(default=False)
@@ -61,9 +61,9 @@ class Poll(models.Model):
     timezone_name = models.CharField(max_length=40, default="Europe/Berlin", validators=[validate_timezone])
     use_user_timezone = models.BooleanField(default=False)
     vote_all = models.BooleanField(default=False)
-    sorting = models.IntegerField(default=0)
+    sorting = models.IntegerField(default=2)
     hide_participants = models.BooleanField(default=False)
-    change_vote_after_event = models.BooleanField(default=True)
+    change_vote_after_event = models.BooleanField(default=False)
 
     class ResultSorting(enum.IntEnum):
         DATE = 0
