@@ -3,7 +3,7 @@ import csv
 import re
 
 import datetime as dt
-from django.utils import timezone
+import urllib.parse as parse
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -11,8 +11,10 @@ from django.contrib.auth.models import Group
 from django.contrib.auth.views import redirect_to_login
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.db import transaction, IntegrityError
+from django.conf import settings as django_settings
 
 from django.http import HttpResponseForbidden, HttpResponse
+from django.http.response import HttpResponseRedirect
 from django.shortcuts import redirect, get_object_or_404
 from django.db.models import Sum, Count, Q, When, Case, F
 from django.template.response import TemplateResponse
@@ -20,7 +22,7 @@ from django.urls import reverse
 from django.utils.formats import date_format
 from django.utils.translation import ugettext_lazy as _
 from django.utils.timezone import activate as tz_activate, localtime, now, make_naive, make_aware
-from django.utils.timezone import get_current_timezone
+from django.utils.timezone import get_current_timezone, utc
 from django.views.decorators.http import require_POST
 from django_token_bucket.models import TokenBucket
 
@@ -38,7 +40,7 @@ from pytz import all_timezones, timezone
 from django.utils.dateparse import parse_datetime, parse_date
 
 
-def poll(request, poll_url: str, export: bool=False):
+def poll(request, poll_url: str, reduced: str=None, export: bool=False):
     """
     :param export: if the view is exported to csv
     :param request
@@ -47,7 +49,7 @@ def poll(request, poll_url: str, export: bool=False):
     Displays for a given poll its fields along with all possible choices, all votes and all its comments.
     """
     current_poll = get_object_or_404(Poll, url=poll_url)
-    reduced_template = True if 'reduced' in request.GET else False
+    reduced_template = bool(reduced) or "reduced" in request.GET
 
     tz_activate(current_poll.get_tz_name(request.user))
 
@@ -85,7 +87,12 @@ def poll(request, poll_url: str, export: bool=False):
     # The next block is limiting the visibility of the results
     summary = True
     if current_poll.require_login_view and not request.user.is_authenticated:
-        return redirect_to_login(reverse('poll', args=[poll_url]) + '?reduced' if reduced_template else '')
+        params = {'next': reverse('poll', args=[poll_url, "reduced"] if reduced_template else [poll_url])}
+        url_parts = list(parse.urlparse(django_settings.LOGIN_URL))
+        query = dict(parse.parse_qsl(url_parts[4]))
+        query.update(params)
+        url_parts[4] = parse.urlencode(query)
+        return HttpResponseRedirect(parse.urlunparse(url_parts))
 
     elif current_poll.current_user_is_owner(request) and current_poll.show_results != "complete":
         messages.info(request, _("You can see the results because you are the owner of the Poll"))
@@ -552,11 +559,10 @@ def edit_choice_date_labels(request, poll_url):
         for key in request.POST.keys():
             if key.startswith("label_"):
                 if date := parse_date(key.replace("label_", "")):
-                    datetime_date = timezone.utc.localize(dt.datetime.combine(date, dt.time(0, 0)))
+                    datetime_date = utc.localize(dt.datetime.combine(date, dt.time(0, 0)))
                     choice_filter = current_poll.choice_set.filter(date=datetime_date)
                     if choice_filter.exists():
                         choice = choice_filter.first()
-                        print(choice)
                         choice.text = request.POST.get(key)
                         changed_choices.append(choice)
 
@@ -950,7 +956,8 @@ def vote(request, poll_url, vote_id=None):
 
     if not current_poll.can_vote(request.user, request, vote_id is not None):
         if current_poll.require_login and not request.user.is_authenticated:
-            return redirect_to_login(reverse('poll_vote', args=[poll_url]))
+            raise Exception()
+            return redirect_to_login(reverse('poll_vote', args=[poll_url]) + f"?next={poll_url}")
         else:
             response = redirect('poll', poll_url)
             if reduced_template:
@@ -1109,6 +1116,8 @@ def vote(request, poll_url, vote_id=None):
         choices_orig = current_poll.choice_set.filter(deleted=False, date__date__gt=only_choices_after).order_by('sort_key')
     else:
         choices_orig = current_poll.choice_set.filter(deleted=False).order_by('sort_key')
+    print("only_choices_after", only_choices_after)
+    print("choices_orig", choices_orig)
     for choice in choices_orig:
         cur_comment = ""
         value = None
@@ -1126,6 +1135,7 @@ def vote(request, poll_url, vote_id=None):
         choices.append(choice)
         comments.append(cur_comment)
         choice_votes.append(value)
+    print("choice_votes", choice_votes)
 
     events = get_caldav(choices, current_poll, request.user, request) # TODO check if we broke anything in CalDAV handling
 
