@@ -26,8 +26,8 @@ class Migration(migrations.Migration):
                 ('name', models.CharField(default='Calendar', max_length=80)),
             ],
         ),
-        migrations.AlterUniqueTogether(
-            name='davcalendar',
-            unique_together={('url', 'user')},
-        ),
+        # migrations.AlterUniqueTogether(
+        #     name='davcalendar',
+        #     unique_together={('url', 'user')},
+        # ),
     ]
