@@ -2,6 +2,9 @@ import csv
 
 import re
 
+import datetime as dt
+from django.utils import timezone
+
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import Group
@@ -545,14 +548,15 @@ def edit_choice_date_labels(request, poll_url):
         return redirect('poll', poll_url)
 
     if request.method == 'POST':
-        print(request.POST)
         changed_choices = []
         for key in request.POST.keys():
             if key.startswith("label_"):
                 if date := parse_date(key.replace("label_", "")):
-                    choice_filter = current_poll.choice_set.filter(date__date=date)
+                    datetime_date = timezone.utc.localize(dt.datetime.combine(date, dt.time(0, 0)))
+                    choice_filter = current_poll.choice_set.filter(date=datetime_date)
                     if choice_filter.exists():
                         choice = choice_filter.first()
+                        print(choice)
                         choice.text = request.POST.get(key)
                         changed_choices.append(choice)
 
