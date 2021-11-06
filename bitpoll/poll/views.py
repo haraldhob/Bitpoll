@@ -49,7 +49,7 @@ def poll(request, poll_url: str, reduced: str=None, export: bool=False):
     Displays for a given poll its fields along with all possible choices, all votes and all its comments.
     """
     current_poll = get_object_or_404(Poll, url=poll_url)
-    reduced_template = bool(reduced)
+    reduced_template = bool(reduced) or "reduced" in request.GET
 
     tz_activate(current_poll.get_tz_name(request.user))
 
