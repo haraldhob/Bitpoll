@@ -2,18 +2,24 @@ version: '3'
 
 services:
   bitpoll:
-    build:
-      context: .
-      dockerfile: ./Dockerfile
+    build: .
     container_name: bitpoll
+    restart: always
     ports:
-      - "8000:8000"
-    environment:
-      - VIRTUAL_HOST=bitpoll.<your-domain>.de
+      - 8000:8000
+    networks:
+      - host_net
+    volumes:
+      - ${PWD}/:/app
+      - /var/run/mysqld/:/var/run/mysqld/:rw
 
-  apache:
-    build:
-      context: .
-      dockerfile: ./docker_testing/apache/Dockerfile
-    ports:
-      - "8080:80"
+volumes:
+  bitpoll:
+    driver_opts:
+      type: "none"
+      o: "bind"
+      device: "$PWD/"
+
+networks:
+  host_net:
+    driver: bridge
