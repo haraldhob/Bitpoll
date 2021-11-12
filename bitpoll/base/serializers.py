@@ -34,7 +34,8 @@ class SocialAccountSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = SocialAccount
         fields = ['url', 'user', 'provider', 'uid']
-        lookup_field = 'user'
+        lookup_field = 'uid'
         extra_kwargs = {
-            'url': {'lookup_field': 'user'}
+            'url': {'lookup_field': 'uid'},
+            # 'user': {'lookup_field': 'user'},
         }

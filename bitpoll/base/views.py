@@ -190,7 +190,7 @@ class SocialAccountViewSet(viewsets.ModelViewSet):
     API endpoint that allows AllAuth's SocialUsers to be viewed or edited.
     """
     queryset = SocialAccount.objects.all()
-    lookup_field = 'user'
+    lookup_field = 'uid' # TODO repair the 404 in the API
     lookup_value_regex = '[^/]+'    # this needs to be done to allow for "." in usernames. Otherwise django crashes when
                                     # rendering the list of users... for whatever reason :(
     serializer_class = SocialAccountSerializer
