@@ -101,6 +101,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.locale.LocaleMiddleware',
     'django-simple-csp.middleware.csp.CSPMiddleware',
+    "bitpoll.nextcloud_authenticator.middleware.AuthRequiredMiddleware",
 ]
 
 STATICFILES_FINDERS = [

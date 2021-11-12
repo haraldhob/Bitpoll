@@ -14,9 +14,8 @@
 {%  value_from_settings GROUP_MANAGEMENT as group_management_enabled %}
 
 <footer>
-    <div class="container"><a href="{% url 'about' %}">{% trans 'About' %}</a><span class="separator"></span><a href="{% url 'imprint' %}"
-        target="_blank">{% trans 'Imprint' %}</a><span
-                class="separator"></span><a href="{% url 'technical' %}">{% trans 'Technical Info' %}</a><span
+    <div class="container"><a href="{% url 'about' %}">{% trans 'About' %}</a><span class="separator"></span>
+      <a href="{% url 'technical' %}">{% trans 'Technical Info' %}</a><span
        class="separator"></span><a href="{% url 'login' %}?next={{ request.path }}">{% trans 'Local Login' %}</a>
         <span class="separator"></span>
         {% trans 'Current timezone is' %} {% get_current_timezone as TIME_ZONE %}{{ TIME_ZONE }}<span
