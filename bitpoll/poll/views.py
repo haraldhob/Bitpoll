@@ -229,6 +229,11 @@ def poll(request, poll_url: str, reduced: str=None, export: bool=False):
             row.append(vote.comment if vote.comment else '')
             row.extend([(choice['value'].title + (" ({})".format(choice['comment']) if choice and choice['comment'] and len(choice['comment']) > 0 else '')) if choice and choice['value'] else '' for choice in votechoices])
             writer.writerow(row)
+        for invitation in invitations:
+            row = [invitation.user.get_displayname() if not current_poll.hide_participants else _('Hidden')]
+            row.append('Invited but did not participate.')
+            row.extend(['' for _ in range(len(a)+1)])
+            writer.writerow(row)
         return response
 
     return TemplateResponse(request, 'poll/poll.html', {
