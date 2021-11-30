@@ -1070,7 +1070,7 @@ def vote(request, poll_url, vote_id=None):
                                 if current_poll.change_vote_after_event:
                                     VoteChoice.objects.filter(vote=current_vote).delete()
                                 else:
-                                    VoteChoice.objects.filter(vote=current_vote, choice__gte=only_choices_after).delete()
+                                    VoteChoice.objects.filter(vote=current_vote, choice_date__gte=only_choices_after).delete()
                                 # todo: nochmal prüfen ob das wirjklich das tut was es soll, also erst alles löschen und dann neu anlegen
                                 # todo eventuell eine transaktion drum machen? wegen falls das eventuell dazwischen abbricht?
                             else:
