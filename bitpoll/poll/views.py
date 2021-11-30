@@ -966,10 +966,11 @@ def vote(request, poll_url, vote_id=None):
 
     tz_activate(current_poll.get_tz_name(request.user))
 
-    ALLOW_EDIT_HOURS = 24  # TODO extract to somewhere better suited
+    ALLOW_EDIT_HOURS = 48  # TODO extract to somewhere better suited
     only_choices_after = None
     if (current_poll.type == 'datetime' or current_poll.type == 'date') and not current_poll.change_vote_after_event:
         only_choices_after = now() - timedelta(hours=ALLOW_EDIT_HOURS)
+        utc.localize(dt.datetime.combine(only_choices_after.date(), dt.time(0, 0)))
 
     if request.method == 'POST':
         vote_id = request.POST.get('vote_id', None)
@@ -1116,8 +1117,6 @@ def vote(request, poll_url, vote_id=None):
         choices_orig = current_poll.choice_set.filter(deleted=False, date__date__gt=only_choices_after).order_by('sort_key')
     else:
         choices_orig = current_poll.choice_set.filter(deleted=False).order_by('sort_key')
-    print("only_choices_after", only_choices_after)
-    print("choices_orig", choices_orig)
     for choice in choices_orig:
         cur_comment = ""
         value = None
@@ -1135,7 +1134,6 @@ def vote(request, poll_url, vote_id=None):
         choices.append(choice)
         comments.append(cur_comment)
         choice_votes.append(value)
-    print("choice_votes", choice_votes)
 
     events = get_caldav(choices, current_poll, request.user, request) # TODO check if we broke anything in CalDAV handling
 
