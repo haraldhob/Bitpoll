@@ -969,8 +969,8 @@ def vote(request, poll_url, vote_id=None):
     ALLOW_EDIT_HOURS = 48  # TODO extract to somewhere better suited
     only_choices_after = None
     if (current_poll.type == 'datetime' or current_poll.type == 'date') and not current_poll.change_vote_after_event:
-        only_choices_after = now() - timedelta(hours=ALLOW_EDIT_HOURS)
-        utc.localize(dt.datetime.combine(only_choices_after.date(), dt.time(0, 0)))
+        only_choices_after = now() + timedelta(hours=ALLOW_EDIT_HOURS)
+        only_choices_after = utc.localize(dt.datetime.combine(only_choices_after.date(), dt.time(0, 0)))
 
     if request.method == 'POST':
         vote_id = request.POST.get('vote_id', None)
@@ -1070,7 +1070,7 @@ def vote(request, poll_url, vote_id=None):
                                 if current_poll.change_vote_after_event:
                                     VoteChoice.objects.filter(vote=current_vote).delete()
                                 else:
-                                    VoteChoice.objects.filter(vote=current_vote, choice__date__gte=only_choices_after).delete()
+                                    VoteChoice.objects.filter(vote=current_vote, choice__gte=only_choices_after).delete()
                                 # todo: nochmal prüfen ob das wirjklich das tut was es soll, also erst alles löschen und dann neu anlegen
                                 # todo eventuell eine transaktion drum machen? wegen falls das eventuell dazwischen abbricht?
                             else:
@@ -1114,7 +1114,7 @@ def vote(request, poll_url, vote_id=None):
     else:
         current_vote = Vote()
     if only_choices_after:
-        choices_orig = current_poll.choice_set.filter(deleted=False, date__date__gt=only_choices_after).order_by('sort_key')
+        choices_orig = current_poll.choice_set.filter(deleted=False, date__gt=only_choices_after).order_by('sort_key')
     else:
         choices_orig = current_poll.choice_set.filter(deleted=False).order_by('sort_key')
     for choice in choices_orig:
