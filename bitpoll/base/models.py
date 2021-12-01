@@ -11,7 +11,7 @@ USER_LANG = (
 
 
 class BitpollUser(AbstractUser):
-    language = models.CharField(max_length=20, choices=USER_LANG, default="english")
+    language = models.CharField(max_length=20, choices=USER_LANG, default="german")
     email_invitation = models.BooleanField(default=True)
     timezone = models.CharField(max_length=40, default=settings.TIME_ZONE, validators=[validate_timezone])
     auto_watch = models.BooleanField(default=False)
