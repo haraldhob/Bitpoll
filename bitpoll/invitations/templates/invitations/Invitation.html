@@ -31,8 +31,8 @@
                                 {{ invitation.date_created }}
                             </td>
                             <td>
-                                <button class="action default" type="submit" name="resend" value="{{ invitation.id }}"><i class="fa fa-refresh"></i></button>
-                                <button class="action default" type="submit" name="delete" value="{{ invitation.id }}"><i class="fa fa-trash-o"></i></button>
+                                <button class="action default" type="submit" title="{% trans 'Resend invitation' %}" name="resend" value="{{ invitation.id }}"><i class="fa fa-refresh"></i></button>
+                                <button class="action default" type="submit" title="{% trans 'Delete invitation' %}" name="delete" value="{{ invitation.id }}"><i class="fa fa-trash-o"></i></button>
                             </td>
                         </tr>
                     {% endfor %}

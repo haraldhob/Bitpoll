@@ -313,11 +313,24 @@ HOME_URL_NAME = "Dashboard"
 # Test mail functionality by printing mails to console:
 # EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
+# # Production E-Mail backend
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
+# # Host for sending e-mail.
+# EMAIL_HOST = 'localhost'
+
+# # Port for sending e-mail.
+# EMAIL_PORT = 1025
+
+# # Optional SMTP authentication information for EMAIL_HOST.
+# EMAIL_HOST_USER = ''
+# EMAIL_HOST_PASSWORD = ''
+# EMAIL_USE_TLS = False
+
 # if the imprint URL is not empty use it as an link to the imprint, else use IMPRINT_TEXT
 IMPRINT_URL = ""
 IMPRINT_TEXT = """
 <h1>Impressum</h1>
-<p>Text goes here</p>
 """
 
 LOCALE_PATHS = (os.path.join(ROOT_DIR, 'locale'), )
@@ -334,7 +347,7 @@ GROUP_MANAGEMENT = REGISTER_ENABLED
 CSP_REPORT_ONLY = True
 CSP_REPORT_URL = ""
 
-MAIL_SIGNATURE = "Bitpoll Team"
+MAIL_SIGNATURE = "SDW München Intranet Team"
 
 TEAM_EMAIL = "mail@example.com"
 

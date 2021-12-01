@@ -32,12 +32,12 @@ class Invitation(models.Model):
             translation.activate(self.user.language)
             link = reverse('poll_vote', args=(self.poll.url,))  # TODO: hier direkt das poll oder das Vote?
             email_content = render_to_string('invitations/mail_invite.txt', {
-                'receiver': self.user.username,
-                'creator': self.creator.username,
+                'receiver': self.user.displayname or self.user.get_full_name() or self.user.username,
+                'creator': self.creator.displayname or self.creator.get_full_name() or self.creator.username,
                 'link': link
             })
             try:
-                send_mail("Invitation to vote on {}".format(self.poll.title), email_content, None, [self.user.email])
+                send_mail(translation.gettext("Invitation to vote on ") + "{}".format(self.poll.title), email_content, None, [self.user.email])
                 self.last_email = now()
                 self.save()
             except SMTPRecipientsRefused:
