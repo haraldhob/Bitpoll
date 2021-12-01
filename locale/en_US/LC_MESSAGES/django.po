@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-12-07 15:18+0100\n"
+"POT-Creation-Date: 2021-12-01 11:02+0100\n"
 "PO-Revision-Date: 2019-12-07 16:08+0100\n"
 "Last-Translator: Nils Rokita <0rokita@informatik.uni-hamburg.de>\n"
 "Language-Team: \n"
@@ -32,11 +32,11 @@ msgid ""
 "\"> Problems</a>"
 msgstr ""
 
-#: bitpoll/base/templates/500.html:8
+#: bitpoll/base/templates/500.html:7
 msgid "Internal server error"
 msgstr ""
 
-#: bitpoll/base/templates/500.html:26
+#: bitpoll/base/templates/500.html:21
 #, python-format
 msgid ""
 "We're sorry, but we didn't expect this to happen. Our error reporting tool "
@@ -45,78 +45,16 @@ msgid ""
 "\">problem reporting page</a>."
 msgstr ""
 
-#: bitpoll/base/templates/500.html:30
+#: bitpoll/base/templates/500.html:23
 #, python-format
-msgid "We have recorded the error under the Identifier %(errorid)s."
+msgid "We have recorded the error under the Identifier %(event_id)s."
 msgstr ""
 
-#: bitpoll/base/templates/base.html:44 bitpoll/base/templates/base/index.html:8
-msgid "Create poll"
-msgstr "Create poll"
-
-#: bitpoll/base/templates/base.html:48 bitpoll/base/templates/base.html:80
 #: bitpoll/base/templates/base/about.html:4
+#: bitpoll/base/templates/base_footer.html:17
+#: bitpoll/base/templates/base_header.html:34
 msgid "About"
 msgstr "About"
-
-#: bitpoll/base/templates/base.html:53
-#: bitpoll/base/templates/base/index.html:228
-#: bitpoll/registration/templates/registration/request_account.html:7
-#: bitpoll/registration/templates/registration/request_account.html:11
-msgid "Register"
-msgstr "Register"
-
-#: bitpoll/base/templates/base.html:55
-#: bitpoll/base/templates/base/index.html:213
-#: bitpoll/registration/templates/registration/login.html:5
-#: bitpoll/registration/templates/registration/login.html:54
-msgid "Login"
-msgstr "Login"
-
-msgid "Local Login"
-msgstr "Local Login"
-
-#: bitpoll/base/templates/base.html:64
-msgid "Groups"
-msgstr "Groups"
-
-#: bitpoll/base/templates/base.html:66
-#: bitpoll/base/templates/base/settings.html:9
-#: bitpoll/base/templates/base/settings.html:67
-#: bitpoll/poll/templates/poll/poll_header.html:90
-msgid "Settings"
-msgstr "Settings"
-
-#: bitpoll/base/templates/base.html:67
-msgid "Logout"
-msgstr "Logout"
-
-#: bitpoll/base/templates/base.html:81
-#: bitpoll/base/templates/base/imprint.html:8
-msgid "Imprint"
-msgstr "Imprint"
-
-#: bitpoll/base/templates/base.html:82
-#: bitpoll/base/templates/base/technical_info.html:4
-msgid "Technical Info"
-msgstr "Technical Info"
-
-#: bitpoll/base/templates/base.html:84
-msgid "Current timezone is"
-msgstr "Current timezone is"
-
-#: bitpoll/base/templates/base.html:97
-#, python-format
-msgid ""
-"\n"
-"                    <b>Warning!</b> %(site_name)s is configured with "
-"<code>DEBUG = True</code>.\n"
-"                    "
-msgstr ""
-"\n"
-"                    <b>Warning!</b> %(site_name)s is configured with "
-"<code>DEBUG = True</code>.\n"
-"                    "
 
 #: bitpoll/base/templates/base/about.html:10
 msgid "The History of BitPoll"
@@ -198,11 +136,22 @@ msgid ""
 "a>."
 msgstr ""
 
+#: bitpoll/base/templates/base/imprint.html:8
+msgid "Imprint"
+msgstr "Imprint"
+
+#: bitpoll/base/templates/base/index.html:8
+#: bitpoll/base/templates/base_header.html:30
+msgid "Create poll"
+msgstr "Create poll"
+
 #: bitpoll/base/templates/base/index.html:19
 msgid "Create a poll"
 msgstr "Create a poll"
 
 #: bitpoll/base/templates/base/index.html:24
+#: bitpoll/poll/templates/poll/date_choice_header.html:4
+#: bitpoll/poll/templates/poll/date_choice_header.html:12
 #: bitpoll/poll/templates/poll/dt_choice_header.html:4
 #: bitpoll/poll/templates/poll/dt_choice_header.html:14
 msgid "Step 1"
@@ -250,6 +199,8 @@ msgid "Rate each choice in a numeric range"
 msgstr "Rate each choice in a numeric range"
 
 #: bitpoll/base/templates/base/index.html:84
+#: bitpoll/poll/templates/poll/date_choice_header.html:6
+#: bitpoll/poll/templates/poll/date_choice_header.html:14
 #: bitpoll/poll/templates/poll/dt_choice_header.html:6
 #: bitpoll/poll/templates/poll/dt_choice_header.html:16
 msgid "Step 2"
@@ -308,33 +259,28 @@ msgstr "allow anonymous votes"
 
 #: bitpoll/base/templates/base/index.html:162
 #: bitpoll/poll/templates/poll/poll_header.html:62
-#: bitpoll/poll/templates/poll/settings.html:105
-msgid "login required to vote"
-msgstr "login required to vote"
-
-#: bitpoll/base/templates/base/index.html:162
-#: bitpoll/poll/templates/poll/poll_header.html:62
-#: bitpoll/poll/templates/poll/settings.html:105
-msgid "login required to view"
-msgstr "login required to view"
+#, fuzzy
+#| msgid "Login required"
+msgid "login required"
+msgstr "Login required"
 
 #: bitpoll/base/templates/base/index.html:166
-#: bitpoll/poll/templates/poll/settings.html:109
+#: bitpoll/poll/templates/poll/settings.html:113
 msgid "invitation required to vote"
 msgstr "invitation required to vote"
 
 #: bitpoll/base/templates/base/index.html:170
-#: bitpoll/poll/templates/poll/settings.html:117
+#: bitpoll/poll/templates/poll/settings.html:121
 msgid "allow unauthenticated vote changes"
 msgstr ""
 
 #: bitpoll/base/templates/base/index.html:174
-#: bitpoll/poll/templates/poll/settings.html:121
+#: bitpoll/poll/templates/poll/settings.html:125
 msgid "one vote per user"
 msgstr "one vote per user"
 
 #: bitpoll/base/templates/base/index.html:178
-#: bitpoll/poll/templates/poll/settings.html:129
+#: bitpoll/poll/templates/poll/settings.html:133
 msgid "forbid empty choices"
 msgstr "forbid empty choices"
 
@@ -353,62 +299,50 @@ msgid "Create"
 msgstr "Create"
 
 #: bitpoll/base/templates/base/index.html:202
-#: bitpoll/registration/templates/registration/password_reset_complete.html:11
-msgid "Log in"
-msgstr "Log in"
-
-#: bitpoll/base/templates/base/index.html:204
-#: bitpoll/registration/templates/registration/create_account.html:15
-#: bitpoll/registration/templates/registration/login.html:35
-#: bitpoll/registration/templates/registration/request_account.html:15
-msgid "Username"
-msgstr "Username"
-
-#: bitpoll/base/templates/base/index.html:208 bitpoll/registration/forms.py:30
-#: bitpoll/registration/templates/registration/account.html:100
-#: bitpoll/registration/templates/registration/create_account.html:19
-#: bitpoll/registration/templates/registration/login.html:44
-msgid "Password"
-msgstr "Password"
-
-#: bitpoll/base/templates/base/index.html:225
 msgid "Register for more"
 msgstr "Register for more"
 
-#: bitpoll/base/templates/base/index.html:226
+#: bitpoll/base/templates/base/index.html:203
 msgid "Registered users have access to the full width of features available."
 msgstr "Registered users have access to the full width of features available."
 
-#: bitpoll/base/templates/base/index.html:233
+#: bitpoll/base/templates/base/index.html:205
+#: bitpoll/base/templates/base_header.html:39
+#: bitpoll/registration/templates/registration/request_account.html:7
+#: bitpoll/registration/templates/registration/request_account.html:11
+msgid "Register"
+msgstr "Register"
+
+#: bitpoll/base/templates/base/index.html:210
 msgid "Statistics"
 msgstr "Statistics"
 
-#: bitpoll/base/templates/base/index.html:236
+#: bitpoll/base/templates/base/index.html:213
 msgid "Polls created"
 msgstr "Polls created"
 
-#: bitpoll/base/templates/base/index.html:240
+#: bitpoll/base/templates/base/index.html:217
 #: bitpoll/poll/templates/poll/choicevalue.html:45
 msgid "Votes cast"
 msgstr "Votes cast"
 
-#: bitpoll/base/templates/base/index.html:244
+#: bitpoll/base/templates/base/index.html:221
 msgid "Users"
 msgstr "Users"
 
-#: bitpoll/base/templates/base/index.html:252
+#: bitpoll/base/templates/base/index.html:229
 msgid "Public polls"
 msgstr "Public polls"
 
-#: bitpoll/base/templates/base/index.html:255
+#: bitpoll/base/templates/base/index.html:232
 msgid "There are currently no public polls."
 msgstr "There are currently no public polls."
 
-#: bitpoll/base/templates/base/index.html:271 bitpoll/registration/tests.py:44
+#: bitpoll/base/templates/base/index.html:248
 msgid "My Polls"
 msgstr "My Polls"
 
-#: bitpoll/base/templates/base/index.html:272
+#: bitpoll/base/templates/base/index.html:249
 msgid ""
 "You can find a list of all the polls in which you have participated on your "
 "profile page."
@@ -416,7 +350,7 @@ msgstr ""
 "You can find a list of all the polls in which you have participated on your "
 "profile page."
 
-#: bitpoll/base/templates/base/index.html:274
+#: bitpoll/base/templates/base/index.html:251
 msgid "Show my polls"
 msgstr "Show my polls"
 
@@ -435,6 +369,13 @@ msgid ""
 "email to <strong><a href=\"mailto:%(team_email)s\">%(team_email)s</a></"
 "strong> and describe your problem.</p>"
 msgstr ""
+
+#: bitpoll/base/templates/base/settings.html:9
+#: bitpoll/base/templates/base/settings.html:67
+#: bitpoll/base/templates/base_header.html:52
+#: bitpoll/poll/templates/poll/poll_header.html:94
+msgid "Settings"
+msgstr "Settings"
 
 #: bitpoll/base/templates/base/settings.html:15
 msgid "Poll overview"
@@ -502,27 +443,33 @@ msgstr "You can edit your account settings in the centralized accounts page"
 msgid "Language:"
 msgstr "Language:"
 
-#: bitpoll/base/templates/base/settings.html:92
+#: bitpoll/base/templates/base/settings.html:91
 msgid "Timezone:"
 msgstr "Timezone:"
 
-#: bitpoll/base/templates/base/settings.html:104
+#: bitpoll/base/templates/base/settings.html:103
 msgid "Various"
 msgstr "Various"
 
-#: bitpoll/base/templates/base/settings.html:107
+#: bitpoll/base/templates/base/settings.html:106
 msgid "Auto-watch polls then you vote on them"
 msgstr ""
 
-#: bitpoll/base/templates/base/settings.html:111
+#: bitpoll/base/templates/base/settings.html:110
 msgid "Allow to receive emails for poll invitations"
 msgstr "Allow to receive emails for poll invitations"
 
-#: bitpoll/base/templates/base/settings.html:114
+#: bitpoll/base/templates/base/settings.html:113
+#: bitpoll/caldav/templates/caldav/caldav_form.html:57
 #: bitpoll/poll/templates/poll/universal_choice_creation.html:14
 #: bitpoll/poll/templates/poll/universal_choice_creation.html:94
 msgid "Save"
 msgstr "Save"
+
+#: bitpoll/base/templates/base/technical_info.html:4
+#: bitpoll/base/templates/base_footer.html:18
+msgid "Technical Info"
+msgstr "Technical Info"
 
 #: bitpoll/base/templates/base/technical_info.html:10
 msgid "License overview of third-party components"
@@ -536,10 +483,125 @@ msgstr "This site uses the following software/components:"
 msgid "Listed in no particular order."
 msgstr "Listed in no particular order."
 
+#: bitpoll/base/templates/base_footer.html:19
+msgid "Local Login"
+msgstr "Local Login"
+
+#: bitpoll/base/templates/base_footer.html:21
+msgid "Current timezone is"
+msgstr "Current timezone is"
+
+#: bitpoll/base/templates/base_footer.html:34
+#, fuzzy, python-format
+#| msgid ""
+#| "\n"
+#| "                    <b>Warning!</b> %(site_name)s is configured with "
+#| "<code>DEBUG = True</code>.\n"
+#| "                    "
+msgid ""
+"\n"
+"                <b>Warning!</b> %(site_name)s is configured with <code>DEBUG "
+"= True</code>.\n"
+"                "
+msgstr ""
+"\n"
+"                    <b>Warning!</b> %(site_name)s is configured with "
+"<code>DEBUG = True</code>.\n"
+"                    "
+
+#: bitpoll/base/templates/base_header.html:41
+#: bitpoll/registration/templates/registration/login.html:6
+#: bitpoll/registration/templates/registration/login.html:60
+msgid "Login"
+msgstr "Login"
+
+#: bitpoll/base/templates/base_header.html:50
+msgid "Groups"
+msgstr "Groups"
+
 #: bitpoll/base/validators.py:9
 #, python-format
 msgid "%(value)s is not a valid timezone"
 msgstr ""
+
+#: bitpoll/caldav/forms.py:116
+#, fuzzy
+#| msgid "Calendar"
+msgid "adding Calendars"
+msgstr "Calendar"
+
+#: bitpoll/caldav/templates/caldav/caldav.html:6
+#, fuzzy
+#| msgid "Settings"
+msgid "CalDav Settings"
+msgstr "Settings"
+
+#: bitpoll/caldav/templates/caldav/caldav_form.html:6
+msgid ""
+"The data provided here will be saved into the Database to retrieve the "
+"calendar on voting in Polls.\n"
+"   The column is encrypted on the server side with a global key."
+msgstr ""
+
+#: bitpoll/caldav/templates/caldav/caldav_form.html:8
+msgid ""
+"You can enter either a world readable CalDav calendar Url, or provide user "
+"and password to login to\n"
+"   the CalDav Server. If you make the calendar world readable check that the "
+"url is not predictable by\n"
+"   other people"
+msgstr ""
+
+#: bitpoll/caldav/templates/caldav/caldav_form.html:12
+#, fuzzy
+#| msgid "Calendar"
+msgid "Change Calendar"
+msgstr "Calendar"
+
+#: bitpoll/caldav/templates/caldav/caldav_form.html:15
+#, fuzzy
+#| msgid "Calendar"
+msgid "Add a Calendar"
+msgstr "Calendar"
+
+#: bitpoll/caldav/templates/caldav/caldav_form.html:37
+#, fuzzy
+#| msgid "Calendar"
+msgid "Calendar URL:"
+msgstr "Calendar"
+
+#: bitpoll/caldav/templates/caldav/caldav_form.html:50
+#, fuzzy
+#| msgid "User"
+msgid "User:"
+msgstr "User"
+
+#: bitpoll/caldav/templates/caldav/caldav_form.html:54
+#, fuzzy
+#| msgid "Password"
+msgid "Password:"
+msgstr "Password"
+
+#: bitpoll/caldav/templates/caldav/caldav_form.html:62
+#, fuzzy
+#| msgid "Calendar"
+msgid "Current Calendars:"
+msgstr "Calendar"
+
+#: bitpoll/caldav/utils.py:62
+#, python-format
+msgid "Could not access your calendar \"%s\" due to an authorization error"
+msgstr ""
+
+#: bitpoll/caldav/views.py:43
+msgid "Error getting Calendar: {}"
+msgstr ""
+
+#: bitpoll/caldav/views.py:45
+#, fuzzy
+#| msgid "The user {} was already invited"
+msgid "This calendar is already configured"
+msgstr "The user {} was already invited"
 
 #: bitpoll/groups/forms.py:26
 #, python-format
@@ -698,7 +760,7 @@ msgid ""
 "%(user)s invited you to join the group \"%(invitation.group.name)s\". To "
 "accept this invitation and join the group, visit\n"
 "\n"
-"  https://%(base_url)s%(url)s\n"
+"  %(base_url)s%(url)s\n"
 "\n"
 "Greetings,\n"
 "\n"
@@ -735,8 +797,8 @@ msgid "Members"
 msgstr ""
 
 #: bitpoll/groups/templates/groups/show.html:81
-#: bitpoll/poll/templates/poll/comment_form.html:12
-#: bitpoll/poll/templates/poll/comment_form.html:17
+#: bitpoll/poll/templates/poll/comment_form.html:21
+#: bitpoll/poll/templates/poll/comment_form.html:26
 msgid "Name"
 msgstr "Name"
 
@@ -789,7 +851,11 @@ msgstr ""
 msgid "Invitation was sent."
 msgstr "Invitation was sent."
 
-#: bitpoll/invitations/models.py:46 bitpoll/poll/models.py:380
+#: bitpoll/invitations/models.py:40
+msgid "Invitation to vote on "
+msgstr "invitation to vote on "
+
+#: bitpoll/invitations/models.py:46 bitpoll/poll/models.py:400
 msgid "The mail server had an error sending the notification to {}"
 msgstr "The mail server had an error sending the notification to {}"
 
@@ -802,14 +868,26 @@ msgid "Invite to Poll"
 msgstr "Invite to Poll"
 
 #: bitpoll/invitations/templates/invitations/Invitation.html:20
-#: bitpoll/poll/templates/poll/settings.html:149
-#: bitpoll/poll/templates/poll/settings.html:151
+#: bitpoll/poll/templates/poll/settings.html:159
+#: bitpoll/poll/templates/poll/settings.html:161
 msgid "User"
 msgstr "User"
 
 #: bitpoll/invitations/templates/invitations/Invitation.html:21
 msgid "Invited"
 msgstr "Invited"
+
+#: bitpoll/invitations/templates/invitations/Invitation.html:34
+#, fuzzy
+#| msgid "Decline invitation"
+msgid "Resend invitation"
+msgstr "Resend invitation"
+
+#: bitpoll/invitations/templates/invitations/Invitation.html:35
+#, fuzzy
+#| msgid "Decline invitation"
+msgid "Delete invitation"
+msgstr "Delete invitation"
 
 #: bitpoll/invitations/templates/invitations/Invitation.html:41
 msgid "Resend all"
@@ -857,12 +935,14 @@ msgstr "Back to poll"
 msgid ""
 "Hi %(receiver)s,\n"
 "\n"
-"you are invited to Participate in a Poll created by %(creator)s\n"
+"you were invited by %(creator)s to participate in a poll!\n"
 "You can vote at %(base_url)s%(link)s\n"
 "\n"
 "Greetings,\n"
 "\n"
 "Your %(signature)s\n"
+"\n"
+"\n"
 "--\n"
 "You received this notification because you have allowed for E-Mail "
 "Invitation in your settings.\n"
@@ -893,39 +973,39 @@ msgstr "The user {} was already invited"
 msgid "The following User/Groups could not be found:  {}"
 msgstr "The following User/Groups could not be found:  {}"
 
-#: bitpoll/poll/models.py:85
+#: bitpoll/poll/models.py:88
 msgid "It is only one vote allowed. You have already voted."
 msgstr "It is only one vote allowed. You have already voted."
 
-#: bitpoll/poll/models.py:89
+#: bitpoll/poll/models.py:92
 msgid "Login required to vote."
 msgstr "Login required to vote."
 
-#: bitpoll/poll/models.py:93
+#: bitpoll/poll/models.py:96
 msgid "You are not allowed to vote in this poll. You have to be invited"
 msgstr "You are not allowed to vote in this poll. You have to be invited"
 
-#: bitpoll/poll/models.py:118
+#: bitpoll/poll/models.py:121
 msgid "You are not allowed to edit this Poll."
 msgstr "You are not allowed to edit this Poll."
 
-#: bitpoll/poll/models.py:252
+#: bitpoll/poll/models.py:272
 msgid "Give an HTML color without the #"
 msgstr "Give an HTML color without the #"
 
-#: bitpoll/poll/models.py:327
+#: bitpoll/poll/models.py:347
 msgid "Anonymous"
 msgstr "Anonymous"
 
-#: bitpoll/poll/models.py:362
+#: bitpoll/poll/models.py:382
 msgid "Annonymus"
 msgstr "Annonymus"
 
-#: bitpoll/poll/models.py:369
+#: bitpoll/poll/models.py:389
 msgid "by an user"
 msgstr "by an user"
 
-#: bitpoll/poll/models.py:375
+#: bitpoll/poll/models.py:395
 msgid "New votes for {}"
 msgstr "New votes for {}"
 
@@ -942,12 +1022,12 @@ msgstr ""
 msgid "Field is required"
 msgstr ""
 
-#: bitpoll/poll/templates/poll/choice_creation_date.html:24
+#: bitpoll/poll/templates/poll/choice_creation_date.html:25
 #: bitpoll/poll/templates/poll/dt_choice_creation_time.html:18
 msgid "Dates"
 msgstr "Dates"
 
-#: bitpoll/poll/templates/poll/choice_creation_date.html:31
+#: bitpoll/poll/templates/poll/choice_creation_date.html:32
 msgid ""
 "Please select the days that you want to\n"
 "                    be able to choose. In the next step, you will select "
@@ -957,7 +1037,7 @@ msgstr ""
 "                    be able to choose. In the next step, you will select "
 "time slots."
 
-#: bitpoll/poll/templates/poll/choice_creation_date.html:34
+#: bitpoll/poll/templates/poll/choice_creation_date.html:35
 msgid ""
 "Please select the days that you want to\n"
 "                    be able to choose."
@@ -965,46 +1045,57 @@ msgstr ""
 "Please select the days that you want to\n"
 "                    be able to choose."
 
-#: bitpoll/poll/templates/poll/choice_creation_date.html:55
+#: bitpoll/poll/templates/poll/choice_creation_date.html:56
 msgid "Mo"
 msgstr "Mo"
 
-#: bitpoll/poll/templates/poll/choice_creation_date.html:56
+#: bitpoll/poll/templates/poll/choice_creation_date.html:57
 msgid "Tu"
 msgstr "Tu"
 
-#: bitpoll/poll/templates/poll/choice_creation_date.html:57
+#: bitpoll/poll/templates/poll/choice_creation_date.html:58
 msgid "We"
 msgstr "We"
 
-#: bitpoll/poll/templates/poll/choice_creation_date.html:58
+#: bitpoll/poll/templates/poll/choice_creation_date.html:59
 msgid "Th"
 msgstr "Th"
 
-#: bitpoll/poll/templates/poll/choice_creation_date.html:59
+#: bitpoll/poll/templates/poll/choice_creation_date.html:60
 msgid "Fr"
 msgstr "Fr"
 
-#: bitpoll/poll/templates/poll/choice_creation_date.html:60
+#: bitpoll/poll/templates/poll/choice_creation_date.html:61
 msgid "Sa"
 msgstr "Sa"
 
-#: bitpoll/poll/templates/poll/choice_creation_date.html:61
+#: bitpoll/poll/templates/poll/choice_creation_date.html:62
 msgid "Su"
 msgstr "Su"
 
-#: bitpoll/poll/templates/poll/choice_creation_date.html:80
-#: bitpoll/poll/templates/poll/dt_choice_creation_combinations.html:80
+#: bitpoll/poll/templates/poll/choice_creation_date.html:81
+#: bitpoll/poll/templates/poll/choice_creation_date_labels.html:43
+#: bitpoll/poll/templates/poll/dt_choice_creation_combinations.html:84
 #: bitpoll/poll/templates/poll/dt_choice_creation_time.html:49
 #: bitpoll/poll/templates/poll/vote_delete_error.html:11
 msgid "Back"
 msgstr "Back"
 
-#: bitpoll/poll/templates/poll/choice_creation_date.html:81
-#: bitpoll/poll/templates/poll/dt_choice_creation_combinations.html:81
+#: bitpoll/poll/templates/poll/choice_creation_date.html:82
+#: bitpoll/poll/templates/poll/choice_creation_date_labels.html:44
+#: bitpoll/poll/templates/poll/dt_choice_creation_combinations.html:85
 #: bitpoll/poll/templates/poll/dt_choice_creation_time.html:50
 msgid "Next"
 msgstr "Next"
+
+#: bitpoll/poll/templates/poll/choice_creation_date_labels.html:17
+msgid "Here you can set custom labels for each date choice."
+msgstr ""
+
+#: bitpoll/poll/templates/poll/choice_creation_date_labels.html:36
+#: bitpoll/poll/templates/poll/dt_choice_creation_combinations.html:58
+msgid "Set a custom name"
+msgstr "Set a custom name"
 
 #: bitpoll/poll/templates/poll/choicevalue.html:22
 msgid ""
@@ -1089,7 +1180,7 @@ msgid "Click icon to insert it into the form."
 msgstr "Click icon to insert it into the form."
 
 #: bitpoll/poll/templates/poll/comment_delete.html:8
-#: bitpoll/poll/templates/poll/poll.html:223
+#: bitpoll/poll/templates/poll/poll_content.html:218
 msgid "Delete comment"
 msgstr "Delete comment"
 
@@ -1108,11 +1199,11 @@ msgstr "comented at"
 msgid "Delete"
 msgstr "Delete"
 
-#: bitpoll/poll/templates/poll/comment_form.html:36
+#: bitpoll/poll/templates/poll/comment_form.html:45
 msgid "Comment"
 msgstr "Comment"
 
-#: bitpoll/poll/templates/poll/comment_form.html:40
+#: bitpoll/poll/templates/poll/comment_form.html:49
 #: bitpoll/poll/templates/poll/settings.html:81
 msgid ""
 "\n"
@@ -1129,7 +1220,7 @@ msgstr ""
 "                syntax for formatting.\n"
 "            "
 
-#: bitpoll/poll/templates/poll/comment_form.html:73
+#: bitpoll/poll/templates/poll/comment_form.html:82
 msgid "Save Comment"
 msgstr "Save Comment"
 
@@ -1173,6 +1264,24 @@ msgstr "Date shift (days)"
 msgid "Due Date"
 msgstr "Due Date"
 
+#: bitpoll/poll/templates/poll/date_choice_header.html:4
+#: bitpoll/poll/templates/poll/dt_choice_header.html:4
+msgid "Days"
+msgstr "Days"
+
+#: bitpoll/poll/templates/poll/date_choice_header.html:6
+msgid "Labels"
+msgstr ""
+
+#: bitpoll/poll/templates/poll/date_choice_header.html:12
+#: bitpoll/poll/templates/poll/dt_choice_header.html:14
+msgid "Select days"
+msgstr "Select days"
+
+#: bitpoll/poll/templates/poll/date_choice_header.html:14
+msgid "Assign labels"
+msgstr "Assign labels"
+
 #: bitpoll/poll/templates/poll/dt_choice_creation_combinations.html:17
 msgid ""
 "Here you can select which day/time combinations\n"
@@ -1196,17 +1305,9 @@ msgstr ""
 "                    want to be able to choose. In the next step, you will "
 "match them against the selected days. "
 
-#: bitpoll/poll/templates/poll/dt_choice_header.html:4
-msgid "Days"
-msgstr "Days"
-
 #: bitpoll/poll/templates/poll/dt_choice_header.html:8
 msgid "Combine"
 msgstr "Combine"
-
-#: bitpoll/poll/templates/poll/dt_choice_header.html:14
-msgid "Select days"
-msgstr "Select days"
 
 #: bitpoll/poll/templates/poll/dt_choice_header.html:16
 msgid "Select time slots"
@@ -1215,10 +1316,6 @@ msgstr "Select time slots"
 #: bitpoll/poll/templates/poll/dt_choice_header.html:18
 msgid "Choose combinations"
 msgstr "Choose combinations"
-
-#: bitpoll/poll/templates/poll/date_choice_header.html:14
-msgid "Assign labels"
-msgstr "Assign labels"
 
 #: bitpoll/poll/templates/poll/mail_watch.txt:1
 #, python-format
@@ -1290,79 +1387,85 @@ msgid ""
 "        "
 msgstr ""
 
-#: bitpoll/poll/templates/poll/poll.html:20
+#: bitpoll/poll/templates/poll/poll_content.html:10
+#, fuzzy
+#| msgid ""
+#| "\n"
+#| "                This Poll does not contain any Choices, you can create "
+#| "some at the Choices tab\n"
+#| "                "
 msgid ""
 "\n"
-"                This Poll does not contain any Choices, you can create some "
-"at the Choices tab\n"
-"                "
+"        This Poll does not contain any Choices, you can create some at the "
+"Choices tab\n"
+"        "
 msgstr ""
 "\n"
 "                This Poll does not contain any Choices, you can create some "
 "at the Choices tab\n"
 "                "
 
-#: bitpoll/poll/templates/poll/poll.html:46
-#: bitpoll/poll/templates/poll/poll.html:85
+#: bitpoll/poll/templates/poll/poll_content.html:38
+#: bitpoll/poll/templates/poll/poll_content.html:77
 msgid "Hidden User"
 msgstr "Hidden User"
 
-#: bitpoll/poll/templates/poll/poll.html:60
+#: bitpoll/poll/templates/poll/poll_content.html:52
 msgid "Assigned after voting by"
 msgstr ""
 
-#: bitpoll/poll/templates/poll/poll.html:94
+#: bitpoll/poll/templates/poll/poll_content.html:86
 msgid "Edit vote"
 msgstr "Edit vote"
 
-#: bitpoll/poll/templates/poll/poll.html:99
+#: bitpoll/poll/templates/poll/poll_content.html:91
 #: bitpoll/poll/templates/poll/vote_delete.html:4
 msgid "Delete vote"
 msgstr "Delete vote"
 
-#: bitpoll/poll/templates/poll/poll.html:104
+#: bitpoll/poll/templates/poll/poll_content.html:96
 msgid "Assign user"
 msgstr ""
 
-#: bitpoll/poll/templates/poll/poll.html:142
-#: bitpoll/poll/templates/poll/poll_header.html:105
+#: bitpoll/poll/templates/poll/poll_content.html:135
+#: bitpoll/poll/templates/poll/poll_header.html:109
 msgid "Vote"
 msgstr "Vote"
 
-#: bitpoll/poll/templates/poll/poll.html:153
+#: bitpoll/poll/templates/poll/poll_content.html:148
 msgid "Percent"
 msgstr "Percent"
 
-#: bitpoll/poll/templates/poll/poll.html:169
-#: bitpoll/poll/templates/poll/poll.html:179
+#: bitpoll/poll/templates/poll/poll_content.html:164
+#: bitpoll/poll/templates/poll/poll_content.html:174
 msgid "Score"
 msgstr "Score"
 
-#: bitpoll/poll/templates/poll/poll.html:186
+#: bitpoll/poll/templates/poll/poll_content.html:181
 msgid "Details"
 msgstr ""
 
-#: bitpoll/poll/templates/poll/poll.html:209
+#: bitpoll/poll/templates/poll/poll_content.html:204
 msgid "Export as CSV"
 msgstr ""
 
-#: bitpoll/poll/templates/poll/poll.html:212
+#: bitpoll/poll/templates/poll/poll_content.html:207
 msgid "Comments"
 msgstr "Comments"
 
-#: bitpoll/poll/templates/poll/poll.html:218
+#: bitpoll/poll/templates/poll/poll_content.html:213
 msgid "commented on"
 msgstr "commented on"
 
-#: bitpoll/poll/templates/poll/poll.html:228
+#: bitpoll/poll/templates/poll/poll_content.html:223
 msgid "Edit comment"
 msgstr "Edit comment"
 
-#: bitpoll/poll/templates/poll/poll.html:243
+#: bitpoll/poll/templates/poll/poll_content.html:238
 msgid "Post a comment"
 msgstr "Post a comment"
 
-#: bitpoll/poll/templates/poll/poll.html:246 bitpoll/poll/views.py:193
+#: bitpoll/poll/templates/poll/poll_content.html:241 bitpoll/poll/views.py:270
 msgid "Comments are disabled for this Poll"
 msgstr "Comments are disabled for this Poll"
 
@@ -1399,7 +1502,7 @@ msgid "Ownership"
 msgstr "Ownership"
 
 #: bitpoll/poll/templates/poll/poll_header.html:47
-#: bitpoll/poll/templates/poll/settings.html:163
+#: bitpoll/poll/templates/poll/settings.html:173
 msgid "Group"
 msgstr "Group"
 
@@ -1424,20 +1527,31 @@ msgid "Login required"
 msgstr "Login required"
 
 #: bitpoll/poll/templates/poll/poll_header.html:65
+#, fuzzy
+#| msgid "login required to view"
+msgid "Login required to view"
+msgstr "login required to view"
+
 #: bitpoll/poll/templates/poll/poll_header.html:66
+#: bitpoll/poll/templates/poll/settings.html:109
+msgid "login required to view"
+msgstr "login required to view"
+
+#: bitpoll/poll/templates/poll/poll_header.html:69
+#: bitpoll/poll/templates/poll/poll_header.html:70
 msgid "Empty choices forbidden"
 msgstr ""
 
-#: bitpoll/poll/templates/poll/poll_header.html:79
+#: bitpoll/poll/templates/poll/poll_header.html:83
 msgid "Overview"
 msgstr "Overview"
 
-#: bitpoll/poll/templates/poll/poll_header.html:94
+#: bitpoll/poll/templates/poll/poll_header.html:98
 #: bitpoll/poll/templates/poll/universal_choice_creation.html:19
 msgid "Choices"
 msgstr "Choices"
 
-#: bitpoll/poll/templates/poll/poll_header.html:100
+#: bitpoll/poll/templates/poll/poll_header.html:104
 msgid "Edit Vote"
 msgstr "Edit Vote"
 
@@ -1477,22 +1591,27 @@ msgstr "additional Settings"
 msgid "allow comments"
 msgstr "allow comments"
 
-#: bitpoll/poll/templates/poll/settings.html:113
+#: bitpoll/poll/templates/poll/settings.html:105
+msgid "login required to vote"
+msgstr "login required to vote"
+
+#: bitpoll/poll/templates/poll/settings.html:117
 msgid "show in public poll list"
 msgstr "show in public poll list"
 
-#: bitpoll/poll/templates/poll/settings.html:125
+#: bitpoll/poll/templates/poll/settings.html:129
 msgid "show invitations as empty votes"
 msgstr "show invitations as empty votes"
 
-#: bitpoll/poll/templates/poll/settings.html:133
+#: bitpoll/poll/templates/poll/settings.html:137
 msgid "hide participants"
 msgstr ""
 
+#: bitpoll/poll/templates/poll/settings.html:141
 msgid "change vote after event"
 msgstr "Allow changes of votes for past events"
 
-#: bitpoll/poll/templates/poll/settings.html:142
+#: bitpoll/poll/templates/poll/settings.html:152
 msgid ""
 "\n"
 "                These settings are not retroactive, meaning that changing "
@@ -1504,7 +1623,7 @@ msgstr ""
 "them will not modify votes/comments already created.\n"
 "                "
 
-#: bitpoll/poll/templates/poll/settings.html:180
+#: bitpoll/poll/templates/poll/settings.html:190
 msgid ""
 "\n"
 "                Only the owner of a poll, or a member of the owner group, "
@@ -1522,23 +1641,23 @@ msgstr ""
 "not claim ownership of this poll.\n"
 "                "
 
-#: bitpoll/poll/templates/poll/settings.html:185
+#: bitpoll/poll/templates/poll/settings.html:195
 msgid "Very advanced stuff"
 msgstr "Very advanced stuff"
 
-#: bitpoll/poll/templates/poll/settings.html:186
+#: bitpoll/poll/templates/poll/settings.html:196
 msgid "Edit possible answer values"
 msgstr "Edit possible answer values"
 
-#: bitpoll/poll/templates/poll/settings.html:187
+#: bitpoll/poll/templates/poll/settings.html:197
 msgid "Manage invitations"
 msgstr "Manage invitations"
 
-#: bitpoll/poll/templates/poll/settings.html:188
+#: bitpoll/poll/templates/poll/settings.html:198
 msgid "Copy poll"
 msgstr "Copy poll"
 
-#: bitpoll/poll/templates/poll/settings.html:189
+#: bitpoll/poll/templates/poll/settings.html:199
 msgid "Delete this poll"
 msgstr "Delete this poll"
 
@@ -1653,33 +1772,29 @@ msgstr "Hold left mouse button and drag mouse to select multiple vote choices."
 msgid "Add a comment"
 msgstr "Add a comment"
 
-#: bitpoll/poll/templates/poll/dt_choice_creation_combinations.html:59
-msgid "Set a custom name"
-msgstr "Set a custom name"
-
-#: bitpoll/poll/templates/poll/vote_creation.html:82
+#: bitpoll/poll/templates/poll/vote_creation.html:87
 msgid "Your name:"
 msgstr "Your name:"
 
-#: bitpoll/poll/templates/poll/vote_creation.html:85
+#: bitpoll/poll/templates/poll/vote_creation.html:90
 msgid "Your name"
 msgstr "Your name"
 
-#: bitpoll/poll/templates/poll/vote_creation.html:97
 #: bitpoll/poll/templates/poll/vote_creation.html:102
+#: bitpoll/poll/templates/poll/vote_creation.html:107
 msgid "Post anonymous vote"
 msgstr "Post anonymous vote"
 
-#: bitpoll/poll/templates/poll/vote_creation.html:108
+#: bitpoll/poll/templates/poll/vote_creation.html:113
 #: bitpoll/poll/templates/poll/vote_delete.html:15
 msgid "Comment:"
 msgstr "Comment:"
 
-#: bitpoll/poll/templates/poll/vote_creation.html:109
+#: bitpoll/poll/templates/poll/vote_creation.html:114
 msgid "(optional)"
 msgstr "(optional)"
 
-#: bitpoll/poll/templates/poll/vote_creation.html:119
+#: bitpoll/poll/templates/poll/vote_creation.html:124
 msgid "Save vote"
 msgstr "Save vote"
 
@@ -1696,159 +1811,177 @@ msgid "Author of Vote:"
 msgstr "Author of Vote:"
 
 #: bitpoll/poll/templates/poll/vote_delete_error.html:8
-#: bitpoll/poll/views.py:302 bitpoll/poll/views.py:745
-#: bitpoll/poll/views.py:993
+#: bitpoll/poll/views.py:401 bitpoll/poll/views.py:925
+#: bitpoll/poll/views.py:1231
 msgid "Deletion not allowed. You are not authenticated."
 msgstr "Deletion not allowed. You are not authenticated."
 
-#: bitpoll/poll/views.py:66
+#: bitpoll/poll/views.py:98
 msgid "You can see the results because you are the owner of the Poll"
 msgstr ""
 
-#: bitpoll/poll/views.py:75
+#: bitpoll/poll/views.py:107
 msgid "No individual results are shown due to Poll settings"
 msgstr "No individual results are shown due to Poll settings"
 
-#: bitpoll/poll/views.py:79
+#: bitpoll/poll/views.py:111
 msgid "Results are only sown after (authenticated) Voting"
 msgstr "Results are only sown after (authenticated) Voting"
 
-#: bitpoll/poll/views.py:83
+#: bitpoll/poll/views.py:115
 msgid "Only the Summary is shown due to the Poll settings"
 msgstr "Only the Summary is shown due to the Poll settings"
 
-#: bitpoll/poll/views.py:88
+#: bitpoll/poll/views.py:120
 msgid "The summary is not shown due to the config of the Poll"
 msgstr "The summary is not shown due to the config of the Poll"
 
-#: bitpoll/poll/views.py:128
+#: bitpoll/poll/views.py:193
 msgid ""
 "Currently, unauthenticated users are allowed to change votes. This means, "
 "that everyone is able to change every vote that has not been assigned to a "
 "user. If you want to prevent this, change the settings."
 msgstr ""
 
-#: bitpoll/poll/views.py:136
+#: bitpoll/poll/views.py:201
 msgid "This poll was transferred from {} to your local timezone {}"
 msgstr ""
 
-#: bitpoll/poll/views.py:139
+#: bitpoll/poll/views.py:204
 msgid "This poll has a different timezone ({}) than you."
 msgstr "This poll has a different timezone ({}) than you."
 
-#: bitpoll/poll/views.py:144
+#: bitpoll/poll/views.py:209
 msgid ""
 "Some votes contain deleted values. If you have already voted, please check "
 "your vote."
 msgstr ""
 
-#: bitpoll/poll/views.py:162
+#: bitpoll/poll/views.py:227 bitpoll/poll/views.py:233
 msgid "Hidden"
 msgstr "Hidden"
 
-#: bitpoll/poll/views.py:211
+#: bitpoll/poll/views.py:292
 msgid "This Field is rquired"
 msgstr ""
 
-#: bitpoll/poll/views.py:227 bitpoll/poll/views.py:255
+#: bitpoll/poll/views.py:310 bitpoll/poll/views.py:344
 msgid "You can't edit this Comment"
 msgstr ""
 
-#: bitpoll/poll/views.py:237
+#: bitpoll/poll/views.py:323
 msgid "Provide a name"
 msgstr ""
 
-#: bitpoll/poll/views.py:239
+#: bitpoll/poll/views.py:325
 msgid "Wrong result"
 msgstr ""
 
-#: bitpoll/poll/views.py:300 bitpoll/poll/views.py:991
+#: bitpoll/poll/views.py:399 bitpoll/poll/views.py:1229
 msgid "Deletion not allowed. You are not {}."
 msgstr "Deletion not allowed. You are not {}."
 
-#: bitpoll/poll/views.py:320
+#: bitpoll/poll/views.py:427
 msgid "You are not allowed to watch this poll."
 msgstr "You are not allowed to watch this poll."
 
-#: bitpoll/poll/views.py:387 bitpoll/poll/views.py:391
-#: bitpoll/poll/views.py:546 bitpoll/poll/views.py:550
+#: bitpoll/poll/views.py:515 bitpoll/poll/views.py:519
+#: bitpoll/poll/views.py:717 bitpoll/poll/views.py:721
 msgid "There was en error interpreting the provided dates and times"
 msgstr ""
 
-#: bitpoll/poll/views.py:603 bitpoll/poll/views.py:631
+#: bitpoll/poll/views.py:782 bitpoll/poll/views.py:810
 msgid "The title \"{}\" is to long. The maximum is 80 characters"
 msgstr ""
 
-#: bitpoll/poll/views.py:773
+#: bitpoll/poll/views.py:955
 msgid "This Poll is past the due date, voting is no longer possible"
 msgstr "This Poll is past the due date, voting is no longer possible"
 
-#: bitpoll/poll/views.py:816
+#: bitpoll/poll/views.py:1011
 msgid "The Name is longer than the allowed name length of 80 characters"
 msgstr ""
 
-#: bitpoll/poll/views.py:823
+#: bitpoll/poll/views.py:1021
 msgid "Anonymous votes are not allowed for this poll."
 msgstr "Anonymous votes are not allowed for this poll."
 
-#: bitpoll/poll/views.py:858
+#: bitpoll/poll/views.py:1059
 msgid ""
 "Due to the the configuration of this poll, you have to fill all choices."
 msgstr ""
 
-#: bitpoll/poll/views.py:864
+#: bitpoll/poll/views.py:1065
 msgid ""
 "Value for choice does not exist. This is probably due to changes in the "
 "poll. Please correct your vote."
 msgstr ""
 
+#: bitpoll/poll/views.py:1069
 msgid ""
-"Tried to vote for a choice that has expired."
-"This is probably because the poll\'s settings were changed"
-"since you started voting. Please reload the page."
+"Tried to vote for a choice that has expired. This is probably because the "
+"poll's settings were changedsince you started voting. Please reload the page."
 msgstr ""
 
-#: bitpoll/poll/views.py:877
+#: bitpoll/poll/views.py:1086
 msgid "Vote has been recorded"
 msgstr "Vote has been recorded"
 
-#: bitpoll/poll/views.py:886
+#: bitpoll/poll/views.py:1098
 msgid "You need to either provide a name or post an anonymous vote."
 msgstr "You need to either provide a name or post an anonymous vote."
 
-#: bitpoll/poll/views.py:947
+#: bitpoll/poll/views.py:1104
+#, fuzzy
+#| msgid "This Poll is past the due date, voting is no longer possible"
+msgid "Voting time for all options has expired, voting is no longer possible"
+msgstr "This Poll is past the due date, voting is no longer possible"
+
+#: bitpoll/poll/views.py:1112
+msgid ""
+"Some poll options have already passed. You will not be able to change your "
+"vote for these options."
+msgstr ""
+
+#: bitpoll/poll/views.py:1181
 msgid "This user has already voted and only one vote per user is permitted"
 msgstr ""
 
-#: bitpoll/poll/views.py:949
+#: bitpoll/poll/views.py:1183
 msgid "The user {} does not exists"
 msgstr ""
 
-#: bitpoll/poll/views.py:1129
+#: bitpoll/poll/views.py:1372
 msgid "User {} not Found"
 msgstr "User {} not Found"
 
-#: bitpoll/poll/views.py:1142
+#: bitpoll/poll/views.py:1385
 msgid "Settings have been changed"
 msgstr ""
 
-#: bitpoll/registration/forms.py:38
+#: bitpoll/registration/forms.py:36
+#: bitpoll/registration/templates/registration/account.html:100
+#: bitpoll/registration/templates/registration/create_account.html:19
+#: bitpoll/registration/templates/registration/login.html:50
+msgid "Password"
+msgstr "Password"
+
+#: bitpoll/registration/forms.py:44
 msgid "Wrong password."
 msgstr "Wrong password."
 
-#: bitpoll/registration/forms.py:74
+#: bitpoll/registration/forms.py:80
 msgid "This address is already associated with an account."
-msgstr ""
-
-#: bitpoll/registration/forms.py:84
-#: bitpoll/registration/templates/registration/account.html:71
-#: bitpoll/registration/templates/registration/request_account.html:36
-msgid "Email"
 msgstr ""
 
 #: bitpoll/registration/templates/registration/account.html:6
 #: bitpoll/registration/templates/registration/account.html:19
 msgid "Account"
+msgstr ""
+
+#: bitpoll/registration/templates/registration/account.html:71
+#: bitpoll/registration/templates/registration/request_account.html:36
+msgid "Email"
 msgstr ""
 
 #: bitpoll/registration/templates/registration/account.html:78
@@ -1879,6 +2012,12 @@ msgstr "Change password"
 #: bitpoll/registration/templates/registration/create_account.html:38
 msgid "Create account"
 msgstr "Create account"
+
+#: bitpoll/registration/templates/registration/create_account.html:15
+#: bitpoll/registration/templates/registration/login.html:41
+#: bitpoll/registration/templates/registration/request_account.html:15
+msgid "Username"
+msgstr "Username"
 
 #: bitpoll/registration/templates/registration/create_account.html:28
 msgid "Password confirmation"
@@ -1925,24 +2064,14 @@ msgid ""
 "Your %(signature)s\n"
 msgstr ""
 
-#: bitpoll/registration/templates/registration/login.html:20
+#: bitpoll/registration/templates/registration/login.html:21
 msgid ""
 "Your account doesn't have access to this page. To proceed, please login with "
 "an account that has access."
 msgstr ""
 
-#: bitpoll/registration/templates/registration/login.html:22
+#: bitpoll/registration/templates/registration/login.html:23
 msgid "Please login to see this page."
-msgstr ""
-
-#: bitpoll/registration/templates/registration/login.html:58
-msgid "Did you forget your password?"
-msgstr ""
-
-#: bitpoll/registration/templates/registration/login.html:60
-msgid ""
-"You can not reset your password here, as the account management is "
-"centralized"
 msgstr ""
 
 #: bitpoll/registration/templates/registration/password_reset_complete.html:4
@@ -1952,6 +2081,10 @@ msgstr ""
 #: bitpoll/registration/templates/registration/password_reset_complete.html:9
 msgid "Your password has been set.  You may go ahead and log in now."
 msgstr ""
+
+#: bitpoll/registration/templates/registration/password_reset_complete.html:11
+msgid "Log in"
+msgstr "Log in"
 
 #: bitpoll/registration/templates/registration/password_reset_confirm.html:5
 #: bitpoll/registration/templates/registration/password_reset_form.html:5
@@ -2104,6 +2237,19 @@ msgstr ""
 msgid "Registration: Sending mail failed: {}"
 msgstr ""
 
+#: templates/socialaccount/authentication_error.html:5
+#: templates/socialaccount/authentication_error.html:8
+msgid "Social Network Login Failure"
+msgstr ""
+
+#: templates/socialaccount/authentication_error.html:10
+msgid ""
+"An error occurred while attempting to login via your social network account."
+msgstr ""
+
+#~ msgid "Logout"
+#~ msgstr "Logout"
+
 #~ msgid ""
 #~ "Assigned after voting by %(vote.assigned_by.name|force_escape|"
 #~ "force_escape)s "
@@ -2164,9 +2310,6 @@ msgstr ""
 
 #~ msgid "Bolt"
 #~ msgstr "Bolt"
-
-#~ msgid "Calendar"
-#~ msgstr "Calendar"
 
 #~ msgid "Yes"
 #~ msgstr "Yes"
