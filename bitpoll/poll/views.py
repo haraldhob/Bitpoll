@@ -1040,7 +1040,7 @@ def vote(request, poll_url, vote_id=None):
                             if str(choice.id) in request.POST and request.POST[str(choice.id)].isdecimal():
                                 choice_value = get_object_or_404(ChoiceValue, id=request.POST[str(choice.id)])
                                 if not choice_value.deleted:
-                                    if current_poll.change_vote_after_event or choice.date > only_choices_after:
+                                    if not (current_poll.type == 'datetime' or current_poll.type == 'date') or current_poll.change_vote_after_event or choice.date > only_choices_after:
                                         new_choices.append(VoteChoice(value=choice_value,
                                                                       vote=current_vote,
                                                                       choice=choice,
