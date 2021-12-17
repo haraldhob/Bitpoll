@@ -40,8 +40,12 @@ def invite(request, poll_url):
                     invitation.delete()
                 return redirect('invitations', current_poll.url)
 
+    # Temp warning for invitation emails:
+    messages.info(request, "Einladungsemails sind nun global aktiviert. Das heißt jede Person die explizit zu einer Umfrage eingeladen wird bekommt automatisch eine Einladungsemail.")
+
     return TemplateResponse(request, 'invitations/Invitation.html', {
         'poll': current_poll,
+        'choices': [(g.name, g.name) for g in Group.objects.all()] + [(b.username, b.displayname or b.get_full_name() or b.username) for b in BitpollUser.objects.all()]
     })
 
 

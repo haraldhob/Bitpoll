@@ -48,7 +48,13 @@
                 <div class="form-group">
                   <label for="invite">{% trans 'User or Group' %}</label>
                     <div class="input-group">
-                        <input id="invite" class="form-control" name="invite" value="" type="text">
+                        <div style="margin-right: 1em;">
+                          <select class="form-select form-control" name="invite">
+                            {% for choice in choices %}
+                            <option value="{{ choice.0 }}">{{ choice.1 }}</option>
+                            {% endfor %}
+                          </select>
+                        </div>
                         <div class="input-group-btn">
                             <input class="action primary" value="Invite" type="submit">
                         </div>
