@@ -1707,7 +1707,7 @@ msgstr "Sehr fortgeschrittene Einstellungen"
 
 #: bitpoll/poll/templates/poll/settings.html:196
 msgid "Edit possible answer values"
-msgstr "Antwortmöglichkeiten bearbeitet"
+msgstr "Antwortmöglichkeiten bearbeiten"
 
 #: bitpoll/poll/templates/poll/settings.html:197
 msgid "Manage invitations"
