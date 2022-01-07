@@ -44,7 +44,7 @@
                                 data-title="{{ vote.display_name|force_escape|force_escape }} {% if vote.user %}({{ vote.user.username|force_escape|force_escape }}){% endif %}"
                                 data-content="
                                     {{ vote.date_created }}
-                                    {% if invited.user.groups.all and invited.user.groups.all|filter_group_names_whitelist %}<div class='comment'>{% trans 'Groups' %}: {{ invited.user.groups.all|filter_group_names_whitelist|join:", " }}</div>{% endif %}
+                                    {% if vote.user.groups.all and vote.user.groups.all|filter_group_names_whitelist %}<div class='comment'>{% trans 'Groups' %}: {{ vote.user.groups.all|filter_group_names_whitelist|join:", " }}</div>{% endif %}
                                     {% if vote.comment %}
                                         <div class='comment'>{{ vote.comment|force_escape|force_escape }}</div>
                                     {% endif %}
