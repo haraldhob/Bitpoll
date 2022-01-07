@@ -225,20 +225,29 @@ def poll(request, poll_url: str, reduced: str=None, export: bool=False):
         response['Content-Disposition'] = 'attachment; filename="poll.csv"'
         writer = csv.writer(response)
         a = [choice.get_title for choice in current_poll.ordered_choices]
-        row = ['Name', 'Datetime', 'Comment']
+        row = ['Name', 'Email', 'Groups', 'Datetime', 'Comment']
         row.extend(a)
         writer.writerow(row)
-        for vote, votechoices in zip(poll_votes, vote_choice_matrix):
-            row = [vote.display_name if not current_poll.hide_participants else _('Hidden')]
-            row.append(vote.date_created.isoformat(timespec='seconds'))
-            row.append(vote.comment if vote.comment else '')
-            row.extend([(choice['value'].title + (" ({})".format(choice['comment']) if choice and choice['comment'] and len(choice['comment']) > 0 else '')) if choice and choice['value'] else '' for choice in votechoices])
-            writer.writerow(row)
-        for invitation in invitations:
-            row = [invitation.user.get_displayname() if not current_poll.hide_participants else _('Hidden')]
-            row.append('Invited but did not participate.')
-            row.extend(['' for _ in range(len(a)+1)])
-            writer.writerow(row)
+        for type, entry in all_entries:
+            if type == 'VOTE':
+                vote, votechoices = entry
+                row = [vote.display_name if not current_poll.hide_participants else _('Hidden')]
+                row.append(vote.user.email)
+                # filter the user's groups to show only those that are in the whitelist for the tooltip
+                row.append(', '.join(set(django_settings.POLL_GROUP_HOVER_WHITELIST) & set(map(lambda g: g.name, vote.user.groups.all()))))
+                row.append(vote.date_created.isoformat(timespec='seconds'))
+                row.append(vote.comment if vote.comment else '')
+                row.extend([(choice['value'].title + (" ({})".format(choice['comment']) if choice and choice['comment'] and len(choice['comment']) > 0 else '')) if choice and choice['value'] else '' for choice in votechoices])
+                writer.writerow(row)
+            elif type == 'INVITE':
+                invitation = entry
+                row = [invitation.user.get_displayname() if not current_poll.hide_participants else _('Hidden')]
+                row.append(invitation.user.email)
+                # filter the user's groups to show only those that are in the whitelist for the tooltip
+                row.append(', '.join(set(django_settings.POLL_GROUP_HOVER_WHITELIST) & set(map(lambda g: g.name, invitation.user.groups.all()))))
+                row.append(_('Invited but didn\'t participate'))
+                row.extend(['' for _ in range(len(a)+1)])
+                writer.writerow(row)
         return response
 
     return TemplateResponse(request, 'poll/poll.html', {
