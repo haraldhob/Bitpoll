@@ -1,6 +1,7 @@
 from numbers import Number
 
 from django import template
+from django.conf import settings
 
 from bitpoll.base.models import BitpollUser
 from bitpoll.poll.models import Poll
@@ -52,3 +53,11 @@ def is_initial_choice(initial: list, date, time):
         return True
 
     return False
+
+@register.filter
+def filter_group_names_whitelist(groups: list) -> list:
+    filtered = []
+    for g in groups:
+        if g.name in settings.POLL_GROUP_HOVER_WHITELIST:
+            filtered.append(g)
+    return filtered
