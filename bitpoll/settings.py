@@ -371,6 +371,9 @@ REST_FRAMEWORK = {
     ]
 }
 
+POLL_GROUP_ORDERING = []
+POLL_GROUP_HOVER_WHITELIST = []
+
 from .settings_local import *
 
 INSTALLED_APPS += INSTALLED_APPS_LOCAL

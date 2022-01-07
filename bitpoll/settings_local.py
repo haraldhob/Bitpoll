@@ -108,6 +108,9 @@ ALLOWED_HOSTS = [
 
 ADMIN_GROUPS = ["admin"]
 
+POLL_GROUP_ORDERING = ['stipendiaten', 'alumni', 'vertrauenspersonen']
+POLL_GROUP_HOVER_WHITELIST = ['stipendiaten', 'alumni', 'vertrauenspersonen', 'admin', 'steuergruppe']
+
 # TODO: configure database
 # DATABASES = {
 #     'default': {

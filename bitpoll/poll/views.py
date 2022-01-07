@@ -148,24 +148,21 @@ def poll(request, poll_url: str, reduced: str=None, export: bool=False):
             elif current_poll.sorting == Poll.ResultSorting.DATE:
                 return item.date_created
             elif current_poll.sorting == Poll.ResultSorting.GROUP:
-                if len(item.user.groups.filter(name='vertrauenspersonen').all()) > 0:
-                    return (2, item.user.username)
-                elif len(item.user.groups.filter(name='alumni').all()) > 0:
-                    return (3, item.user.username)
-                else:
-                    return (1, item.user.username)
+                for i, group in enumerate(django_settings.POLL_GROUP_ORDERING):
+                    if len(item.user.groups.filter(name=group).all()) > 0:
+                        return (i, item.user.username)
+                return (len(django_settings.POLL_GROUP_ORDERING), item.user.username)
         elif isinstance(item, tuple) and len(item) == 2 and isinstance(item[0], Vote):
             if current_poll.sorting == Poll.ResultSorting.NAME:
                 return item[0].user.username
             elif current_poll.sorting == Poll.ResultSorting.DATE:
                 return item[0].date_created
             elif current_poll.sorting == Poll.ResultSorting.GROUP:
-                if len(item[0].user.groups.filter(name='vertrauenspersonen').all()) > 0:
-                    return (2, item[0].user.username)
-                elif len(item[0].user.groups.filter(name='alumni').all()) > 0:
-                    return (3, item[0].user.username)
-                else:
-                    return (1, item[0].user.username)
+                for i, group in enumerate(django_settings.POLL_GROUP_ORDERING):
+                    if len(item[0].user.groups.filter(name=group).all()) > 0:
+                        return (i, item[0].user.username)
+                return (len(django_settings.POLL_GROUP_ORDERING), item[0].user.username)
+
         return (3, '')
 
     all_entries.sort(key=getkey_vote_and_invitation)
