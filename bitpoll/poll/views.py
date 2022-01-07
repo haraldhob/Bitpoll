@@ -141,8 +141,8 @@ def poll(request, poll_url: str, reduced: str=None, export: bool=False):
     all_entries = list(voted_entries) + list(invited_entries)
 
     def getkey_vote_and_invitation(item):
-        item = item[1]
-        if isinstance(item, Invitation):
+        type, item = item
+        if type == 'INVITE':
             if current_poll.sorting == Poll.ResultSorting.NAME:
                 return item.user.username
             elif current_poll.sorting == Poll.ResultSorting.DATE:
@@ -152,18 +152,19 @@ def poll(request, poll_url: str, reduced: str=None, export: bool=False):
                     if len(item.user.groups.filter(name=group).all()) > 0:
                         return (i, item.user.username)
                 return (len(django_settings.POLL_GROUP_ORDERING), item.user.username)
-        elif isinstance(item, tuple) and len(item) == 2 and isinstance(item[0], Vote):
+        elif type == 'VOTE':
+            vote, _ = item
             if current_poll.sorting == Poll.ResultSorting.NAME:
-                return item[0].user.username
+                return vote.user.username
             elif current_poll.sorting == Poll.ResultSorting.DATE:
-                return item[0].date_created
+                return vote.date_created
             elif current_poll.sorting == Poll.ResultSorting.GROUP:
                 for i, group in enumerate(django_settings.POLL_GROUP_ORDERING):
-                    if len(item[0].user.groups.filter(name=group).all()) > 0:
-                        return (i, item[0].user.username)
-                return (len(django_settings.POLL_GROUP_ORDERING), item[0].user.username)
+                    if len(vote.user.groups.filter(name=group).all()) > 0:
+                        return (i, vote.user.username)
+                return (len(django_settings.POLL_GROUP_ORDERING), vote.user.username)
 
-        return (3, '')
+        return (len(django_settings.POLL_GROUP_ORDERING) + 1, '')
 
     all_entries.sort(key=getkey_vote_and_invitation)
     # keys = map(getkey_vote_and_invitation, vote_entries)
