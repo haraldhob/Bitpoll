@@ -42,9 +42,14 @@ table.poll {
     margin: .7em -3px;
 }
 
-.sticky-firstrow {
+.sticky-firstcol {
     position: sticky;
     left: 0;
+}
+
+.sticky-firstrow {
+    position: sticky;
+    top: 0;
 }
 
 .poll, .vote {
@@ -174,6 +179,10 @@ td.control {
     display: inline;
     padding: 0;
     margin-right: 1em;
+}
+
+.vote-choice-comment {
+    min-width: 10em;
 }
 
 table.poll td.none {

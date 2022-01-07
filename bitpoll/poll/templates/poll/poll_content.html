@@ -13,18 +13,18 @@
         </p>
     {% endif %}
         <table class="table poll auto-width" id="poll">
-            <thead>
+            <thead class="sticky-firstrow">
             {% for row in matrix %}
-                <tr>
+                <tr class="sticky-firstrow">
                     <th class="table sticky-firstrow"></th>
                     {% for item in row %}
                         {% if item.0 != None %}
-                            <th colspan="{{ item.2 }}" rowspan="{{ item.1 }}" class="choice-group">
+                            <th colspan="{{ item.2 }}" rowspan="{{ item.1 }}" class="choice-group sticky-firstrow">
                                 {{ item.0|group_title }}
                             </th>
                         {% endif %}
                     {% endfor %}
-                    <th class="noprint"></th>
+                    <th class="noprint sticky-firstrow"></th>
                 </tr>
             {% endfor %}
             </thead>
@@ -35,9 +35,9 @@
                         <tr class="vote {% if not request.user.is_anonymous and vote.user_id == request.user.id %} mine{% endif %}"
                                 {# data-author="{{ vote.display_name|force_escape|force_escape }}"#}>
                             {% if poll.hide_participants and not poll|poll_is_owner:request.user and user != vote.user %}
-                            <td class="author author-hidden sticky-firstrow">{% trans "Hidden User" %}</td>
+                            <td class="author author-hidden sticky-firstcol">{% trans "Hidden User" %}</td>
                             {% else %}
-                            <td class="author sticky-firstrow"
+                            <td class="author sticky-firstcol"
                                 data-toggle="popover"
                                 data-trigger="hover"
                                 data-container="body"
@@ -109,7 +109,7 @@
                 {% elif entry.0 == 'INVITE' %}
                     {% with invited=entry.1 %}
                         <tr class="vote {% if invited.user == request.user %} mine{% endif %}">
-                            <td class="author sticky-firstrow"
+                            <td class="author sticky-firstcol"
                                 data-toggle="popover"
                                 data-trigger="hover"
                                 data-container="body"
@@ -143,7 +143,7 @@
             <tfoot>
             {% if summary %}
             <tr id="scores">
-                <th class="table sticky-firstrow">
+                <th class="table sticky-firstcol">
                         <span class="print-only"><b>{% trans 'Percent' %}<br/></b></span>
                 </th>
                 {#                            {% set scores, counts, totals, max_score = poll.get_stats() %}#}
