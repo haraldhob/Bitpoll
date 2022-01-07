@@ -54,25 +54,29 @@ def poll(request, poll_url: str, reduced: str=None, export: bool=False):
     tz_activate(current_poll.get_tz_name(request.user))
 
     poll_votes = Vote.objects.filter(poll=current_poll).select_related('user')
-    if current_poll.sorting == Poll.ResultSorting.NAME:
-        poll_votes = poll_votes.order_by('name')
-    elif current_poll.sorting == Poll.ResultSorting.DATE:
-        poll_votes = poll_votes.order_by('date_created')
-    elif current_poll.sorting == Poll.ResultSorting.GROUP:
-        # the desired behavior in this case is:
-        # - stipendiaten appear first, ordered by name
-        # - vertrauenspersonen appear second, also ordered by name
 
-        # this is kind of a hack to achieve the desired behavior:
-        # I'm introducing an aggregated attribute called is_vertrauensperson by counting the number of groups assocaited
-        # with a user that are named 'vertrauenspersonen'. Thus this attribute is 0 if the person who gave a vote is a
-        # stip and 1 if they are a vertrauensperson
-        poll_votes = poll_votes.annotate(
-            is_vertrauensperson=Count(
-                'user__groups',
-                filter=Q(user__groups__name__iexact='vertrauenspersonen') # TODO extract the magic name into the config?
-            )
-        ).order_by('is_vertrauensperson', 'name')
+    # Note: Reordering at this point is redundant, because poll votes and invitations are combined below and then
+    # explicitly sorted.
+
+    # if current_poll.sorting == Poll.ResultSorting.NAME:
+    #     poll_votes = poll_votes.order_by('name')
+    # elif current_poll.sorting == Poll.ResultSorting.DATE:
+    #     poll_votes = poll_votes.order_by('date_created')
+    # elif current_poll.sorting == Poll.ResultSorting.GROUP:
+    #     # the desired behavior in this case is:
+    #     # - stipendiaten appear first, ordered by name
+    #     # - vertrauenspersonen appear second, also ordered by name
+    # 
+    #     # this is kind of a hack to achieve the desired behavior:
+    #     # I'm introducing an aggregated attribute called is_vertrauensperson by counting the number of groups assocaited
+    #     # with a user that are named 'vertrauenspersonen'. Thus this attribute is 0 if the person who gave a vote is a
+    #     # stip and 1 if they are a vertrauensperson
+    #     poll_votes = poll_votes.annotate(
+    #         is_vertrauensperson=Count(
+    #             'user__groups',
+    #             filter=Q(user__groups__name__iexact='vertrauenspersonen') # TODO extract the magic name into the config?
+    #         )
+    #     ).order_by('is_vertrauensperson', 'name')
 
     # prefetch_related('votechoice_set').select_releated() #TODO (Prefetch objekt nötig, wie ist der reverse join name wirklich?
 
@@ -136,7 +140,6 @@ def poll(request, poll_url: str, reduced: str=None, export: bool=False):
     invited_entries = map(lambda x: ('INVITE', x), invitations)
     all_entries = list(voted_entries) + list(invited_entries)
 
-
     def getkey_vote_and_invitation(item):
         item = item[1]
         if isinstance(item, Invitation):
@@ -147,6 +150,8 @@ def poll(request, poll_url: str, reduced: str=None, export: bool=False):
             elif current_poll.sorting == Poll.ResultSorting.GROUP:
                 if len(item.user.groups.filter(name='vertrauenspersonen').all()) > 0:
                     return (2, item.user.username)
+                elif len(item.user.groups.filter(name='alumni').all()) > 0:
+                    return (3, item.user.username)
                 else:
                     return (1, item.user.username)
         elif isinstance(item, tuple) and len(item) == 2 and isinstance(item[0], Vote):
@@ -157,6 +162,8 @@ def poll(request, poll_url: str, reduced: str=None, export: bool=False):
             elif current_poll.sorting == Poll.ResultSorting.GROUP:
                 if len(item[0].user.groups.filter(name='vertrauenspersonen').all()) > 0:
                     return (2, item[0].user.username)
+                elif len(item[0].user.groups.filter(name='alumni').all()) > 0:
+                    return (3, item[0].user.username)
                 else:
                     return (1, item[0].user.username)
         return (3, '')
