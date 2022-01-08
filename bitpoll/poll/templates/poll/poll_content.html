@@ -44,7 +44,7 @@
                                 data-title="{{ vote.display_name|force_escape|force_escape }} {% if vote.user %}({{ vote.user.username|force_escape|force_escape }}){% endif %}"
                                 data-content="
                                     {{ vote.date_created }}
-                                    {% if vote.user.groups.all and vote.user.groups.all|filter_group_names_whitelist %}<div class='comment'>{% trans 'Groups' %}: {{ vote.user.groups.all|filter_group_names_whitelist|join:", " }}</div>{% endif %}
+                                    {% if vote.user.groups.all and vote.user.groups.all|filter_group_names_whitelist %}<div class='comment'>{% trans 'Groups' %}: {{ vote.user.groups.all|filter_group_names_whitelist|groupname_prettify|join:", " }}</div>{% endif %}
                                     {% if vote.comment %}
                                         <div class='comment'>{{ vote.comment|force_escape|force_escape }}</div>
                                     {% endif %}
@@ -115,7 +115,7 @@
                                 data-trigger="hover"
                                 data-container="body"
                                 data-title="{{ invited.user.get_displayname|force_escape|force_escape }} {% if invited.user %}({{ invited.user.username|force_escape|force_escape }}){% endif %}"
-                                data-content="{% if invited.user.groups.all and invited.user.groups.all|filter_group_names_whitelist %}<div class='comment'>{% trans 'Groups' %}: {{ invited.user.groups.all|filter_group_names_whitelist|join:", " }}</div>{% endif %}">
+                                data-content="{% if invited.user.groups.all and invited.user.groups.all|filter_group_names_whitelist %}<div class='comment'>{% trans 'Groups' %}: {{ invited.user.groups.all|filter_group_names_whitelist|groupname_prettify|join:", " }}</div>{% endif %}">
                                 {{ invited.user.get_displayname }}
                             </td>
                             {% for row in matrix.0 %}
