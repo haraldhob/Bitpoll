@@ -77,7 +77,28 @@ Define a nextcloud group which only contains admins which should also have admin
 instance:
 
 Edit the `ADMIN_GROUPS` in the `settings_local.py` file. As soon as a user logs in using the nextcloud oauth, his/her
-groups are compared to the groups in this list. If any of them matches, the user is granted administrative rights.
+groups are compared to the groups in this list. If any of them matches, the user is granted
+administrative rights.
+
+# Translation
+
+To translate strings that are already wrapped in a `gettext` call (sometime aliased as `_`), just
+run the following command:
+
+```bash
+./manage.py makemessages
+```
+
+This will create updated `.po` files in the `/locale/de_DE/` and `/locale/en_US/` directories. 
+For a reference on how to use these files for translation, have a look at [this
+tutorial](https://docs.djangoproject.com/en/4.0/topics/i18n/translation/).
+
+After adding all required translations, run the following command to convert the `.po` files to the
+compiled `.mo` files for runtime translation with gettext.
+
+```bash
+./manage.py compilemessages
+```
 
 # nginx Webserver Setup
 

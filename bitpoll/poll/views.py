@@ -1115,7 +1115,7 @@ def vote(request, poll_url, vote_id=None):
     matrix = current_poll.get_choice_group_matrix(get_current_timezone(), choices_after=only_choices_after)
     if len(matrix) == 0 or matrix == [[]]:
         messages.error(
-            request, _("Voting time for all options has expired, voting is no longer possible")  # TODO add translations
+            request, _("Voting time for all options has expired, voting is no longer possible")
         )
         response = redirect('poll', poll_url)
         if reduced_template:
@@ -1123,7 +1123,7 @@ def vote(request, poll_url, vote_id=None):
         return response
     if len(matrix) < len(current_poll.ordered_choices):
         messages.info(
-            request, _('Some poll options have already passed. You will not be able to change your vote for these options.') # TODO translation
+            request, _('Some poll options have already passed. You will not be able to change your vote for these options.')
         )
     choices = []
     comments = []
