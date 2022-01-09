@@ -54,25 +54,29 @@ def poll(request, poll_url: str, reduced: str=None, export: bool=False):
     tz_activate(current_poll.get_tz_name(request.user))
 
     poll_votes = Vote.objects.filter(poll=current_poll).select_related('user')
-    if current_poll.sorting == Poll.ResultSorting.NAME:
-        poll_votes = poll_votes.order_by('name')
-    elif current_poll.sorting == Poll.ResultSorting.DATE:
-        poll_votes = poll_votes.order_by('date_created')
-    elif current_poll.sorting == Poll.ResultSorting.GROUP:
-        # the desired behavior in this case is:
-        # - stipendiaten appear first, ordered by name
-        # - vertrauenspersonen appear second, also ordered by name
 
-        # this is kind of a hack to achieve the desired behavior:
-        # I'm introducing an aggregated attribute called is_vertrauensperson by counting the number of groups assocaited
-        # with a user that are named 'vertrauenspersonen'. Thus this attribute is 0 if the person who gave a vote is a
-        # stip and 1 if they are a vertrauensperson
-        poll_votes = poll_votes.annotate(
-            is_vertrauensperson=Count(
-                'user__groups',
-                filter=Q(user__groups__name__iexact='vertrauenspersonen') # TODO extract the magic name into the config?
-            )
-        ).order_by('is_vertrauensperson', 'name')
+    # Note: Reordering at this point is redundant, because poll votes and invitations are combined below and then
+    # explicitly sorted.
+
+    # if current_poll.sorting == Poll.ResultSorting.NAME:
+    #     poll_votes = poll_votes.order_by('name')
+    # elif current_poll.sorting == Poll.ResultSorting.DATE:
+    #     poll_votes = poll_votes.order_by('date_created')
+    # elif current_poll.sorting == Poll.ResultSorting.GROUP:
+    #     # the desired behavior in this case is:
+    #     # - stipendiaten appear first, ordered by name
+    #     # - vertrauenspersonen appear second, also ordered by name
+    # 
+    #     # this is kind of a hack to achieve the desired behavior:
+    #     # I'm introducing an aggregated attribute called is_vertrauensperson by counting the number of groups assocaited
+    #     # with a user that are named 'vertrauenspersonen'. Thus this attribute is 0 if the person who gave a vote is a
+    #     # stip and 1 if they are a vertrauensperson
+    #     poll_votes = poll_votes.annotate(
+    #         is_vertrauensperson=Count(
+    #             'user__groups',
+    #             filter=Q(user__groups__name__iexact='vertrauenspersonen') # TODO extract the magic name into the config?
+    #         )
+    #     ).order_by('is_vertrauensperson', 'name')
 
     # prefetch_related('votechoice_set').select_releated() #TODO (Prefetch objekt nötig, wie ist der reverse join name wirklich?
 
@@ -136,30 +140,31 @@ def poll(request, poll_url: str, reduced: str=None, export: bool=False):
     invited_entries = map(lambda x: ('INVITE', x), invitations)
     all_entries = list(voted_entries) + list(invited_entries)
 
-
     def getkey_vote_and_invitation(item):
-        item = item[1]
-        if isinstance(item, Invitation):
+        type, item = item
+        if type == 'INVITE':
             if current_poll.sorting == Poll.ResultSorting.NAME:
                 return item.user.username
             elif current_poll.sorting == Poll.ResultSorting.DATE:
                 return item.date_created
             elif current_poll.sorting == Poll.ResultSorting.GROUP:
-                if len(item.user.groups.filter(name='vertrauenspersonen').all()) > 0:
-                    return (2, item.user.username)
-                else:
-                    return (1, item.user.username)
-        elif isinstance(item, tuple) and len(item) == 2 and isinstance(item[0], Vote):
+                for i, group in enumerate(django_settings.POLL_GROUP_ORDERING):
+                    if len(item.user.groups.filter(name=group).all()) > 0:
+                        return (i, item.user.username)
+                return (len(django_settings.POLL_GROUP_ORDERING), item.user.username)
+        elif type == 'VOTE':
+            vote, _ = item
             if current_poll.sorting == Poll.ResultSorting.NAME:
-                return item[0].user.username
+                return vote.user.username
             elif current_poll.sorting == Poll.ResultSorting.DATE:
-                return item[0].date_created
+                return vote.date_created
             elif current_poll.sorting == Poll.ResultSorting.GROUP:
-                if len(item[0].user.groups.filter(name='vertrauenspersonen').all()) > 0:
-                    return (2, item[0].user.username)
-                else:
-                    return (1, item[0].user.username)
-        return (3, '')
+                for i, group in enumerate(django_settings.POLL_GROUP_ORDERING):
+                    if len(vote.user.groups.filter(name=group).all()) > 0:
+                        return (i, vote.user.username)
+                return (len(django_settings.POLL_GROUP_ORDERING), vote.user.username)
+
+        return (len(django_settings.POLL_GROUP_ORDERING) + 1, '')
 
     all_entries.sort(key=getkey_vote_and_invitation)
     # keys = map(getkey_vote_and_invitation, vote_entries)
@@ -220,20 +225,29 @@ def poll(request, poll_url: str, reduced: str=None, export: bool=False):
         response['Content-Disposition'] = 'attachment; filename="poll.csv"'
         writer = csv.writer(response)
         a = [choice.get_title for choice in current_poll.ordered_choices]
-        row = ['Name', 'Datetime', 'Comment']
+        row = ['Name', 'Email', 'Groups', 'Datetime', 'Comment']
         row.extend(a)
         writer.writerow(row)
-        for vote, votechoices in zip(poll_votes, vote_choice_matrix):
-            row = [vote.display_name if not current_poll.hide_participants else _('Hidden')]
-            row.append(vote.date_created.isoformat(timespec='seconds'))
-            row.append(vote.comment if vote.comment else '')
-            row.extend([(choice['value'].title + (" ({})".format(choice['comment']) if choice and choice['comment'] and len(choice['comment']) > 0 else '')) if choice and choice['value'] else '' for choice in votechoices])
-            writer.writerow(row)
-        for invitation in invitations:
-            row = [invitation.user.get_displayname() if not current_poll.hide_participants else _('Hidden')]
-            row.append('Invited but did not participate.')
-            row.extend(['' for _ in range(len(a)+1)])
-            writer.writerow(row)
+        for type, entry in all_entries:
+            if type == 'VOTE':
+                vote, votechoices = entry
+                row = [vote.display_name if not current_poll.hide_participants else _('Hidden')]
+                row.append(vote.user.email)
+                # filter the user's groups to show only those that are in the whitelist for the tooltip
+                row.append(', '.join(set(django_settings.POLL_GROUP_HOVER_WHITELIST) & set(map(lambda g: g.name, vote.user.groups.all()))))
+                row.append(vote.date_created.isoformat(timespec='seconds'))
+                row.append(vote.comment if vote.comment else '')
+                row.extend([(choice['value'].title + (" ({})".format(choice['comment']) if choice and choice['comment'] and len(choice['comment']) > 0 else '')) if choice and choice['value'] else '' for choice in votechoices])
+                writer.writerow(row)
+            elif type == 'INVITE':
+                invitation = entry
+                row = [invitation.user.get_displayname() if not current_poll.hide_participants else _('Hidden')]
+                row.append(invitation.user.email)
+                # filter the user's groups to show only those that are in the whitelist for the tooltip
+                row.append(', '.join(set(django_settings.POLL_GROUP_HOVER_WHITELIST) & set(map(lambda g: g.name, invitation.user.groups.all()))))
+                row.append(_('Invited but didn\'t participate'))
+                row.extend(['' for _ in range(len(a)+1)])
+                writer.writerow(row)
         return response
 
     return TemplateResponse(request, 'poll/poll.html', {
