@@ -1,0 +1,139 @@
+############################################
+### Don't change the following settings! ###
+############################################
+
+# SECURITY WARNING: don't run with debug turned on in production!
+DEBUG = False
+PIPELINE_LOCAL = {}
+CSRF_COOKIE_SECURE = True
+# The root dir bitpoll appears to be in from the web, as configured in the webserver
+URL_PREFIX = ''
+INSTALLED_APPS_LOCAL = [
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'bitpoll.nextcloud_authenticator',
+    'django.contrib.sites',
+]
+LANGUAGE_CODE = 'de-DE'
+TIME_ZONE = 'Europe/Berlin'
+REGISTER_ENABLED = False
+GROUP_MANAGEMENT = False
+# Because we don't want additional email confirmations, disable this feature.
+ACCOUNT_EMAIL_VERIFICATION = 'none'
+ACCOUNT_SESSION_REMEMBER = True
+# Used by the multi-site management system of the allauth library -> not important
+SITE_ID = 1
+AUTHENTICATION_BACKENDS = (
+    # Needed to login by username in Django admin, regardless of `allauth`
+    'django.contrib.auth.backends.ModelBackend',
+    # django-allauth backend
+    'allauth.account.auth_backends.AuthenticationBackend',
+)
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'root': {
+        'handlers': ['console'],
+        'level': 'DEBUG',
+    },
+}
+SESSION_COOKIE_SAMESITE = None
+SESSION_COOKIE_SECURE = False
+CSRF_COOKIE_SAMESITE = None
+REGISTER_ENABLED = False
+ACCOUNT_ADAPTER = 'bitpoll.nextcloud_authenticator.adapter.NoNewUsersAccountAdapter'
+# Production E-Mail backend
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
+######################################
+### Adjust the following settings! ###
+######################################
+
+# You must insert your own random value here
+# SECURITY WARNING: keep the secret key used in production secret!
+# see <https://docs.djangoproject.com/en/dev/howto/deployment/checklist/#secret-key>
+SECRET_KEY = 'FILL_IN_SECRET_KEY'
+
+# generate via: ./manage.py generate_encryption_key
+FIELD_ENCRYPTION_KEY = "FILL_IN_ECRYPTION_KEY"
+
+""" How to setup the nextcloud instance:
+
+1. Log in with admin permissions and navigate to settings/admin/security.
+2. Add a new OAuth 2.0 client at the bottom of the page (Nextcloud Version 20)
+    - "Name": This can be any name.
+    - "Redirection URI": This has to be the following URI (fill in the base domain):
+        -> 'https://bitpoll.sdw-muenchen.org/accounts/nextcloud_auth/login/callback/' <-
+3. Copy the "Client Identification" and paste it into the "client_id" field.
+4. Copy the "Secret" and paste it into the "secret" field. 
+"""
+SOCIALACCOUNT_PROVIDERS = {
+    'nextcloud_auth': {
+        'SERVER': 'https://sdw-muenchen.org',
+        'APP': {
+            "client_id": "CLIENT_ID",
+            "secret": "SECRET_KEY",
+        },
+        # emails received from nextcloud accounts are automatically marked as valid
+        'VERIFIED_EMAIL': True,
+    }
+}
+
+## https://docs.djangoproject.com/en/1.9/ref/settings/#databases
+DATABASES = {
+   'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'bitpoll',
+        'USER': 'bitpoll',
+        'PASSWORD': 'DB_PASSWORD',
+        'HOST': 'localhost',
+        'PORT': '3306',
+    }
+}
+
+# Customize your instance
+SITE_NAME = 'Bitpoll'
+BASE_URL = 'https://bitpoll.sdw-muenchen.org'
+
+# The login url, being excempted from the automatic authentication redirect
+LOGIN_URL = 'https://bitpoll.sdw-muenchen.org/accounts/nextcloud_auth/login/'
+
+# Url to the Base Homepage and Text on the Link, leave empty to not use this option
+HOME_URL = "https://sdw-muenchen.org"
+HOME_URL_NAME = "Nextcloud"
+
+# Allowed HOSTs and ORIGINs
+ALLOWED_HOSTS = [
+    "bitpoll.sdw-muenchen.org"
+]
+CSRF_TRUSTED_ORIGINS = ["sdw-muenchen.org", "bitpoll.sdw-muenchen.org"]
+X_FRAME_OPTIONS = 'allow-from https://sdw-muenchen.org/'
+
+# Nextcloud groups whose users should be awarded the admin status in the Bitpoll application
+ADMIN_GROUPS = ["admin"]
+
+POLL_GROUP_ORDERING = ['stipendiaten', 'vertrauenspersonen', 'alumni']
+POLL_GROUP_HOVER_WHITELIST = ['allgemeines_programm', 'studienkolleg', 'stipendiaten', 'alumni', 'vertrauenspersonen', 'admin', 'steuergruppe']
+
+# E-Mail displayed for support
+TEAM_EMAIL = "hilfe@sdw-muenchen.org"
+
+# Host for sending e-mail.
+EMAIL_HOST = 'smtp.strato.de'
+
+# Port for sending e-mail.
+EMAIL_PORT = 587
+
+# Optional SMTP authentication information for EMAIL_HOST.
+EMAIL_HOST_USER = 'it@sdw-muenchen.org'
+EMAIL_HOST_PASSWORD = 'EMAIL_PASSWORD'
+EMAIL_USE_TLS = True
+
+# EMAIL_USE_SSL = True
+DEFAULT_FROM_EMAIL = 'it@sdw-muenchen.org'

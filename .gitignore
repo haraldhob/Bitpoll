@@ -10,4 +10,4 @@ db.sqlite3
 .pyenv2
 .venv
 *.mo
-bitpoll/settings_local2.py
+bitpoll/settings_local.py
