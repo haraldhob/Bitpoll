@@ -1170,6 +1170,7 @@ def vote(request, poll_url, vote_id=None):
         'page': 'Vote',
         'current_vote': current_vote,
         'timezone_warning': (request.user.is_authenticated and
+                             current_poll.type != 'date' and
                              current_poll.get_tz_name(request.user) != request.user.timezone),
         'choice_values': ChoiceValue.objects.filter(poll=current_poll),
         'url_append': '' if not reduced_template else '?reduced',
