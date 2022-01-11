@@ -110,7 +110,7 @@ ADMIN_GROUPS = ["admin"]
 
 POLL_GROUP_ORDERING = ['stipendiaten', 'vertrauenspersonen', 'alumni']
 POLL_GROUP_HOVER_WHITELIST = ['stipendiaten', 'alumni', 'vertrauenspersonen', 'admin', 'steuergruppe']
-
+POLL_ALLOW_EDIT_DAYS = 2
 # TODO: configure database
 # DATABASES = {
 #     'default': {

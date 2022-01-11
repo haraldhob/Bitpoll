@@ -1670,7 +1670,7 @@ msgstr "Teilnehmerliste verbergen"
 
 #: bitpoll/poll/templates/poll/settings.html:141
 msgid "change vote after event"
-msgstr "Verhindere Änderungen der Eintragung bei vergangenen Events"
+msgstr "Erlaube Änderungen der Eintragung bei vergangenen Events"
 
 #: bitpoll/poll/templates/poll/settings.html:152
 msgid ""

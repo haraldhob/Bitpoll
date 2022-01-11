@@ -985,10 +985,11 @@ def vote(request, poll_url, vote_id=None):
 
     tz_activate(current_poll.get_tz_name(request.user))
 
-    ALLOW_EDIT_HOURS = 48  # TODO extract to somewhere better suited
+    allow_edit_hours = django_settings.POLL_ALLOW_EDIT_DAYS * 24 + 24 # the +24 is because date polls are always defined
+    # at 00:00, and thus the 'effective' allowed time to edit after a poll has passed is one day less than given.
     only_choices_after = None
     if (current_poll.type == 'datetime' or current_poll.type == 'date') and not current_poll.change_vote_after_event:
-        only_choices_after = now() + timedelta(hours=ALLOW_EDIT_HOURS)
+        only_choices_after = now() - timedelta(hours=allow_edit_hours)
         only_choices_after = utc.localize(dt.datetime.combine(only_choices_after.date(), dt.time(0, 0)))
 
     if request.method == 'POST':

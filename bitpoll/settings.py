@@ -373,6 +373,7 @@ REST_FRAMEWORK = {
 
 POLL_GROUP_ORDERING = []
 POLL_GROUP_HOVER_WHITELIST = []
+POLL_ALLOW_EDIT_DAYS = 2
 
 from .settings_local import *
 
