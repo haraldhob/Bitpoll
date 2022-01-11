@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-01-09 21:25+0100\n"
+"POT-Creation-Date: 2022-01-11 11:29+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Nils Rokita <0rokita@informatik.uni-hamburg.de>\n"
 "Language-Team: \n"
@@ -1906,7 +1906,7 @@ msgstr "Autor der Stimme:"
 
 #: bitpoll/poll/templates/poll/vote_delete_error.html:8
 #: bitpoll/poll/views.py:415 bitpoll/poll/views.py:939
-#: bitpoll/poll/views.py:1246
+#: bitpoll/poll/views.py:1247
 msgid "Deletion not allowed. You are not authenticated."
 msgstr "Löschen nicht erlaubt. Du bist nicht angemeldet."
 
@@ -1986,7 +1986,7 @@ msgstr "Gib einen Namen an"
 msgid "Wrong result"
 msgstr "Falsche Antwort"
 
-#: bitpoll/poll/views.py:413 bitpoll/poll/views.py:1244
+#: bitpoll/poll/views.py:413 bitpoll/poll/views.py:1245
 msgid "Deletion not allowed. You are not {}."
 msgstr "Löschen nicht erlaubt. Du bist nicht {}."
 
@@ -2007,22 +2007,22 @@ msgstr "Der Titel \"{}\" ist zu lang. Das Maximum sind 80 Zeichen."
 msgid "This Poll is past the due date, voting is no longer possible"
 msgstr "Diese Umfrage ist abgelaufen. Abstimmen ist nicht länger möglich."
 
-#: bitpoll/poll/views.py:1025
+#: bitpoll/poll/views.py:1026
 msgid "The Name is longer than the allowed name length of 80 characters"
 msgstr "Der Name ist länger als die maximal erlaubten 80 Zeichen."
 
-#: bitpoll/poll/views.py:1035
+#: bitpoll/poll/views.py:1036
 msgid "Anonymous votes are not allowed for this poll."
 msgstr "Bei dieser Umfrage sind anonyme Stimmen nicht erlaubt."
 
-#: bitpoll/poll/views.py:1073
+#: bitpoll/poll/views.py:1074
 msgid ""
 "Due to the the configuration of this poll, you have to fill all choices."
 msgstr ""
 "Aufgrund der Einstellungen der Umfrage müssen alle Möglichkeiten ausgefüllt "
 "sein."
 
-#: bitpoll/poll/views.py:1079
+#: bitpoll/poll/views.py:1080
 msgid ""
 "Value for choice does not exist. This is probably due to changes in the "
 "poll. Please correct your vote."
@@ -2031,7 +2031,7 @@ msgstr ""
 "wahrscheinlich an Änderungen bei der Umfrage. Bitte korrigiere deine "
 "Stimmabgabe."
 
-#: bitpoll/poll/views.py:1083
+#: bitpoll/poll/views.py:1084
 #, fuzzy
 #| msgid ""
 #| "Tried to vote for a choice that has expired.This is probably because the "
@@ -2045,41 +2045,43 @@ msgstr ""
 "liegt wahrscheinlich an Änderungen bei der Umfrage, während Du sieausgefüllt "
 "hast. Bitte korrigiere deine Stimmabgabe"
 
-#: bitpoll/poll/views.py:1100
+#: bitpoll/poll/views.py:1101
 msgid "Vote has been recorded"
 msgstr "Stimme wurde abgegeben"
 
-#: bitpoll/poll/views.py:1112
+#: bitpoll/poll/views.py:1113
 msgid "You need to either provide a name or post an anonymous vote."
 msgstr "Du musst entweder einen Namen angeben oder anonym abstimmen."
 
-#: bitpoll/poll/views.py:1118
+#: bitpoll/poll/views.py:1119
 msgid "Voting time for all options has expired, voting is no longer possible"
-msgstr "Die Abstimmungszeit für alle Optionen ist abgelaufen. Abstimmen ist nicht länger möglich."
+msgstr ""
+"Die Abstimmungszeit für alle Optionen ist abgelaufen. Abstimmen ist nicht "
+"länger möglich."
 
-#: bitpoll/poll/views.py:1126
+#: bitpoll/poll/views.py:1127
 msgid ""
 "Some poll options have already passed. You will not be able to change your "
 "vote for these options."
 msgstr ""
-"Die Antwortzeit für manche Antwortmöglichkeiten ist bereits um. Du kannst deine Stimme(n) "
-"für diese Optionen nicht mehr ändern."
+"Die Antwortzeit für manche Antwortmöglichkeiten ist bereits um. Du kannst "
+"deine Stimme(n) für diese Optionen nicht mehr ändern."
 
-#: bitpoll/poll/views.py:1196
+#: bitpoll/poll/views.py:1197
 msgid "This user has already voted and only one vote per user is permitted"
 msgstr ""
 "Dieser Nutzer hat bereits abgestimmt, und es ist nur eine Stimme pro Nutzer "
 "erlaubt"
 
-#: bitpoll/poll/views.py:1198
+#: bitpoll/poll/views.py:1199
 msgid "The user {} does not exists"
 msgstr "Der Nutzer {} existiert nicht"
 
-#: bitpoll/poll/views.py:1387
+#: bitpoll/poll/views.py:1388
 msgid "User {} not Found"
 msgstr "Benutzer {} nicht gefunden"
 
-#: bitpoll/poll/views.py:1400
+#: bitpoll/poll/views.py:1401
 msgid "Settings have been changed"
 msgstr "Einstellungen wurden geändert"
 
