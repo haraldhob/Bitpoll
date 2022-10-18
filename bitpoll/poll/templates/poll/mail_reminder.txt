@@ -1,5 +1,4 @@
-{% load settings_value %}{% value_from_settings BASE_URL as base_url%}
-Hallo {{ receiver_name }}.
+{% load settings_value %}{% value_from_settings BASE_URL as base_url%}Hallo {{ receiver_name }}.
 
 Wir brauchen innerhalb der nächsten {{ time_hours }} Stunden
 deine Rückmeldung für die folgende Abstimmung:
