@@ -33,9 +33,6 @@ class Command(BaseCommand):
             ):
                 print(f"Found expiring option in this poll: {expiring_choice}")
                 for invitation in poll.invitation_set.all():
-                    a = expiring_choice.date - timezone.now() + ALLOW_EDIT_HOURS
-                    print(timezone.now())
-                    print(int(a.days * 24 + a.seconds / 3600))
                     if not invitation.user.vote_set.filter(
                         votechoice__choice=expiring_choice
                     ).exists():
