@@ -1,16 +1,15 @@
+from bitpoll.base.models import BitpollUser
+from bitpoll.invitations.models import Invitation
+from bitpoll.poll.models import Poll
 from django.contrib import messages
 from django.contrib.auth.models import Group
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import IntegrityError
-from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import get_object_or_404, redirect
 from django.template.response import TemplateResponse
 from django.utils.timezone import now
-from django.views.decorators.http import require_POST
-
-from bitpoll.base.models import BitpollUser
-from bitpoll.invitations.models import Invitation
-from bitpoll.poll.models import Poll
 from django.utils.translation import ugettext_lazy as _
+from django.views.decorators.http import require_POST
 
 
 def invite(request, poll_url):
@@ -41,7 +40,7 @@ def invite(request, poll_url):
                 return redirect('invitations', current_poll.url)
 
     # Temp warning for invitation emails:
-    messages.info(request, "Einladungsemails sind nun global aktiviert. Das heißt jede Person die explizit zu einer Umfrage eingeladen wird bekommt automatisch eine Einladungsemail.")
+    messages.info(request, "Einladungsemails sind nun global aktiviert. Das heißt, jede Person die explizit zu einer Umfrage eingeladen wird bekommt automatisch eine Einladungsemail.")
 
     return TemplateResponse(request, 'invitations/Invitation.html', {
         'poll': current_poll,
