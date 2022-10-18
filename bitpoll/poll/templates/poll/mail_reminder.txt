@@ -1,3 +1,4 @@
+{% load settings_value %}{% value_from_settings BASE_URL as base_url%}
 Hallo {{ receiver_name }}.
 
 Wir brauchen innerhalb der nächsten {{ time_hours }} Stunden
@@ -6,6 +7,7 @@ deine Rückmeldung für die folgende Abstimmung:
 Veranstaltung:  {{ choice_name }}
 Abstimmung:     {{ poll_name }}
 Ablaufzeit:     {% if not date_only %}{{ choice_date|time:"H:i" }} Uhr am {% endif %}{{ choice_date|date:"D" }}, den {{ choice_date|date:"d.m.Y" }}
+Link:           {{ base_url }}{{ poll_link }}
 
 Die Erstellerin der Abstimmung hat explizit eingestellt, dass Abstimmungsergebnisse
 {{ time_after_date }} Stunden nach Start der Veranstaltung* nicht mehr geändert werden können.
