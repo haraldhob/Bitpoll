@@ -33,9 +33,14 @@ class Command(BaseCommand):
             ):
                 print(f"Found expiring option in this poll: {expiring_choice}")
                 for invitation in poll.invitation_set.all():
-                    if not invitation.user.vote_set.filter(
-                        votechoice__choice=expiring_choice
-                    ).exists():
+                    if (
+                        invitation.user.groups.filter(
+                            name__in=options["user-groups"]
+                        ).exists()
+                        and not invitation.user.vote_set.filter(
+                            votechoice__choice=expiring_choice
+                        ).exists()
+                    ):
                         self.send_reminder(
                             invitation.user,
                             poll,
