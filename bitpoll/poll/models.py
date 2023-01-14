@@ -2,8 +2,11 @@ import enum
 from smtplib import SMTPRecipientsRefused
 from typing import Optional
 
+from bitpoll.base.models import BitpollUser
+from bitpoll.base.validators import validate_timezone
+from bitpoll.poll.util import DateTimePart, PartialDateTime
 from django.contrib import messages
-from django.contrib.auth.models import Group, AbstractUser
+from django.contrib.auth.models import AbstractUser, Group
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.mail import send_mail
 from django.core.validators import RegexValidator
@@ -11,27 +14,23 @@ from django.db import models
 from django.http import HttpRequest
 from django.template.loader import render_to_string
 from django.urls import reverse
+from django.utils import translation
 from django.utils.functional import cached_property
 from django.utils.translation import ugettext_lazy as _
 from django_markdown.models import MarkdownField
 
-from bitpoll.base.models import BitpollUser
-from bitpoll.base.validators import validate_timezone
-from bitpoll.poll.util import DateTimePart, PartialDateTime
-from django.utils import translation
-
 POLL_TYPES = (
-    ('universal', 'Universal'),
-    ('datetime', 'Date-Time'),
-    ('date', 'Date'),
+    ("universal", "Universal"),
+    ("datetime", "Date-Time"),
+    ("date", "Date"),
 )
 
 POLL_RESULTS = (
-    ('summary', 'Summary'),
-    ('complete', 'Complete'),
-    ('never', 'Never'),
-    ('summary after vote', 'Summary after Vote'),
-    ('complete after vote', 'Complete after Vote'),
+    ("summary", "Summary"),
+    ("complete", "Complete"),
+    ("never", "Never"),
+    ("summary after vote", "Summary after Vote"),
+    ("complete after vote", "Complete after Vote"),
 )
 
 
@@ -41,7 +40,9 @@ class Poll(models.Model):
     url = models.SlugField(max_length=80, unique=True)
     type = models.CharField(max_length=20, choices=POLL_TYPES)
     created = models.DateTimeField(auto_now_add=True)
-    user = models.ForeignKey(BitpollUser, null=True, blank=True, on_delete=models.SET_NULL)
+    user = models.ForeignKey(
+        BitpollUser, null=True, blank=True, on_delete=models.SET_NULL
+    )
     group = models.ForeignKey(Group, null=True, blank=True, on_delete=models.SET_NULL)
     """owner_id = models.ForeignKey(Member)"""
 
@@ -52,18 +53,23 @@ class Poll(models.Model):
     require_login = models.BooleanField(default=True)
     require_login_view = models.BooleanField(default=True)
     require_invitation = models.BooleanField(default=False)
-    show_results = models.CharField(max_length=20, choices=POLL_RESULTS, default="complete")
+    show_results = models.CharField(
+        max_length=20, choices=POLL_RESULTS, default="complete"
+    )
     send_mail = models.BooleanField(default=False)
     one_vote_per_user = models.BooleanField(default=True)
     allow_unauthenticated_vote_changes = models.BooleanField(default=False)
     allow_comments = models.BooleanField(default=True)
     show_invitations = models.BooleanField(default=True)
-    timezone_name = models.CharField(max_length=40, default="Europe/Berlin", validators=[validate_timezone])
+    timezone_name = models.CharField(
+        max_length=40, default="Europe/Berlin", validators=[validate_timezone]
+    )
     use_user_timezone = models.BooleanField(default=False)
     vote_all = models.BooleanField(default=False)
     sorting = models.IntegerField(default=2)
     hide_participants = models.BooleanField(default=False)
     change_vote_after_event = models.BooleanField(default=False)
+    separate_groups = models.BooleanField(default=False)
 
     class ResultSorting(enum.IntEnum):
         DATE = 0
@@ -71,9 +77,14 @@ class Poll(models.Model):
         GROUP = 2
 
     def __str__(self):
-        return u'Poll {}'.format(self.title)
+        return "Poll {}".format(self.title)
 
-    def can_vote(self, user: AbstractUser, request: Optional[HttpRequest] = None, is_edit: bool=False) -> bool:
+    def can_vote(
+        self,
+        user: AbstractUser,
+        request: Optional[HttpRequest] = None,
+        is_edit: bool = False,
+    ) -> bool:
         """
         Determine if the user is allowed to vote
 
@@ -85,25 +96,38 @@ class Poll(models.Model):
         has_voted = self.has_voted(user)
         if self.one_vote_per_user and has_voted and not is_edit:
             if request:
-                messages.error(request, _("It is only one vote allowed. You have already voted."))
+                messages.error(
+                    request, _("It is only one vote allowed. You have already voted.")
+                )
             return False
         elif self.require_login and not user.is_authenticated:
             if request:
                 messages.error(request, _("Login required to vote."))
             return False
-        elif self.require_invitation and (not user.is_authenticated or not self.invitation_set.filter(user=user).exists()):
+        elif self.require_invitation and (
+            not user.is_authenticated
+            or not self.invitation_set.filter(user=user).exists()
+        ):
             if request:
-                messages.error(request, _("You are not allowed to vote in this poll. You have to be invited"))
+                messages.error(
+                    request,
+                    _(
+                        "You are not allowed to vote in this poll. You have to be invited"
+                    ),
+                )
             return False
         return True
 
     def has_voted(self, user: AbstractUser) -> bool:
-        return user.is_authenticated and Vote.objects.filter(user=user, poll=self).count() > 0
+        return (
+            user.is_authenticated
+            and Vote.objects.filter(user=user, poll=self).count() > 0
+        )
 
     def get_own_vote(self, user: AbstractUser):
         return Vote.objects.filter(user=user, poll=self)[0]
 
-    def can_edit(self, user: AbstractUser, request: HttpRequest=None) -> bool:
+    def can_edit(self, user: AbstractUser, request: HttpRequest = None) -> bool:
         """
         check if the user can edit this Poll
 
@@ -115,18 +139,22 @@ class Poll(models.Model):
         has_owner = self.group or self.user
         is_owner = self.is_owner(user)
 
-        can_edit = ((not has_owner) or is_owner) and user.is_authenticated or not has_owner
+        can_edit = (
+            ((not has_owner) or is_owner) and user.is_authenticated or not has_owner
+        )
         if request and not can_edit:
-            messages.error(
-                request, _("You are not allowed to edit this Poll.")
-            )
+            messages.error(request, _("You are not allowed to edit this Poll."))
         return can_edit
 
     def can_watch(self, user: AbstractUser) -> bool:
-        if self.can_vote(user) and self.show_results not in ('never', 'summary after vote', 'complete after vote'):
+        if self.can_vote(user) and self.show_results not in (
+            "never",
+            "summary after vote",
+            "complete after vote",
+        ):
             # If the user can vote and the results are not restricted
             return True
-        if self.has_voted(user) and self.show_results not in ('never', ):
+        if self.has_voted(user) and self.show_results not in ("never",):
             # If the user has voted and can view the results
             return True
         return False
@@ -135,22 +163,25 @@ class Poll(models.Model):
         return self.user == user or (self.group and user in self.group.user_set.all())
 
     def get_icon(self):
-        if self.type == 'universal':
-            return 'list'
-        if self.type == 'datetime':
-            return 'clock-o'
-        if self.type == 'date':
-            return 'calendar'
+        if self.type == "universal":
+            return "list"
+        if self.type == "datetime":
+            return "clock-o"
+        if self.type == "date":
+            return "calendar"
 
     @property
     def ordered_choices(self):
-        return self.choice_set.filter(deleted=False).order_by('sort_key')
+        return self.choice_set.filter(deleted=False).order_by("sort_key")
 
     def get_choice_group_matrix(self, tz, choices_after=None):
-        matrix = [
-            choice.get_hierarchy(tz) for choice in self.ordered_choices]
+        matrix = [choice.get_hierarchy(tz) for choice in self.ordered_choices]
 
-        if choices_after and (self.type == 'date' or self.type == 'datetime') and not self.change_vote_after_event:
+        if (
+            choices_after
+            and (self.type == "date" or self.type == "datetime")
+            and not self.change_vote_after_event
+        ):
             filtered_matrix = []
             for row in matrix:
                 if row[0].datetime > choices_after:
@@ -173,29 +204,32 @@ class Poll(models.Model):
             fill(row, width)
 
         # Merge None left to determine depth
-        for i in range(width-1, 0, -1):
+        for i in range(width - 1, 0, -1):
             for row in matrix:
                 if row[i][0] is None:
-                    row[i-1][1] = row[i][1] + 1
+                    row[i - 1][1] = row[i][1] + 1
 
         # Merge items up and replace by None
-        for i in range(len(matrix)-1, 0, -1):
+        for i in range(len(matrix) - 1, 0, -1):
             for j in range(width):
-                if matrix[i][j][0] == matrix[i-1][j][0] and matrix[i][j][1] == matrix[i-1][j][1]:
-                    matrix[i-1][j][2] = matrix[i][j][2] + 1
+                if (
+                    matrix[i][j][0] == matrix[i - 1][j][0]
+                    and matrix[i][j][1] == matrix[i - 1][j][1]
+                ):
+                    matrix[i - 1][j][2] = matrix[i][j][2] + 1
                     matrix[i][j][0] = None
 
         # cut off time column in day mode, only use date field
-        if self.type == 'date':
+        if self.type == "date":
             matrix = [[row[0], row[1]] for row in matrix]
 
         return matrix
 
     def get_tz_name(self, user: BitpollUser):
         # TODO: local etc beachten (umrechenn auf user...)
-        if self.type == 'date':
+        if self.type == "date":
             # Datepolls are using UTC as timezone
-            tz = 'UTC'
+            tz = "UTC"
         else:
             tz = self.get_tz_name_no_date_utc(user)
         return tz
@@ -218,13 +252,16 @@ class Poll(models.Model):
         :param user: The User in Question
         :return: True if the User watches the Poll
         """
-        return user.is_authenticated and PollWatch.objects.filter(poll=self, user=user).count() > 0
+        return (
+            user.is_authenticated
+            and PollWatch.objects.filter(poll=self, user=user).count() > 0
+        )
 
 
 POLL_RESULT_SORTING = (
-    (Poll.ResultSorting.DATE, 'Date'),
-    (Poll.ResultSorting.NAME, 'Name'),
-    (Poll.ResultSorting.GROUP, 'Group')
+    (Poll.ResultSorting.DATE, "Date"),
+    (Poll.ResultSorting.NAME, "Name"),
+    (Poll.ResultSorting.GROUP, "Group"),
 )
 
 
@@ -236,7 +273,7 @@ class Choice(models.Model):
     deleted = models.BooleanField(default=False, db_index=True)
 
     def __str__(self):
-        if self.poll.type == 'universal':
+        if self.poll.type == "universal":
             return self.text
         elif self.text:
             return "{} ({})".format(self.text, self.date)
@@ -247,7 +284,7 @@ class Choice(models.Model):
     def get_title(self):
         return self.__str__()
 
-    def can_edit(self, user: BitpollUser, request: HttpRequest=None) -> bool:
+    def can_edit(self, user: BitpollUser, request: HttpRequest = None) -> bool:
         return self.poll.can_edit(user, request)
 
     def get_hierarchy(self, tz):
@@ -268,14 +305,20 @@ class Choice(models.Model):
 class ChoiceValue(models.Model):
     title = models.CharField(max_length=80)
     icon = models.CharField(max_length=64)
-    color = models.CharField(max_length=7, validators=[RegexValidator('#?[a-fA-F0-9]{6}$',
-                                                                      message=_("Give an HTML color without the #"))])
+    color = models.CharField(
+        max_length=7,
+        validators=[
+            RegexValidator(
+                "#?[a-fA-F0-9]{6}$", message=_("Give an HTML color without the #")
+            )
+        ],
+    )
     weight = models.DecimalField(max_digits=5, decimal_places=2, default=0.0)
     poll = models.ForeignKey(Poll, on_delete=models.CASCADE)
     deleted = models.BooleanField(default=False)
 
     def __str__(self):
-        return u'ChoiceValue {}'.format(self.title)
+        return "ChoiceValue {}".format(self.title)
 
     def can_edit(self, user: BitpollUser, request=None) -> bool:
         return self.poll.can_edit(user, request)
@@ -288,11 +331,13 @@ class Comment(models.Model):
     text = MarkdownField()
     date_created = models.DateTimeField()
     name = models.CharField(max_length=80)
-    user = models.ForeignKey(BitpollUser, on_delete=models.CASCADE, null=True, blank=True)
+    user = models.ForeignKey(
+        BitpollUser, on_delete=models.CASCADE, null=True, blank=True
+    )
     poll = models.ForeignKey(Poll, on_delete=models.CASCADE, db_index=True)
 
     def __str__(self):
-        return u'CommentID {} by {}'.format(self.id, self.name)
+        return "CommentID {} by {}".format(self.id, self.name)
 
     def can_edit(self, user: BitpollUser) -> bool:
         is_owner = user == self.user
@@ -310,9 +355,13 @@ class Vote(models.Model):
     anonymous = models.BooleanField(default=False)
     date_created = models.DateTimeField()
     comment = models.TextField()
-    assigned_by = models.ForeignKey(BitpollUser, on_delete=models.CASCADE, null=True, related_name='assigning')
+    assigned_by = models.ForeignKey(
+        BitpollUser, on_delete=models.CASCADE, null=True, related_name="assigning"
+    )
     poll = models.ForeignKey(Poll, on_delete=models.CASCADE, db_index=True)
-    user = models.ForeignKey(BitpollUser, on_delete=models.CASCADE, null=True, blank=True)
+    user = models.ForeignKey(
+        BitpollUser, on_delete=models.CASCADE, null=True, blank=True
+    )
 
     def can_edit(self, user: BitpollUser) -> bool:
         """
@@ -323,7 +372,9 @@ class Vote(models.Model):
         """
         if user.is_authenticated and (self.user == user or self.poll.can_edit(user)):
             return True
-        if not self.user and (self.poll.can_edit(user) or self.poll.allow_unauthenticated_vote_changes):
+        if not self.user and (
+            self.poll.can_edit(user) or self.poll.allow_unauthenticated_vote_changes
+        ):
             return True
         return False
 
@@ -334,7 +385,7 @@ class Vote(models.Model):
         :param user:
         :return:
         """
-        #if self.poll.owner == user:  # TODO: gruppen, owner algemein
+        # if self.poll.owner == user:  # TODO: gruppen, owner algemein
         #    return True
         if user.is_anonymous:
             return False
@@ -344,32 +395,34 @@ class Vote(models.Model):
     def display_name(self) -> str:
         """Name of user if assigned, name field or anonymous else."""
         if self.anonymous:
-            return _('Anonymous')
+            return _("Anonymous")
         if self.user:
             # return '{} ({})'.format(self.user.first_name, self.user.username)
             return self.user.get_displayname()
         return self.name
 
     def __str__(self):
-        return u'Vote {}'.format(self.display_name)
+        return "Vote {}".format(self.display_name)
 
 
 class VoteChoice(models.Model):
     class Meta:
-        unique_together = ('vote', 'choice')
+        unique_together = ("vote", "choice")
 
     comment = models.TextField()
-    value = models.ForeignKey(ChoiceValue, on_delete=models.CASCADE, null=True, blank=True)
+    value = models.ForeignKey(
+        ChoiceValue, on_delete=models.CASCADE, null=True, blank=True
+    )
     vote = models.ForeignKey(Vote, on_delete=models.CASCADE)
     choice = models.ForeignKey(Choice, on_delete=models.CASCADE)
 
     def __str__(self):
-        return u'VoteChoice {}'.format(self.id)
+        return "VoteChoice {}".format(self.id)
 
 
 class PollWatch(models.Model):
     class Meta:
-        unique_together = ('poll', 'user')
+        unique_together = ("poll", "user")
 
     poll = models.ForeignKey(Poll, on_delete=models.CASCADE, db_index=True)
     user = models.ForeignKey(BitpollUser, on_delete=models.CASCADE)
@@ -377,30 +430,43 @@ class PollWatch(models.Model):
     def send(self, request, vote: Vote):
         old_lang = translation.get_language()
         translation.activate(self.user.language)
-        link = reverse('poll', args=(self.poll.url,))
+        link = reverse("poll", args=(self.poll.url,))
         if vote.anonymous:
             username = _("Annonymus")
         elif vote.user:
             username = vote.user.username
         else:
             username = vote.name
-        email_content = render_to_string('poll/mail_watch.txt', {
-            'receiver': self.user.username,
-            'user': username if self.poll.show_results == "complete" else _("by an user"),
-            'poll': self.poll.title,
-            'link': link,
-            'hide_participants': self.poll.hide_participants  # TODO: simplify merge with usernameshadowing above
-        })
+        email_content = render_to_string(
+            "poll/mail_watch.txt",
+            {
+                "receiver": self.user.username,
+                "user": username
+                if self.poll.show_results == "complete"
+                else _("by an user"),
+                "poll": self.poll.title,
+                "link": link,
+                "hide_participants": self.poll.hide_participants,  # TODO: simplify merge with usernameshadowing above
+            },
+        )
         try:
-            send_mail(_("New votes for {}".format(self.poll.title)), email_content, None,
-                      [self.user.email])
+            send_mail(
+                _("New votes for {}".format(self.poll.title)),
+                email_content,
+                None,
+                [self.user.email],
+            )
         except (SMTPRecipientsRefused, OSError):
             translation.activate(old_lang)
             messages.error(
-                request, _("The mail server had an error sending the notification to {}".format(
-                    self.user.username))
+                request,
+                _(
+                    "The mail server had an error sending the notification to {}".format(
+                        self.user.username
+                    )
+                ),
             )
         translation.activate(old_lang)
 
     def __str__(self):
-        return u'Pollwatch of Poll {} and User {}'.format(self.poll_id, self.user_id)
+        return "Pollwatch of Poll {} and User {}".format(self.poll_id, self.user_id)

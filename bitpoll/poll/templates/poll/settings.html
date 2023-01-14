@@ -140,6 +140,10 @@
                 <input type="checkbox" id="change_vote_after_event" name="{{ form.change_vote_after_event.name }}" {% if form.change_vote_after_event.value %} checked {% endif %}>
                 <label for="change_vote_after_event">{% trans 'change vote after event' %}</label>
             </div>
+            <div class="checkbox">
+                <input type="checkbox" id="separate_groups" name="{{ form.separate_groups.name }}" {% if form.separate_groups.value %} checked {% endif %}>
+                <label for="separate_groups">{% trans 'visually separate Stips, Vertrauenspersonen and Alumni' %}</label>
+            </div>
             <div class="">
               {% trans 'Sort results by' %}:
             {# TODO: use enum values #}
