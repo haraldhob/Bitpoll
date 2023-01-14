@@ -1,20 +1,16 @@
 {% load i18n %}
 {% load poll_filter vote_permissions comment_permissions poll_permissions %}
-{% load user_groups %}
+{% load user_groups nth_prev snake_to_title %}
 
 <div class="text-center">
-  {% if poll.separate_groups %}
+  {% if poll.separate_groups and not first %}
   <div style="margin-bottom: 2em; margin-top: 2em;">
-    {% if idx == 1 %}
-      <span>⬆️ &nbsp; Stips - Vertrauenspersonen &nbsp; ⬇️</span>
-    {% elif idx == 2 %}
-      <span>⬆️ &nbsp; Vertrauenspersonen - Alumni &nbsp; ⬇️</span>
-    {% endif %}
+      <span>⬆️ &nbsp; {{ settings.POLL_GROUP_ORDERING|nth_prev:idx|snake_to_title }} - {{ group_filter|snake_to_title }} &nbsp; ⬇️</span>
   </div>
   {% endif %}
 
   <table class="table poll auto-width" id="poll">
-    {% if not poll.separate_groups or idx == 0 %}
+    {% if not poll.separate_groups or first %}
       <thead>
       {% for row in matrix %}
           <tr>
@@ -148,7 +144,7 @@
         {% endif %}
     {% endfor %}
     </tbody>
-    {% if not poll.separate_groups or idx == 2 %}
+    {% if not poll.separate_groups or last %}
       <tfoot>
         {% if summary %}
         <tr id="scores">
