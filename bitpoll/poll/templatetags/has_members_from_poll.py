@@ -8,4 +8,6 @@ def has_members_from_poll(group_list, poll):
     poll_member_group_names = list(
         poll.vote_set.values_list("user__groups__name", flat=True)
     ) + list(poll.invitation_set.values_list("user__groups__name", flat=True))
-    return set(group_list).intersection(poll_member_group_names)
+
+    # ordered intersection
+    return [s for s in group_list if s in poll_member_group_names]

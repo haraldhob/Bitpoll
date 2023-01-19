@@ -14,9 +14,11 @@
         {% endif %}
 
         {% if poll.separate_groups %}
-            {% for group in settings.POLL_GROUP_ORDERING|has_members_from_poll:poll %}
+            {% with filtered_poll_groups=settings.POLL_GROUP_ORDERING|has_members_from_poll:poll %}
+            {% for group in filtered_poll_groups %}
                 {% include 'poll/poll_table.html' with group_filter=group first=forloop.first last=forloop.last idx=forloop.counter0 %}
             {% endfor %}
+            {% endwith %}
         {% else %}
             {% include 'poll/poll_table.html' %}
         {% endif %}

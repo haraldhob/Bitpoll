@@ -10,7 +10,7 @@
     </div>
     {% else %}
     <div style="margin-bottom: 2em; margin-top: 2em;">
-        <span>⬆️ &nbsp; {{ settings.POLL_GROUP_ORDERING|nth_prev:idx|snake_to_title }} - {{ group_filter|snake_to_title }} &nbsp; ⬇️</span>
+        <span>⬆️ &nbsp; {{ filtered_poll_groups|nth_prev:idx|snake_to_title }} - {{ group_filter|snake_to_title }} &nbsp; ⬇️</span>
     </div>
     {% endif %}
   {% endif %}
