@@ -3,10 +3,16 @@
 {% load user_groups nth_prev snake_to_title %}
 
 <div class="text-center">
-  {% if poll.separate_groups and not first %}
-  <div style="margin-bottom: 2em; margin-top: 2em;">
-      <span>⬆️ &nbsp; {{ settings.POLL_GROUP_ORDERING|nth_prev:idx|snake_to_title }} - {{ group_filter|snake_to_title }} &nbsp; ⬇️</span>
-  </div>
+  {% if poll.separate_groups %}
+    {% if first %}
+    <div style="margin-bottom: 2em; margin-top: 2em;">
+        <span>⬇️ &nbsp; {{ group_filter|snake_to_title }} &nbsp; ⬇️</span>
+    </div>
+    {% else %}
+    <div style="margin-bottom: 2em; margin-top: 2em;">
+        <span>⬆️ &nbsp; {{ settings.POLL_GROUP_ORDERING|nth_prev:idx|snake_to_title }} - {{ group_filter|snake_to_title }} &nbsp; ⬇️</span>
+    </div>
+    {% endif %}
   {% endif %}
 
   <table class="table poll auto-width" id="poll">
@@ -199,4 +205,9 @@
       </tfoot>
     {% endif %}
   </table>
+  {% if poll.separate_groups and last %}
+    <div style="margin-bottom: 2em; margin-top: 2em;">
+        <span>⬆️ &nbsp; {{ group_filter|snake_to_title }} &nbsp; ⬆️</span>
+    </div>
+  {% endif %}
 </div>
