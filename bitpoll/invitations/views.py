@@ -44,7 +44,7 @@ def invite(request, poll_url):
 
     return TemplateResponse(request, 'invitations/Invitation.html', {
         'poll': current_poll,
-        'choices': [(g.name, g.name + f' ({_("group")})') for g in Group.objects.all()] + [(b.username, b.displayname or b.get_full_name() or b.username) for b in BitpollUser.objects.all()]
+        'choices': [(g.name, g.name + f' ({_("group")})') for g in Group.objects.order_by("name")] + [(b.username, b.displayname or b.get_full_name() or b.username) for b in BitpollUser.objects.order_by("username")]
     })
 
 
