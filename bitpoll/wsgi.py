@@ -12,8 +12,9 @@ import os
 from django.core.wsgi import get_wsgi_application
 
 import sys
-sys.path.append('/app/')
-sys.path.append('/app/env/bin')
+
+sys.path.append("/app/")
+sys.path.append("/app/env/bin")
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "bitpoll.settings")
 

@@ -21,15 +21,15 @@ def group_title(value):
 @register.filter
 def percentage(value: Number) -> str:
     if value is not None:
-        return '{0:.1f}%'.format(value * 100)
-    return 'n/a'
+        return "{0:.1f}%".format(value * 100)
+    return "n/a"
 
 
 @register.filter
 def or_none(value: object) -> object:
     if value:
         return value
-    return 'n/a'
+    return "n/a"
 
 
 @register.filter
@@ -54,9 +54,14 @@ def is_initial_choice(initial: list, date, time):
 
     return False
 
+
 @register.filter
 def groupname_prettify(groups: str) -> str:
-    return map(lambda group: ' '.join(map(lambda s: s.capitalize(), str(group).split('_'))), groups)
+    return map(
+        lambda group: " ".join(map(lambda s: s.capitalize(), str(group).split("_"))),
+        groups,
+    )
+
 
 @register.filter
 def filter_group_names_whitelist(groups: list) -> list:

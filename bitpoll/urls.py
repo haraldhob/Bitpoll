@@ -24,47 +24,46 @@ import django.conf.urls.i18n
 from bitpoll import settings
 
 urlpatterns = [
-    url(r'^poll/', include('bitpoll.poll.urls')),
-    url(r'^', include('bitpoll.base.urls')),
-    url(r'^invitations/', include('bitpoll.invitations.urls')),
-    url(r'^$', lambda req: redirect('index'), name='home'),
-    url(r'^login/$', auth_views.LoginView.as_view(), name='login', ),
-
+    url(r"^poll/", include("bitpoll.poll.urls")),
+    url(r"^", include("bitpoll.base.urls")),
+    url(r"^invitations/", include("bitpoll.invitations.urls")),
+    url(r"^$", lambda req: redirect("index"), name="home"),
+    url(
+        r"^login/$",
+        auth_views.LoginView.as_view(),
+        name="login",
+    ),
     # urls for nextcloud oauth login interaction
-    url(r'^accounts/', include('allauth.urls')),
-
-    url(r'^logout/$', auth_views.LogoutView.as_view(next_page='index'), name='logout'),
-    url(r'^markdown/', include('django_markdown.urls')),
-    url(r'^registration/', include('bitpoll.registration.urls')),
-
-    url(r'^i18n/', include(django.conf.urls.i18n)),
-    url(r'^admin/', admin.site.urls),
-
+    url(r"^accounts/", include("allauth.urls")),
+    url(r"^logout/$", auth_views.LogoutView.as_view(next_page="index"), name="logout"),
+    url(r"^markdown/", include("django_markdown.urls")),
+    url(r"^registration/", include("bitpoll.registration.urls")),
+    url(r"^i18n/", include(django.conf.urls.i18n)),
+    url(r"^admin/", admin.site.urls),
 ]
 
 if settings.CALENDAR_ENABLED:
     urlpatterns += [
-        url(r'^caldav/', include('bitpoll.caldav.urls')),
+        url(r"^caldav/", include("bitpoll.caldav.urls")),
     ]
 
 if settings.GROUP_MANAGEMENT:
     urlpatterns += [
-        url(r'^groups/', include('bitpoll.groups.urls')),
-        ]
+        url(r"^groups/", include("bitpoll.groups.urls")),
+    ]
 
-if settings.DEBUG and 'debug_toolbar' in settings.INSTALLED_APPS:
+if settings.DEBUG and "debug_toolbar" in settings.INSTALLED_APPS:
     import debug_toolbar
+
     urlpatterns = [
-        url(r'^__debug__/', include(debug_toolbar.urls)),
+        url(r"^__debug__/", include(debug_toolbar.urls)),
     ] + urlpatterns
 
-url_prefix = getattr(settings, 'URL_PREFIX', '')
-if url_prefix not in ('', '/', None):
-    if not url_prefix.endswith('/'):
-        url_prefix += '/'
-    urlpatterns = [
-        path(url_prefix, include(urlpatterns))
-    ]
+url_prefix = getattr(settings, "URL_PREFIX", "")
+if url_prefix not in ("", "/", None):
+    if not url_prefix.endswith("/"):
+        url_prefix += "/"
+    urlpatterns = [path(url_prefix, include(urlpatterns))]
 
 
 def handler500(request):
@@ -78,6 +77,7 @@ def handler500(request):
     event_id = None
     try:
         import sentry_sdk
+
         if sentry_sdk.Hub.current.client:
             use_sentry = True
             sentry_dsn = sentry_sdk.Hub.current.client.dsn
@@ -85,9 +85,13 @@ def handler500(request):
     except ImportError:
         pass
 
-    return render(request, '500.html', status=500, context={
-        'use_sentry': use_sentry,
-        'sentry_public_dsn': sentry_dsn,
-        'event_id': event_id,
-    })
-
+    return render(
+        request,
+        "500.html",
+        status=500,
+        context={
+            "use_sentry": use_sentry,
+            "sentry_public_dsn": sentry_dsn,
+            "event_id": event_id,
+        },
+    )

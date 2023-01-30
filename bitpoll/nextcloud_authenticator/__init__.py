@@ -1,1 +1,1 @@
-default_app_config = 'bitpoll.nextcloud_authenticator.apps.NextcloudAuthenticatorConfig'
+default_app_config = "bitpoll.nextcloud_authenticator.apps.NextcloudAuthenticatorConfig"

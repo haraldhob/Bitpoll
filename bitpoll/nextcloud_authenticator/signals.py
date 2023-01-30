@@ -18,8 +18,8 @@ def user_login_callback(**kwargs):
     the logged in user. This callback is called if either a user was created (-> user_signed_up) or the user already had
     an existing account and the new information can be used for updates (-> social_account_updated).
     """
-    social_login = kwargs['sociallogin']
-    user_groups = social_login.account.extra_data['groups'].split(", ")
+    social_login = kwargs["sociallogin"]
+    user_groups = social_login.account.extra_data["groups"].split(", ")
 
     for group in user_groups:
         local_group = Group.objects.filter(name=group)
@@ -28,7 +28,10 @@ def user_login_callback(**kwargs):
             create_usergroup(social_login.user, group)
 
         # the group does exist, but either the user doesn't exist, or the existing user is not a member of the group
-        elif not social_login.is_existing or not local_group[0].user_set.filter(id=social_login.user.id).exists():
+        elif (
+            not social_login.is_existing
+            or not local_group[0].user_set.filter(id=social_login.user.id).exists()
+        ):
             GroupProxy(local_group[0]).add_member(social_login.user)
 
         if group in settings.ADMIN_GROUPS:

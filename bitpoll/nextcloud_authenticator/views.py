@@ -16,6 +16,7 @@ class CustomNextCloudAdapter(NextCloudAdapter):
 
     Includes group information received from the nextcloud API in the user info data ("extra_data").
     """
+
     provider_id = CustomNextCloudProvider.id
     settings = app_settings.PROVIDERS.get(provider_id, {})
     server = settings.get("SERVER", "https://nextcloud.example.org")
@@ -27,10 +28,15 @@ class CustomNextCloudAdapter(NextCloudAdapter):
         headers = {"Authorization": "Bearer {0}".format(token)}
         resp = requests.get(self.profile_url + user_id, headers=headers)
         if resp.status_code != 200:
-            print("Error in user metadata request: " + str(resp.status_code) + " " + resp.content.decode())
+            print(
+                "Error in user metadata request: "
+                + str(resp.status_code)
+                + " "
+                + resp.content.decode()
+            )
         resp.raise_for_status()
         data = ET.fromstring(resp.content.decode())[1]
-        
+
         result_dict = {}
         for d in data:
             if d.text:
@@ -45,12 +51,14 @@ class CustomNextCloudAdapter(NextCloudAdapter):
                 result_dict[d.tag] = value
 
             # The 'groups' tag doesn't contain plain text, but a list of group strings
-            if d.tag == 'groups':
+            if d.tag == "groups":
                 result_dict[d.tag] = ", ".join([e.text for e in d])
 
         # Our login fails if the nextcloud user doesn't have a valid email. This shouldn't be the case.
         if {"email", "username", "name"} - result_dict.keys():
-            raise ValueError(f"Missing user details (email, username or name) in nextcloud account for user {user_id}.")
+            raise ValueError(
+                f"Missing user details (email, username or name) in nextcloud account for user {user_id}."
+            )
         return result_dict
 
 

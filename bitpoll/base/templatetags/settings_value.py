@@ -14,20 +14,26 @@ register = Library()
 def value_from_settings(parser, token):
     bits = token.split_contents()
     if len(bits) < 2:
-        raise TemplateSyntaxError("'%s' takes at least one " \
-                                  "argument (settings constant to retrieve)" % bits[0])
+        raise TemplateSyntaxError(
+            "'%s' takes at least one "
+            "argument (settings constant to retrieve)" % bits[0]
+        )
     settingsvar = bits[1]
     settingsvar = settingsvar[1:-1] if settingsvar[0] == '"' else settingsvar
     asvar = None
     bits = bits[2:]
-    if len(bits) >= 2 and bits[-2] == 'as':
+    if len(bits) >= 2 and bits[-2] == "as":
         asvar = bits[-1]
         bits = bits[:-2]
     if len(bits):
-        raise TemplateSyntaxError("'value_from_settings' didn't recognise " \
-                                  "the arguments '%s'" % ", ".join(bits))
+        raise TemplateSyntaxError(
+            "'value_from_settings' didn't recognise "
+            "the arguments '%s'" % ", ".join(bits)
+        )
     if settingsvar not in settings.TEMPLATE_ALLOWABLE_SETTINGS_VALUES:
-        raise TemplateSyntaxError("The settings Variable %s is not allowed to be acessed" % settingsvar)
+        raise TemplateSyntaxError(
+            "The settings Variable %s is not allowed to be acessed" % settingsvar
+        )
     return ValueFromSettings(settingsvar, asvar)
 
 
@@ -40,6 +46,6 @@ class ValueFromSettings(Node):
         ret_val = getattr(settings, str(self.arg))
         if self.asvar:
             context[self.asvar] = ret_val
-            return ''
+            return ""
         else:
             return ret_val

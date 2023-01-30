@@ -5,15 +5,17 @@ from django.contrib.auth.models import AbstractUser
 from bitpoll.base.validators import validate_timezone
 
 USER_LANG = (
-    ('german', 'German'),
-    ('english', 'English'),
+    ("german", "German"),
+    ("english", "English"),
 )
 
 
 class BitpollUser(AbstractUser):
     language = models.CharField(max_length=20, choices=USER_LANG, default="german")
     email_invitation = models.BooleanField(default=True)
-    timezone = models.CharField(max_length=40, default=settings.TIME_ZONE, validators=[validate_timezone])
+    timezone = models.CharField(
+        max_length=40, default=settings.TIME_ZONE, validators=[validate_timezone]
+    )
     auto_watch = models.BooleanField(default=False)
     displayname = models.CharField(max_length=100, default="")
 

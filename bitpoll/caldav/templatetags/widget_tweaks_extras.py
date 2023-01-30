@@ -16,9 +16,10 @@ def render_multi_field(parser, token):
     Attribute-value pairs should be in the form of attribute=value OR
     attribute="a value"
     """
-    error_msg = ('%r tag requires a form field and index followed by a list '
-                 'of attributes and values in the form attr="value"'
-                 % token.split_contents()[0])
+    error_msg = (
+        "%r tag requires a form field and index followed by a list "
+        'of attributes and values in the form attr="value"' % token.split_contents()[0]
+    )
     try:
         bits = token.split_contents()
         form_field = bits[1]
@@ -34,15 +35,19 @@ def render_multi_field(parser, token):
         if not match:
             raise template.TemplateSyntaxError(error_msg + ": %s" % pair)
         dct = match.groupdict()
-        attr, sign, value = \
-            dct['attr'], dct['sign'], parser.compile_filter(dct['value'])
+        attr, sign, value = (
+            dct["attr"],
+            dct["sign"],
+            parser.compile_filter(dct["value"]),
+        )
         if sign == "=":
             attr_assign_dict[attr] = value
         else:
             attr_concat_dict[attr] = value
 
-    return MultiFieldAttributeNode(form_field, attr_assign_dict,
-                                   attr_concat_dict, index=field_index)
+    return MultiFieldAttributeNode(
+        form_field, attr_assign_dict, attr_concat_dict, index=field_index
+    )
 
 
 class MultiFieldAttributeNode(template.Node):
@@ -62,17 +67,17 @@ class MultiFieldAttributeNode(template.Node):
         for k, v in self.assign_dict.items():
             attrs[k] = v.resolve(context)
         for k, v in self.concat_dict.items():
-            attrs[k] = widget.attrs.get(k, '') + ' ' + v.resolve(context)
+            attrs[k] = widget.attrs.get(k, "") + " " + v.resolve(context)
         if bounded_field.errors:
-            attrs['class'] = attrs.get('class', '') + ' error'
+            attrs["class"] = attrs.get("class", "") + " error"
 
         if not bounded_field.form.is_bound:
-            data = bounded_field.form.initial.get(bounded_field.name,
-                                                  field.initial)
+            data = bounded_field.form.initial.get(bounded_field.name, field.initial)
             if callable(data):
                 data = data()
             data = bounded_field.field.widget.decompress(data)[self.index]
         else:
             data = bounded_field.data[self.index]
-        return widget.render('%s_%d' % (bounded_field.html_name, self.index),
-                             data, attrs)
+        return widget.render(
+            "%s_%d" % (bounded_field.html_name, self.index), data, attrs
+        )

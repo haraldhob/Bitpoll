@@ -19,12 +19,16 @@ class PartialDateTime(object):
         return self.datetime < other.datetime
 
     def __eq__(self, other):
-        return isinstance(other, PartialDateTime) and self.part == other.part and self.format() == other.format()
+        return (
+            isinstance(other, PartialDateTime)
+            and self.part == other.part
+            and self.format() == other.format()
+        )
 
     def format(self):
         if self.part == DateTimePart.date:
-            return date_format(self.datetime, format='D, j. N Y')
+            return date_format(self.datetime, format="D, j. N Y")
         elif self.part == DateTimePart.time:
-            return date_format(self.datetime, format='H:i')
+            return date_format(self.datetime, format="H:i")
         elif self.part == DateTimePart.datetime:
-            return date_format(self.datetime, format='D, j. N Y H:i')
+            return date_format(self.datetime, format="D, j. N Y H:i")
